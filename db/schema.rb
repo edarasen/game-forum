@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_14_035910) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_14_134303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_14_035910) do
     t.string "genres"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "game_slug"
   end
 
   add_foreign_key "channels", "channelgroups"
