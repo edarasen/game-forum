@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
+      get "/itchdata" => "itchdata#index"
+      get "/rawgdata" => "rawgdata#index"
       # resources :models
+      resources :channelgroups, shallow: true do
+        resources :channels
+      end
     end
   end
 end

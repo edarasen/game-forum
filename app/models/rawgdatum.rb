@@ -1,0 +1,2 @@
+class Rawgdatum < ApplicationRecord
+end
