@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get "/itchdata" => "itchdata#index"
       get "/rawgdata" => "rawgdata#index"
-      # resources :models
+      resources :users
       resources :channelgroups, shallow: true do
         resources :channels
       end
