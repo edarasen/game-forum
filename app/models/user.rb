@@ -8,5 +8,5 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: self
 
   has_many :posts
-  has_many :comments, through: :posts
+  has_many :comments
 end

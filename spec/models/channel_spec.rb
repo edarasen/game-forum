@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Channel, type: :model do
   let (:test_channelgroup) {create(:channelgroup)}
+  let (:test_channel) {create(:channel, channelgroup: test_channelgroup)}
+  let (:test_user) {create(:user)}
 
   context "initial test" do
     it "creates channel" do
@@ -26,6 +28,13 @@ RSpec.describe Channel, type: :model do
       channelgroup = test_channelgroup
       channel = Channel.new(title: "rspec initial channel", description: "channel description", channelgroup: channelgroup)
       expect(channel.channelgroup).to eq(test_channelgroup)
+    end
+    it "has many posts" do
+      channelgroup = test_channelgroup
+      channel = test_channel
+      channel.posts.create(title: "asdf", body: "asdf", user: test_user)
+      expect(channel.posts[0].title).to eq("asdf")
+      expect(channel.posts.count).to eq(1)
     end
   end
 end
