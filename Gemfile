@@ -51,3 +51,4 @@ end
 gem "dotenv-rails"
 gem "devise"
 gem "devise-jwt"
+gem "pg"
