@@ -189,6 +189,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-arm-linux-musl)
       racc (~> 1.4)
+    nokogiri (1.18.10-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
@@ -199,6 +201,12 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.2)
+    pg (1.6.2-aarch64-linux)
+    pg (1.6.2-aarch64-linux-musl)
+    pg (1.6.2-arm64-darwin)
+    pg (1.6.2-x86_64-linux)
+    pg (1.6.2-x86_64-linux-musl)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -330,6 +338,7 @@ GEM
     sqlite3 (2.7.4-aarch64-linux-musl)
     sqlite3 (2.7.4-arm-linux-gnu)
     sqlite3 (2.7.4-arm-linux-musl)
+    sqlite3 (2.7.4-arm64-darwin)
     sqlite3 (2.7.4-x86_64-linux-gnu)
     sqlite3 (2.7.4-x86_64-linux-musl)
     sshkit (1.24.0)
@@ -343,6 +352,7 @@ GEM
     thor (1.4.0)
     thruster (0.1.15)
     thruster (0.1.15-aarch64-linux)
+    thruster (0.1.15-arm64-darwin)
     thruster (0.1.15-x86_64-linux)
     timeout (0.4.3)
     tsort (0.2.0)
@@ -372,6 +382,7 @@ PLATFORMS
   aarch64-linux-musl
   arm-linux-gnu
   arm-linux-musl
+  arm64-darwin-24
   x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
@@ -385,6 +396,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   kamal
+  pg
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.3)
