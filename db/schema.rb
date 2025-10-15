@@ -27,4 +27,40 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_041503) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "channelgroups", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "channels", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.bigint "channelgroup_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channelgroup_id"], name: "index_channels_on_channelgroup_id"
+  end
+
+  create_table "itchdata", force: :cascade do |t|
+    t.integer "views_count"
+    t.integer "downloads_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rawgdata", force: :cascade do |t|
+    t.string "name_original"
+    t.string "background_image"
+    t.string "website"
+    t.string "developer"
+    t.string "genres"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "game_slug"
+  end
+
+  add_foreign_key "channels", "channelgroups"
 end

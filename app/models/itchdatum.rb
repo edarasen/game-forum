@@ -1,0 +1,2 @@
+class Itchdatum < ApplicationRecord
+end
