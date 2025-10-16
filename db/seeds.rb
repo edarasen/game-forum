@@ -114,5 +114,5 @@ def test_data
 end
 
 rawgdata_seed
-# itchdata_seed # 16Oct2025 itch.io is down
+itchdata_seed
 test_data
