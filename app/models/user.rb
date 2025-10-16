@@ -7,6 +7,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
+  # You can call on .admin/?, .moderator/?, and .user/?
+  enum :role, { admin: "admin", moderator: "moderator", user: "user" }
+  enum :moderator_status, { not_applied: "no application", pending: "pending", approved: "approved" }
+
   has_many :posts
   has_many :comments
 end

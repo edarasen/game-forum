@@ -28,9 +28,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get "/itchdata" => "itchdata#index"
       get "/rawgdata" => "rawgdata#index"
-      
+      patch "/apply_mod" => "users#apply_moderator"
       resources :users
-      
+
       resources :channelgroups, shallow: true do
         resources :channels, shallow:true do
           resources :posts, shallow:true do
@@ -41,6 +41,15 @@ Rails.application.routes.draw do
       
       resources :reports, only: [:index, :show, :create, :destroy]
 
+      namespace :admins do
+        patch "/ban/:id" => "users#ban"
+        patch "/approve_mod/:id" => "users#approve_moderator"
+        resources :users
+      end
+      namespace :moderators do
+        patch "/ban/:id" => "users#ban"
+        resources :users, only: [ :show, :update ]
+      end
     end
   end
 
