@@ -39,6 +39,8 @@ Rails.application.routes.draw do
         end
       end
       
+      resources :reports, only: [:index, :show, :create, :destroy]
+
     end
   end
 

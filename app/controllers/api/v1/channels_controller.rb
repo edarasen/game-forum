@@ -38,6 +38,7 @@ class Api::V1::ChannelsController < ApplicationController
   # DELETE /channels/1
   def destroy
     @channel.destroy!
+    render json: {message: 'Destroy successful'}, status: :accepted
   end
 
   private

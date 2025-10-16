@@ -47,6 +47,7 @@ class Api::V1::CommentsController < ApplicationController
   def destroy
     if @comment.user == current_user # || current_user.role != 'user'
       @comment.destroy!
+      render json: {message: 'Destroy successful'}, status: :accepted
     else
       render json: {
         message: 'Invalid delete request', 

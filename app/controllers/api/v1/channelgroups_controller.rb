@@ -36,6 +36,7 @@ class Api::V1::ChannelgroupsController < ApplicationController
   # DELETE /channelgroups/1
   def destroy
     @channelgroup.destroy!
+    render json: {message: 'Destroy successful'}, status: :accepted
   end
 
   private

@@ -44,10 +44,11 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
-  # DELETE /post/1
+  # DELETE /posts/1
   def destroy
     if @post.user == current_user # || current_user.role != 'user'
       @post.destroy!
+      render json: {message: 'Destroy successful'}, status: :accepted
     else
       render json: {
         message: 'Invalid delete request', 
