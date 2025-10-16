@@ -75,8 +75,10 @@ end
 def test_data
   # Users
   puts "Seeding Users..."
-  user_one = User.create(email: "user01_test@test.com", password: "password")
-  user_two = User.create(email: "user02_test@test.com", password: "password")
+  admin = User.create(username: "god_mode", email:"admin_test@test.com", password: "password", profile_picture:"", role:"admin")
+  moderator_one = User.create(username: "moderater_one", email:"moderator_test@test.com", password:"password", profile_picture:"", role: "moderator", moderator_status:"approved")
+  user_one = User.create(username:"user01", email: "user01_test@test.com", password: "password")
+  user_two = User.create(username:"user02", email: "user02_test@test.com", password: "password")
   puts "Users seeded!"
 
   # Channel Groups
@@ -113,6 +115,6 @@ def test_data
   puts "Comments seeded!"
 end
 
-rawgdata_seed
-itchdata_seed
 test_data
+rawgdata_seed
+# itchdata_seed - itch is down again 16oct2025
