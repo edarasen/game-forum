@@ -7,12 +7,12 @@ class Api::V1::ChannelsController < ApplicationController
     @channelgroup = Channelgroup.find(params.expect(:channelgroup_id))
     @channels = @channelgroup.channels
 
-    render json: @channels
+    # render json: @channels -> index.json.props
   end
 
   # GET /channels/1
   def show
-    render json: @channel
+    # render json: @channel -> show.json.props
   end
 
   # POST /channels

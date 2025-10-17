@@ -6,12 +6,12 @@ class Api::V1::ChannelgroupsController < ApplicationController
   def index
     @channelgroups = Channelgroup.all
 
-    render json: @channelgroups
+    # render json: @channelgroups -> index.json.props
   end
 
   # GET /channelgroups/1
   def show
-    render json: @channelgroup
+    # render json: @channelgroup -> show.json.props
   end
 
   # POST /channelgroups
@@ -19,7 +19,7 @@ class Api::V1::ChannelgroupsController < ApplicationController
     @channelgroup = Channelgroup.new(channelgroup_params)
 
     if @channelgroup.save
-      render json: @channelgroup, status: :created
+      # render json: @channelgroup, status: :created -> create.json.props
     else
       render json: @channelgroup.errors, status: :unprocessable_content
     end
@@ -28,7 +28,7 @@ class Api::V1::ChannelgroupsController < ApplicationController
   # PATCH/PUT /channelgroups/1
   def update
     if @channelgroup.update(channelgroup_params)
-      render json: @channelgroup
+      # render json: @channelgroup -> update.json.props
     else
       render json: @channelgroup.errors, status: :unprocessable_content
     end
@@ -38,7 +38,7 @@ class Api::V1::ChannelgroupsController < ApplicationController
   def destroy
     # could add destroy permissions in the future
     @channelgroup.destroy!
-    render json: {message: 'Destroy successful'}, status: :accepted
+    render json: { message: "Destroy successful" }, status: :accepted
   end
 
   private
@@ -56,6 +56,6 @@ class Api::V1::ChannelgroupsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def channelgroup_params
-      params.expect(channelgroup: [:title, :description])
+      params.expect(channelgroup: [ :title, :description ])
     end
 end

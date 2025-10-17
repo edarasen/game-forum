@@ -5,15 +5,15 @@ class Api::V1::ReportsController < ApplicationController
   def index
     @post_reports = Report.posts
     @comment_reports = Report.comments
-    render json: {
-      posts: @post_reports,
-      comments: @comment_reports
-    }
+    # render json: {
+    #   posts: @post_reports,
+    #   comments: @comment_reports
+    # } -> index.json.props
   end
 
   # GET /reports/1
   def show
-    render json: @report
+    # render json: @report -> show.json.props
   end
 
   # POST /reports
@@ -37,7 +37,7 @@ class Api::V1::ReportsController < ApplicationController
     end
 
     if @report.save && valid_content
-      render json: @report, status: :created
+      # render json: @report, status: :created -> create.json.props
     else
       render json: @report.errors, status: :unprocessable_content
     end

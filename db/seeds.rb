@@ -119,6 +119,13 @@ def test_data
   guide_comment_test = Comment.create(body:"Woah! I should try that!", post:guide_post_test, user:user_one)
   support_comment_test = Comment.create(body:"I would love that as well!", post:support_post_test, user: user_two)
   puts "Comments seeded!"
+
+  # Reports
+  puts "Seeding Reports..."
+  report_post = Report.create(content_type: 'post', content_id:1, user_id: 3)
+  report_comment = Report.create(content_type: 'comment', content_id:1, user_id: 4)
+  puts "Reports seeded!"
+
 end
 
 test_data

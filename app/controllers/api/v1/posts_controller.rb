@@ -3,16 +3,17 @@ class Api::V1::PostsController < ApplicationController
   before_action :authenticate_user!, only: %i[ create update destroy ]
 
   # GET /posts
+  # **
   def index
     @channel = Channel.find(params.expect(:channel_id))
     @posts = @channel.posts
 
-    render json: @posts
+    # render json: @posts -> index.json.props
   end
 
   # GET /posts/1
   def show
-    render json: @post
+    # render json: @post -> show.json.props
   end
 
   # POST /channels
@@ -39,7 +40,7 @@ class Api::V1::PostsController < ApplicationController
     if can_post == false
       render json: {message: "User does not have the permission to post in this channel"}, status: :forbidden
     elsif can_post == true && @post.save
-      render json: @post, status: :created
+      # render json: @post, status: :created -> create.json.props
     else
       render json: @post.errors, status: :unprocessable_content
     end
@@ -49,7 +50,7 @@ class Api::V1::PostsController < ApplicationController
   def update
     if @post.user == current_user || current_user.role != 'user'
       if @post.update(post_params)
-        render json: @post
+        # render json: @post -> update.json.props
       else
         render json: @post.errors, status: :unprocessable_content
       end

@@ -1,0 +1,26 @@
+json.status do
+  json.code 201
+  json.message "Created channel #{@channel.id} successfully"
+end
+
+json.data do
+  json.channel_details do
+    json.extract! @channel, :id, :title, :description, :post_permission
+    json.post_count @channel.posts.count
+  end
+  json.channelgroup_details do
+    json.extract! @channel.channelgroup, :id, :title
+  end
+  json.posts do
+    json.array! @channel.posts do |post|
+      json.extract! post, :id, :title, :body
+      json.owner_details do
+        json.extract! post.user, :id, :username
+      end
+      json.comment_count post.comments.count
+    end
+  end
+
+  json.created_at @channel.created_at
+  json.updated_at @channel.updated_at
+end

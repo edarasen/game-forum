@@ -7,12 +7,12 @@ class Api::V1::CommentsController < ApplicationController
     @post = Post.find(params.expect(:post_id))
     @comments = @post.comments
 
-    render json: @comments
+    # render json: @comments -> index.json.props
   end
 
   # GET /comments/1
   def show
-    render json: @comment
+    # render json: @comment -> show.json.props
   end
 
   # POST /comments
@@ -22,7 +22,7 @@ class Api::V1::CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      render json: @comment, status: :created
+      # render json: @comment, status: :created -> create.json.props
     else
       render json: @comment.errors, status: :unprocessable_content
     end
@@ -32,7 +32,7 @@ class Api::V1::CommentsController < ApplicationController
   def update
     if @comment.user == current_user || current_user.role != 'user'
       if @comment.update(comment_params)
-        render json: @comment
+        # render json: @comment -> update.json.props
       else
         render json: @comment.errors, status: :unprocessable_content
       end
