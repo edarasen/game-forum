@@ -1,5 +1,6 @@
 class Api::V1::ReportsController < ApplicationController
   before_action :set_report, only: %i[ show destroy ]
+  before_action :ensure_admin_moderator, only: %i[index show destroy]
 
   def index
     @post_reports = Report.posts
@@ -56,7 +57,14 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    def ensure_admin_moderator
+      authenticate_user!
+      if !current_user.admin? && !current_user.moderator?
+        render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
+      end
+    end
+
     def set_report
       @report = Report.find(params.expect(:id))
     end

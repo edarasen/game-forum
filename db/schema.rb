@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_053937) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_022342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_053937) do
     t.bigint "channelgroup_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "post_permission", default: 2
     t.index ["channelgroup_id"], name: "index_channels_on_channelgroup_id"
   end
 

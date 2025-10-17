@@ -1,5 +1,6 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show update destroy ]
+  before_action :authenticate_user!, only: %i[ create update destroy ]
 
   # GET /comments
   def index
@@ -29,7 +30,7 @@ class Api::V1::CommentsController < ApplicationController
 
   # PATCH/PUT /comment/1
   def update
-    if @comment.user == current_user # || current_user.role != 'user'
+    if @comment.user == current_user || current_user.role != 'user'
       if @comment.update(comment_params)
         render json: @comment
       else
@@ -45,7 +46,7 @@ class Api::V1::CommentsController < ApplicationController
 
   # DELETE /post/1
   def destroy
-    if @comment.user == current_user # || current_user.role != 'user'
+    if @comment.user == current_user || current_user.role != 'user'
       @comment.destroy!
       render json: {message: 'Destroy successful'}, status: :accepted
     else

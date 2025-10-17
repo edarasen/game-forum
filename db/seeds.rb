@@ -90,8 +90,10 @@ def test_data
 
   # Channels
   puts "Seeding Channels..."
-  rules_c = Channel.create(title:"Rules & FAQ", description:"All new users should check this out!", channelgroup: welcome_cg)
-  announcements_c = Channel.create(title:"Announcements", description:"Stay updated on the game's development progress", channelgroup: welcome_cg)
+  delete_this_c = Channel.create(title:"Delete This", description:"For Testing Purposes", channelgroup: welcome_cg)
+  
+  rules_c = Channel.create(title:"Rules & FAQ", description:"All new users should check this out!", channelgroup: welcome_cg, post_permission: 'admin_moderator_only')
+  announcements_c = Channel.create(title:"Announcements", description:"Stay updated on the game's development progress", channelgroup: welcome_cg, post_permission: 'admin_moderator_only')
   game_discussion_c = Channel.create(title:"Game Discussion", description:"Talk about the game here!", channelgroup: pnb_cg)
   guides_c = Channel.create(title:"Guides", description:"Stuck? Find guides here!", channelgroup: pnb_cg)
 
@@ -102,6 +104,8 @@ def test_data
   
   # Posts
   puts "Seeding Posts..."
+  delete_post_test = Post.create(title:"Delete Post Test", body:"Delete This Please", channel:delete_this_c, user: user_two)
+  
   game_post_test = Post.create(title:"The puzzles are hard!", body:"Is it just me? Am I just stupid? haha", channel:game_discussion_c, user: user_one)
   guide_post_test = Post.create(title:"Here's how I solve the brewing puzzles every time", body:"Just count the number of lines coming from each node and make sure they're in the same position as the one on the chalkboard", channel:guides_c, user: user_two)
   support_post_test = Post.create(title:"Please add an inventory view outside of selling or foraging", body:"Would be nice to see everything I'm missing before I travel to a sanctum", channel:game_suggestions_c, user: user_one)
@@ -109,6 +113,8 @@ def test_data
 
   # Comments
   puts "Seeding Comments..."
+  delete_comment_test = Comment.create(body:"Delete Comment Test", post: delete_post_test, user: user_one)
+
   game_comment_test = Comment.create(body:"You're not stupid. The puzzles take a while to get used to!", post: game_post_test, user: user_two)
   guide_comment_test = Comment.create(body:"Woah! I should try that!", post:guide_post_test, user:user_one)
   support_comment_test = Comment.create(body:"I would love that as well!", post:support_post_test, user: user_two)
@@ -117,4 +123,4 @@ end
 
 test_data
 rawgdata_seed
-# itchdata_seed - itch is down again 16oct2025
+itchdata_seed

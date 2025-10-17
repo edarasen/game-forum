@@ -1,5 +1,6 @@
 class Api::V1::ChannelsController < ApplicationController
   before_action :set_channel, only: %i[ show update destroy ]
+  before_action :ensure_admin_moderator, only: %i[ create update destroy ]
 
   # GET /channels
   def index
@@ -42,13 +43,20 @@ class Api::V1::ChannelsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    def ensure_admin_moderator
+      authenticate_user!
+      if !current_user.admin? && !current_user.moderator?
+        render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
+      end
+    end
+
     def set_channel
       @channel = Channel.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def channel_params
-      params.expect(channel: [:title, :description])
+      params.expect(channel: [:title, :description, :post_permission])
     end
 end

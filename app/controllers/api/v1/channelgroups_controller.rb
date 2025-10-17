@@ -1,5 +1,6 @@
 class Api::V1::ChannelgroupsController < ApplicationController
   before_action :set_channelgroup, only: %i[ show update destroy ]
+  before_action :ensure_admin_moderator, only: %i[ create update destroy ]
 
   # GET /channelgroups
   def index
@@ -35,12 +36,20 @@ class Api::V1::ChannelgroupsController < ApplicationController
 
   # DELETE /channelgroups/1
   def destroy
+    # could add destroy permissions in the future
     @channelgroup.destroy!
     render json: {message: 'Destroy successful'}, status: :accepted
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def ensure_admin_moderator
+      authenticate_user!
+      if !current_user.admin? && !current_user.moderator?
+        render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
+      end
+    end
+
     def set_channelgroup
       @channelgroup = Channelgroup.find(params.expect(:id))
     end

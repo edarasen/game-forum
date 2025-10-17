@@ -1,5 +1,6 @@
 class Api::V1::PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
+  before_action :authenticate_user!, only: %i[ create update destroy ]
 
   # GET /posts
   def index
@@ -21,7 +22,23 @@ class Api::V1::PostsController < ApplicationController
     @post = @channel.posts.build(post_params)
     @post.user = current_user
 
-    if @post.save
+    can_post = false
+    case @channel.post_permission
+    when 'admin_only'
+      if current_user.admin?
+        can_post = true
+      end
+    when 'admin_moderator_only'
+      if current_user.admin? || current_user.moderator?
+        can_post = true
+      end
+    when 'all_users'
+      can_post = true
+    end
+
+    if can_post == false
+      render json: {message: "User does not have the permission to post in this channel"}, status: :forbidden
+    elsif can_post == true && @post.save
       render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_content
@@ -30,7 +47,7 @@ class Api::V1::PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    if @post.user == current_user # || current_user.role != 'user'
+    if @post.user == current_user || current_user.role != 'user'
       if @post.update(post_params)
         render json: @post
       else
@@ -46,7 +63,7 @@ class Api::V1::PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-    if @post.user == current_user # || current_user.role != 'user'
+    if @post.user == current_user || current_user.role != 'user'
       @post.destroy!
       render json: {message: 'Destroy successful'}, status: :accepted
     else
