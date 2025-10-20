@@ -16,6 +16,14 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # KELCIE, NOTE
+  # optimized routes :
+  #   channelgroup#show should show its channels
+  #   channel#show should show its posts
+  #   post#show should show its comments
+  #   user#show should show their posts
+
   namespace :api do
     namespace :v1 do
       get "/itchdata" => "itchdata#index"
@@ -24,14 +32,24 @@ Rails.application.routes.draw do
       resources :users
 
       resources :channelgroups, shallow: true do
-        resources :channels
+        resources :channels, shallow:true do
+          resources :posts, shallow:true do
+            resources :comments
+          end
+        end
       end
+
+      resources :reports, only: [:index, :show, :create, :destroy]
+
       namespace :admins do
+        get "/show_reports" => "users#show_reports"
+        get "/show_all" => "users#show_all"
         patch "/ban/:id" => "users#ban"
         patch "/approve_mod/:id" => "users#approve_moderator"
         resources :users
       end
       namespace :moderators do
+        get "/show_reports" => "users#show_reports"
         patch "/ban/:id" => "users#ban"
         resources :users, only: [ :show, :update ]
       end

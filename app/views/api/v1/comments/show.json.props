@@ -1,0 +1,22 @@
+json.status do
+  json.code 200
+  json.message "Fetched comment #{@comment.id} successfully"
+end
+
+json.data do
+  json.comment_details do
+    json.extract! @comment, :id, :body
+    json.owner_details do
+      json.extract! @comment.user, :id, :username
+    end
+  end
+  json.post_details do
+    json.extract! @comment.post, :id, :title, :body
+    json.owner_details do
+      json.extract! @comment.post.user, :id, :username
+    end
+  end
+
+  json.created_at @comment.created_at
+  json.updated_at @comment.updated_at
+end
