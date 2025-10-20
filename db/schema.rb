@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_022342) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_20_093555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -34,7 +34,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_022342) do
   create_table "comments", force: :cascade do |t|
     t.text "body"
     t.bigint "post_id", null: false
-    t.boolean "is_reported", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
@@ -54,7 +53,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_022342) do
     t.text "body"
     t.bigint "channel_id", null: false
     t.bigint "user_id", null: false
-    t.boolean "is_reported", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_posts_on_channel_id"

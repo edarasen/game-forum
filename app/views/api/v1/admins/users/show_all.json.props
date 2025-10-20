@@ -1,0 +1,18 @@
+json.status do
+  json.code 200
+  json.message "Successfully fetched users"
+end
+
+json.data do
+  json.set! :moderators do
+    json.array! @moderators do |u|
+      json.extract! u, :id, :username, :email, :role, :created_at, :updated_at
+    end
+  end
+
+  json.set! :users do
+    json.array! @users do |u|
+      json.extract! u, :id, :username, :email, :role, :created_at, :updated_at
+    end
+  end
+end

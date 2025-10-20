@@ -38,19 +38,21 @@ Rails.application.routes.draw do
           end
         end
       end
-      
+
       resources :reports, only: [:index, :show, :create, :destroy]
 
       namespace :admins do
+        get "/show_reports" => "users#show_reports"
+        get "/show_all" => "users#show_all"
         patch "/ban/:id" => "users#ban"
         patch "/approve_mod/:id" => "users#approve_moderator"
         resources :users
       end
       namespace :moderators do
+        get "/show_reports" => "users#show_reports"
         patch "/ban/:id" => "users#ban"
         resources :users, only: [ :show, :update ]
       end
     end
   end
-
 end

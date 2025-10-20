@@ -7,9 +7,16 @@ class Api::V1::Moderators::UsersController < ApplicationController
     render json: @user
   end
 
+  def show_reports
+    @reports = Reports.all
+  end
+
   def update
-    if @user.update(edit_user_params)
-      render json: { message: "Credentials updated!" }, status: :ok
+    if @user.admin? || @user.moderator?
+      render json: { message: "Unable to modify #{@user.role}" }, status: :unprocessable_entity
+    elsif @user.user?
+      @user.update(edit_user_params)
+      # render json: { message: "Credentials updated!" }, status: :ok
     else
       render json: { message: "Invalid changes." }, status: :unprocessable_entity
     end
@@ -18,7 +25,9 @@ class Api::V1::Moderators::UsersController < ApplicationController
   def ban
     if @user.user? && !@user.deactivated?
       @user.update(deactivated: true, deactivated_at: Time.current)
-      render json: { message: "#{@user.username} has been banned." }, status: :ok
+      # render json: { message: "#{@user.username} has been banned." }, status: :ok
+    elsif @user.admin? || @user.moderator?
+      render json: { message: "Unable to ban #{@user.role}" }, status: :unprocessable_entity
     else
       render json: { message: "#{@user.username} is already banned" }, status: :unprocessable_entity
     end
