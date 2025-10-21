@@ -202,6 +202,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
+    oj (3.16.11)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     parallel (1.27.0)
@@ -218,6 +221,10 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.5.1)
+    props_template (0.38.0)
+      actionview (>= 7.0, < 9.0)
+      activesupport (>= 7.0, < 9.0)
+      oj (~> 3.9)
     psych (5.2.6)
       date
       stringio
@@ -415,6 +422,7 @@ DEPENDENCIES
   httparty
   kamal
   pg
+  props_template
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.3)

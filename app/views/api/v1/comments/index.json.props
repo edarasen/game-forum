@@ -1,0 +1,24 @@
+json.status do
+  json.code 200
+  json.message "Fetched comments successfully"
+end
+
+json.data do
+  json.post_details do
+    json.extract! @post, :id, :title, :body
+    json.owner_details do
+      json.extract! @post.user, :id, :username
+    end
+    json.comment_count @post.comments.count
+  end
+
+  json.comments do
+    json.array! @comments do |comment|
+      json.extract! comment, :id, :body
+      json.owner_details do
+        json.extract! comment.user, :id, :username
+      end
+      json.extract! comment, :created_at, :updated_at
+    end
+  end
+end

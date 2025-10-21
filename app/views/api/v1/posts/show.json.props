@@ -1,0 +1,28 @@
+json.status do
+  json.code 200
+  json.message "Fetched post #{@post.id} successfully"
+end
+
+json.data do
+  json.post_details do
+    json.extract! @post, :id, :title, :body
+    json.comment_count @post.comments.count
+  end
+  json.channel_details do
+    json.extract! @post.channel, :id, :title, :post_permission
+  end
+  json.owner_details do
+    json.extract! @post.user, :id, :username
+  end
+  json.comments do
+    json.array! @post.comments do |comment|
+      json.extract! comment, :id, :body
+      json.owner do
+        json.extract! comment.user, :id, :username
+      end
+    end
+  end
+
+  json.created_at @post.created_at
+  json.updated_at @post.updated_at
+end

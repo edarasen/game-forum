@@ -1,0 +1,18 @@
+json.status do
+  json.code 200
+  json.message "Fetched channels successfully"
+end
+
+json.data do
+  json.channelgroup_details do
+    json.extract! @channelgroup, :id, :title, :description
+  end
+
+  json.channels do
+    json.array! @channels do |channel|
+      json.extract! channel, :id, :title, :description, :post_permission
+      json.post_count channel.posts.count
+      json.extract! channel, :created_at, :updated_at
+    end
+  end
+end

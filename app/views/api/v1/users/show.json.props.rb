@@ -1,0 +1,11 @@
+json.status do
+  json.code 200
+  json.message "Fetching successful!"
+end
+
+json.data do
+  json.extract! @user, :id, :username, :email, :role
+
+  json.created_at @user.created_at
+  json.updated_at @user.updated_at
+end

@@ -72,5 +72,62 @@ def itchdata_seed
   puts "Finished seeding data from itch.io"
 end
 
+def test_data
+  # Users
+  puts "Seeding Users..."
+  admin = User.create(username: "god_mode", email:"admin_test@test.com", password: "password", profile_picture:"", role:"admin")
+  moderator_one = User.create(username: "moderater_one", email:"moderator_test@test.com", password:"password", profile_picture:"", role: "moderator", moderator_status:"approved")
+  user_one = User.create(username:"user01", email: "user01_test@test.com", password: "password")
+  user_two = User.create(username:"user02", email: "user02_test@test.com", password: "password")
+  puts "Users seeded!"
+
+  # Channel Groups
+  puts "Seeding Channel groups..."
+  welcome_cg = Channelgroup.create(title: "Welcome!", description: "New to the forum? Keep to date with announcements and rules here!")
+  pnb_cg = Channelgroup.create(title: "Pluck & Brew", description: "Anything and everything related to Pluck & Brew!")
+  support_cg = Channelgroup.create(title: "Support", description: "Bug reports, suggestions, and feedback!")
+  puts "Channel groups seeded!"
+
+  # Channels
+  puts "Seeding Channels..."
+  delete_this_c = Channel.create(title:"Delete This", description:"For Testing Purposes", channelgroup: welcome_cg)
+  
+  rules_c = Channel.create(title:"Rules & FAQ", description:"All new users should check this out!", channelgroup: welcome_cg, post_permission: 'admin_moderator_only')
+  announcements_c = Channel.create(title:"Announcements", description:"Stay updated on the game's development progress", channelgroup: welcome_cg, post_permission: 'admin_moderator_only')
+  game_discussion_c = Channel.create(title:"Game Discussion", description:"Talk about the game here!", channelgroup: pnb_cg)
+  guides_c = Channel.create(title:"Guides", description:"Stuck? Find guides here!", channelgroup: pnb_cg)
+
+  bug_reports_c = Channel.create(title:"Bug Reports", description:"Found a bug?", channelgroup: support_cg)
+  game_suggestions_c = Channel.create(title:"Game Suggestions", description:"The devs check this regularly", channelgroup: support_cg)
+  forum_feedback_c = Channel.create(title:"Forum Feedback", description:"Moderators check this regularly", channelgroup: support_cg)
+  puts "Channels seeded!"
+  
+  # Posts
+  puts "Seeding Posts..."
+  delete_post_test = Post.create(title:"Delete Post Test", body:"Delete This Please", channel:delete_this_c, user: user_two)
+  
+  game_post_test = Post.create(title:"The puzzles are hard!", body:"Is it just me? Am I just stupid? haha", channel:game_discussion_c, user: user_one)
+  guide_post_test = Post.create(title:"Here's how I solve the brewing puzzles every time", body:"Just count the number of lines coming from each node and make sure they're in the same position as the one on the chalkboard", channel:guides_c, user: user_two)
+  support_post_test = Post.create(title:"Please add an inventory view outside of selling or foraging", body:"Would be nice to see everything I'm missing before I travel to a sanctum", channel:game_suggestions_c, user: user_one)
+  puts "Posts seeded!"
+
+  # Comments
+  puts "Seeding Comments..."
+  delete_comment_test = Comment.create(body:"Delete Comment Test", post: delete_post_test, user: user_one)
+
+  game_comment_test = Comment.create(body:"You're not stupid. The puzzles take a while to get used to!", post: game_post_test, user: user_two)
+  guide_comment_test = Comment.create(body:"Woah! I should try that!", post:guide_post_test, user:user_one)
+  support_comment_test = Comment.create(body:"I would love that as well!", post:support_post_test, user: user_two)
+  puts "Comments seeded!"
+
+  # Reports
+  puts "Seeding Reports..."
+  report_post = Report.create(content_type: 'post', content_id:1, user_id: 3)
+  report_comment = Report.create(content_type: 'comment', content_id:1, user_id: 4)
+  puts "Reports seeded!"
+
+end
+
+test_data
 rawgdata_seed
 itchdata_seed

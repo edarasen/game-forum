@@ -1,17 +1,18 @@
 class Api::V1::ChannelsController < ApplicationController
   before_action :set_channel, only: %i[ show update destroy ]
+  before_action :ensure_admin_moderator, only: %i[ create update destroy ]
 
   # GET /channels
   def index
     @channelgroup = Channelgroup.find(params.expect(:channelgroup_id))
     @channels = @channelgroup.channels
 
-    render json: @channels
+    # render json: @channels -> index.json.props
   end
 
   # GET /channels/1
   def show
-    render json: @channel
+    # render json: @channel -> show.json.props
   end
 
   # POST /channels
@@ -38,16 +39,24 @@ class Api::V1::ChannelsController < ApplicationController
   # DELETE /channels/1
   def destroy
     @channel.destroy!
+    render json: {message: 'Destroy successful'}, status: :accepted
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    def ensure_admin_moderator
+      authenticate_user!
+      if !current_user.admin? && !current_user.moderator?
+        render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
+      end
+    end
+
     def set_channel
       @channel = Channel.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def channel_params
-      params.expect(channel: [:title, :description])
+      params.expect(channel: [:title, :description, :post_permission])
     end
 end
