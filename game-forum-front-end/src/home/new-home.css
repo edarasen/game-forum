@@ -1,3 +1,4 @@
+@import "tailwindcss";
 @font-face {
   font-family: 'Montserrat';
   src: url('/pnb-front-end/src/assets/fonts/Montserrat-VariableFont_wght.ttf')
@@ -32,7 +33,7 @@ body {
 
 .logo-img {
   width: 35px;
-  margin-top: 30px;
+  margin-top: 8px;
   margin-left: 0;
 }
 
@@ -108,8 +109,23 @@ body {
   background-color: #e00101; 
 }
 
-@media (min-width: 431px) {
+.abt {
+  color: #677365;
+  background: #fce5cd;
+  padding-top: 50px;
+}
+
+.gpFeat {
+  background: #677365;
+  color: #f7d486;
+}
+
+
+
+@media (min-width: 800px) {
   body {
-    background-size: cover;  
+    background-size: fill;  
   }
 }
+
+
