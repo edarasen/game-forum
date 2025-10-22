@@ -32,7 +32,6 @@ function Login({onLogin}) {
         handleHeaders(headers);
         onLogin(true);
         navigate('/');
-        console.log(headers);
       }
     }
     catch (error) {

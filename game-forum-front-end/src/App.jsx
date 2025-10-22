@@ -4,6 +4,7 @@ import Login from './pages/Login/Login';
 import Test from './pages/Test/Test'
 import LandingPage from "./home/home";
 import AboutPage from "./about/about";
+import NotFound from './pages/NotFound/NotFound';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from 'react';
 
@@ -24,10 +25,11 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/permissions-test" replace/> : <Login onLogin={handleLogin} /> }/>
-            <Route path="/permissions-test" element={<Test />}/>
             <Route path="/">
               <Route index element={<LandingPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="permissions-test" element={<Test />}/>
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>
