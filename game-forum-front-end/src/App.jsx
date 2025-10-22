@@ -24,11 +24,11 @@ function App() {
       <DataProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/permissions-test" replace/> : <Login onLogin={handleLogin} /> }/>
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
               <Route index element={<LandingPage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="permissions-test" element={<Test />}/>
+              {/* <Route path="permissions-test" element={<Test />}/> */}
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
