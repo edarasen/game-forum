@@ -58,7 +58,6 @@ function convertISOTimestamp(timestamp){
   convert_array.push(getMonthString(convert.getMonth()))
   convert_array.push(convert.getFullYear())
   convert_array.push(`${convert.getHours()}:${convert.getMinutes()}`)
-  //hassle code to make date readable here
   var convert_string = convert_array.join(" ")
   return convert_string;
 }

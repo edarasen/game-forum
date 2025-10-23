@@ -29,7 +29,7 @@ function App() {
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
-              <Route index element={<ForumMain onLogout={handleLogout}/>} />
+              <Route index element={<LandingPage/>} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
               <Route path="permissions-test" element={<Test />}/>

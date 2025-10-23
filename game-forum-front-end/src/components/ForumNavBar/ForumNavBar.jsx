@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/pnb logo.webp";
 
 function ForumNavBar({onLogout}){
-  const {userHeaders, resetHeaders, userDetails} = useData();
+  const {userHeaders, resetHeadersDetails, userDetails} = useData();
   const [menuOpen, setMenuOpen] = useState(false);
   const navListTailwind = "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6"
 
   const handleLogout = () => {
     onLogout()
-    resetHeaders()
+    resetHeadersDetails()
   }
 
   return (
@@ -28,6 +28,7 @@ function ForumNavBar({onLogout}){
         </div>
       </div>
       <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
+        <p>{userDetails['username']}</p>
         <Link to="/">Main Site</Link>
         <Link to="/forums">My Posts</Link>
         <Link to="/forums">Profile</Link>
