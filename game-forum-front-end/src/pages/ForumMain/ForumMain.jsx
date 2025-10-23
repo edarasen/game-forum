@@ -34,8 +34,7 @@ function ForumMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
-      <div className="pt-50 bg-red-500">
-        <h1>Channel Groups Display</h1>
+      <div className="py-6 flex flex-col gap-8">
         {
           channelGroupsData && channelGroupsData.map((channelgroup) => (
             <ChannelGroup 

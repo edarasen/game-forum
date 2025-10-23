@@ -11,7 +11,7 @@ json.data do
     
     json.channels do
       json.array! channelgroup.channels do |channel|
-        json.extract! channel, :id, :title, :description, :post_permission
+        json.extract! channel, :id, :title, :description, :post_permission, :updated_at
         json.post_count channel.posts.count
       end
     end

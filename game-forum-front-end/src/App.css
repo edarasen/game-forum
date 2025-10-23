@@ -1,9 +1,15 @@
-#root {
+:root{
   --pnb-green: #6B796A;
   --pnb-gold: #F7D480;
   --pnb-parchment: #FAE5CA;
   --pnb-text-green: #5B6153;
-  
+  --pnb-alternate-parchment: #6B796A20;
+}
+
+body{
+  background-color: var(--pnb-parchment);
+}
+#root {
   /* max-width: 1280px; */
   margin: 0 auto;
   /* padding: 2rem; */
