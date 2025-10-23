@@ -13,10 +13,15 @@ const DataProvider = ({children}) => {
     setUserHeaders(updatedHeader);
   }
 
+  const resetHeaders = () => {
+    setUserHeaders('');
+  }
+
   return (
     <DataContext.Provider value={
       {
         handleHeaders,
+        resetHeaders,
         userHeaders
       }
     }>

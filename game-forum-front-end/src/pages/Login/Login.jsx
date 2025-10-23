@@ -31,7 +31,7 @@ function Login({onLogin}) {
       if (data.data && headers){
         handleHeaders(headers);
         onLogin(true);
-        navigate('/');
+        navigate('/forums');
       }
     }
     catch (error) {
