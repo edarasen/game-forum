@@ -14,7 +14,7 @@ function Login({onLogin}) {
   // const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   const navigate = useNavigate();
-  const {handleHeaders} = useData();
+  const {handleHeaders, handleDetails} = useData();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -30,8 +30,9 @@ function Login({onLogin}) {
       const {data, headers} = response;
       if (data.data && headers){
         handleHeaders(headers);
+        handleDetails(data.data);
         onLogin(true);
-        navigate('/');
+        navigate('/forums');
       }
     }
     catch (error) {
