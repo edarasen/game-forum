@@ -120,7 +120,82 @@ body {
   color: #f7d486;
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+  @apply text-yellow-400;
+}
 
+.descript {
+  padding-bottom: 45px;
+  margin-top: 0%;
+  align-content: flex-start;
+  flex-direction: column;
+}
+
+.rdMap {
+  color: #677365;
+  background: #fce5cd;
+}
+
+.abtTeam {
+  color: #f7d486;
+  background: #677365;
+}
+
+.demo {
+  color:#677365;
+  background: #fce5cd;
+}
+
+.record {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-basis: 3xs;
+}
+
+.altar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0px;
+}
+
+.discussion {
+  background: #677365;
+  color: #f7d486;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.cta-btn {
+  background-color: #EFCF75;
+  color: #5E5E40;            
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.cta-btn.outline {
+  background: transparent;
+  border: 2px solid #EFCF75;
+  color: #EFCF75;
+}
+
+
+.cta-btn:hover {
+  background-color: #F7D486; 
+  color: #5E5E40;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
 
 @media (min-width: 800px) {
   body {

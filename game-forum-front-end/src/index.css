@@ -90,3 +90,25 @@ body {
   padding: 0;
   font-family: 'Montserrat';
 }
+
+/* .swiper-button-next,
+.swiper-button-prev {
+  @apply text-yellow-400;
+} */
+
+
+/*@layer utilities {
+  .swiper-button-next,
+  .swiper-button-prev {
+    @apply text-yellow-500; /* or your color */
+  /*}
+}*/
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #f7d486 !important;
+}
+
+.swiper-pagination-bullet {
+  background-color: #f7d486;
+}
