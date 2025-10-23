@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get "/itchdata" => "itchdata#index"
       get "/rawgdata" => "rawgdata#index"
       patch "/apply_mod" => "users#apply_moderator"
+      get "/latest" => "posts#latest"
       resources :users
 
       resources :channelgroups, shallow: true do

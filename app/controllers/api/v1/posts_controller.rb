@@ -16,6 +16,11 @@ class Api::V1::PostsController < ApplicationController
     # render json: @post -> show.json.props
   end
 
+  def latest
+    @posts = Post.order(created_at: :desc)
+    # render json: @post -> latest.json.props
+  end
+
   # POST /channels
   # Make sure to add authorization token in the headers to be able to POST
   def create

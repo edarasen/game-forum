@@ -1,4 +1,5 @@
 import "./ChannelPreview.css"
+import { useNavigate } from "react-router-dom";
 
 function getDayOfWeekString(day){
   var string = '';
@@ -63,8 +64,14 @@ function convertISOTimestamp(timestamp){
 }
 
 function ChannelPreview(props){
+  const navigate = useNavigate();
+
+  function navigateToChannel(channel_id){
+    navigate(`/channels/${channel_id}`)
+  }
+
   return (
-    <div className="flex flex-row justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)" onClick={()=>{console.log(props.channel['id'])}}>
+    <div className="flex flex-row justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)" onClick={()=>{navigateToChannel(props.channel['id'])}}>
       <div>
         <h4 className="font-semibold text-2xl">{props.channel['title']}</h4>
         <h6 className="text-sm">Last Updated : {convertISOTimestamp(props.channel['updated_at'])}</h6>

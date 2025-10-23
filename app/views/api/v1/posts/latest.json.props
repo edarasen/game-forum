@@ -1,0 +1,17 @@
+json.status do
+  json.code 200
+  json.message "Fetched latest posts successfully"
+end
+
+json.data do
+  json.posts do
+    json.array! @posts do |post|
+      json.extract! post, :id, :title, :body
+      json.owner do
+        json.extract! post.user, :id, :username
+      end
+      json.post_count post.comments.count
+      json.extract! post, :created_at, :updated_at
+    end
+  end
+end

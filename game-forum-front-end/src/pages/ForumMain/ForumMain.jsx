@@ -34,16 +34,17 @@ function ForumMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
-      <div className="py-6 flex flex-col gap-8">
         {
-          channelGroupsData && channelGroupsData.map((channelgroup) => (
-            <ChannelGroup 
-              key={`channelgroup-${channelgroup['channelgroup_details']['id']}`} 
-              channelgroup={channelgroup}
-            />
-          ))
+          channelGroupsData.length > 0 ? 
+          <div className="py-6 flex flex-col gap-8">
+            {channelGroupsData.map((channelgroup) => (
+              <ChannelGroup 
+                key={`channelgroup-${channelgroup['channelgroup_details']['id']}`} 
+                channelgroup={channelgroup}
+              />
+            ))}
+          </div> : "Retrieving channel groups data..."
         }
-      </div>
     </>
   )
 }
