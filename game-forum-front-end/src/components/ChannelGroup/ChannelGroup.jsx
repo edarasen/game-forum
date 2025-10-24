@@ -7,7 +7,7 @@ function ChannelGroup(props){
     <div className="border-2 border-solid border-(--pnb-green) mx-2 text-left">
       <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
         <img src={forums_cg_logo} alt="Pluck and Brew Logo" className="w-12 h-12"/>
-        <div className="flex flex-col">
+        <div className="flex flex-col text-left">
           <h1 className="font-semibold text-2xl">{props.channelgroup['channelgroup_details']['title']}</h1>
           <h3 className="text-sm">{props.channelgroup['channelgroup_details']['description']}</h3>
         </div>        

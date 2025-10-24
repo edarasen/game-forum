@@ -63,14 +63,14 @@ function convertISOTimestamp(timestamp){
 function PostPreview(props){
   return(
     <div className="flex flex-row items-center justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)">
-      <div>
+      <div className="text-left">
         <h4 className="font-semibold text-2xl">{props.post['title']}</h4>
         <h6 className="text-sm">By : {props.post['owner_details']['username']}</h6>
         <h6 className="text-sm">Created : {convertISOTimestamp(props.post['created_at'])}</h6>
       </div>
       <div className="text-center">
         <p className="font-semibold text-2xl">{props.post['comment_count']}</p>
-        <p className="text-sm">{props.post['comment_count'] > 1 ? "Posts": "Post"}</p>
+        <p className="text-sm">{props.post['comment_count'] > 1 ? "Comments": "Comment"}</p>
       </div>
     </div>
   )

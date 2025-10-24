@@ -7,7 +7,7 @@ function ForumNavBar({onLogout}){
   const navigate = useNavigate()
   const {userHeaders, resetHeadersDetails, userDetails} = useData();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navListTailwind = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-12 gap-16"
+  const navOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-12 gap-16"
   const navButton = "hover:font-semibold"
 
   const handleLogout = () => {
@@ -29,7 +29,7 @@ function ForumNavBar({onLogout}){
           <span></span>
         </div>
       </div>
-      <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
+      <div className={`${navOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <Link to="/" className={navButton}>Main Site</Link>
         <Link to="/forums" className={navButton}>My Posts</Link>
         <Link to="/forums" className={navButton}>Profile</Link>

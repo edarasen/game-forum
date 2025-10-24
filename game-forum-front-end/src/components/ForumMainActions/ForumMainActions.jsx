@@ -1,0 +1,39 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useData } from "../../context/DataProvider"
+import add_icon from "../../assets/add_icon.svg"
+import latest_icon from "../../assets/latest_icon.svg"
+import search_icon from "../../assets/search_icon.svg"
+
+function ForumMainActions(){
+  const {userHeaders} = useData()
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const actionLink = "flex flex-row items-center gap-3 font-semibold px-4 sm:px-8 py-2 rounded-full cursor-pointer"
+  const mainActionLink = `${actionLink} bg-(--pnb-green) text-(--pnb-gold)`
+  const secondaryActionLink = `${actionLink} border-(--pnb-green) border-2 text-(--pnb-green)`
+
+  const searchOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) py-12 gap-12"
+  return (
+    <div className="flex flex-row justify-around pt-6">
+      <div className={`${searchOverlay} ${menuOpen ? "flex" : "hidden"}`}>
+        <div className="flex flex-col items-center w-[80%] gap-4">
+          <div className="flex flex-row gap-4">
+            <img src={search_icon} alt="Search Icon" className="w-8 h-8"/> 
+            <p className="font-semibold text-2xl">Search</p>
+          </div>
+          <input type='text' className="rounded-md p-2 text-lg border border-black h-20 w-full"></input>
+        </div>
+        <button className={secondaryActionLink} onClick={()=>{setMenuOpen(!menuOpen)}}>Back</button>
+      </div>
+      {
+        userHeaders ?
+        <Link to="/posts/new" className={mainActionLink}><img src={add_icon} alt="Add Icon" className="w-8 h-8"/>New Post</Link> : <></>
+      }
+      <Link to="/latest" className={secondaryActionLink}><img src={latest_icon} alt="Auto Renew Icon" className="w-8 h-8"/>Latest Posts</Link>
+      <button className={secondaryActionLink} onClick={()=>{setMenuOpen(!menuOpen)}}><img src={search_icon} alt="Search Icon" className="w-8 h-8"/></button>
+    </div>
+  )
+}
+
+export default ForumMainActions;
