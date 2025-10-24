@@ -4,6 +4,9 @@ import "./new-home.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { Autoplay } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useData } from "../context/DataProvider";
 import "swiper/css";
 import "swiper/css/navigation";
 import gal1 from "../assets/gal1.webp";
@@ -21,55 +24,40 @@ import ContactSection from "../component/ContactSection";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [homeRoute, setHomeRoute] = useState(false);
+  const {userHeaders, resetHeadersDetails, userDetails} = useData();
+  const navigate = useNavigate();
 
-  const handleLogoClick = () => {
-    setHomeRoute(true);
-    setTimeout(() => {
-      window.location.href = "/";
-      setHomeRoute(false);
-    }, 150);
+  const navListTailwind =
+    "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
+
+  const handleLogout = () => {
+    onLogout();
+    resetHeadersDetails();
   };
 
   return (
     <>
-      <nav className="navbar">
-        <div
-          className={`logo ${homeRoute ? "clicked" : ""}`}
-          onClick={handleLogoClick}
-        >
-          <img src={logo} alt="Pluck and Brew Logo" className="logo-img" />
-        </div>
-
-        <div
-          className={`hamburger ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-
-        <ul className={`nav-list ${menuOpen ? "active" : ""}`}>
-          <li>
-            <a href="#">About</a>
-          </li>
-          <li>
-            <a
-              href="https://nalshiragames.itch.io/pluck-brew-v02"
-              target="_blank"
-            >
-              Itch.io Demo
-            </a>
-          </li>
-          <li>
-            <a href="abt">Contact</a>
-          </li>
-          <li>
-            <a href="#">Forums</a>
-          </li>
-        </ul>
-      </nav>
+      <nav>
+            <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
+              {userHeaders ? <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399" className="w-10 h-10"></img> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
+              <h1 className="text-(--pnb-gold) text-lg font-medium">About P&B</h1>
+              <div
+                className={`hamburger ${menuOpen ? "open" : ""}`}
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
+              <p>{userDetails['username']}</p>
+              <Link to="/">Main Site</Link>
+              <Link to="/forums">My Posts</Link>
+              <Link to="/forums">Profile</Link>
+              {userHeaders ? <button onClick={handleLogout}>Log Out</button> : <Link to="/login-test">Log In</Link> }
+            </div>
+          </nav>
       <div className="PnB">
         {/* <img src="landing-page.webp" alt="PnB Logo" /> */}
       </div>
@@ -301,7 +289,9 @@ const LandingPage = () => {
           lore, and share fanart with other players!
         </p>
         <div class="cta-buttons">
-          <button class="cta-btn outline">Go to Forums</button>
+          <button class="cta-btn outline" onClick={() => navigate("/forums")}>
+            Go to Forums
+          </button>
           <button class="cta-btn outline">Join Discord</button>
         </div>
       </div>
