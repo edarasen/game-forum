@@ -9,6 +9,7 @@ import AboutPage from "./about/about";
 import NotFound from './pages/NotFound/NotFound';
 import ForumMain from './pages/ForumMain/ForumMain';
 import Channel from './pages/Channel/Channel';
+import LatestPosts from './pages/LatestPosts/LatestPosts';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,7 +35,8 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
               <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
-              <Route path="permissions-test" element={<Test />}/>
+              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
+              {/* <Route path="permissions-test" element={<Test />}/> */}
               <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
               <Route path="*" element={<NotFound />} />
             </Route>

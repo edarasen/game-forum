@@ -7,11 +7,17 @@ import search_icon from "../../assets/search_icon.svg"
 
 function ForumMainActions(){
   const {userHeaders} = useData()
+  const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
   const actionLink = "flex flex-row items-center gap-3 font-semibold px-4 sm:px-8 py-2 rounded-full cursor-pointer"
   const mainActionLink = `${actionLink} bg-(--pnb-green) text-(--pnb-gold)`
   const secondaryActionLink = `${actionLink} border-(--pnb-green) border-2 text-(--pnb-green)`
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    console.log(`search: ${search}`);
+  }
 
   const searchOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) py-12 gap-12"
   return (
@@ -22,7 +28,9 @@ function ForumMainActions(){
             <img src={search_icon} alt="Search Icon" className="w-8 h-8"/> 
             <p className="font-semibold text-2xl">Search</p>
           </div>
-          <input type='text' className="rounded-md p-2 text-lg border border-black h-20 w-full"></input>
+          <form className="w-full" onSubmit={submitSearch}>
+            <input type='text' className="rounded-md p-2 text-lg border border-black h-20 w-full" onChange={(e) => {setSearch(e.target.value)}}></input>
+          </form>
         </div>
         <button className={secondaryActionLink} onClick={()=>{setMenuOpen(!menuOpen)}}>Back</button>
       </div>
