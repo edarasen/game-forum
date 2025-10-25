@@ -1,0 +1,32 @@
+json.status do
+  json.code 200
+  json.message "Posts fetching successful!"
+end
+
+json.data do
+  json.id current_user.id
+  json.username current_user.username
+  json.email current_user.email
+  json.role current_user.role
+  json.created_at current_user.created_at
+  json.updated_at current_user.updated_at
+
+  json.posts @user_posts.map { |post|
+    {
+      id: post.id,
+      title: post.title,
+      body: post.body,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      channel_id: post.channel_id,
+      comments: post.comments.map { |comment|
+        {
+          id: comment.id,
+          body: comment.body,
+          user_id: comment.user_id,
+          created_at: comment.created_at
+        }
+      }
+    }
+  }
+end

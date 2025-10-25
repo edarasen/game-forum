@@ -9,6 +9,7 @@ import AboutPage from "./about/about";
 import NotFound from './pages/NotFound/NotFound';
 import ForumMain from './pages/ForumMain/ForumMain';
 import Channel from './pages/Channel/Channel';
+import MyPosts from './pages/MyPosts/MyPosts';
 import Signup from './pages/SignUp/SignUp';
 import LatestPosts from './pages/LatestPosts/LatestPosts';
 import SearchResults from './pages/SearchResults/SearchResults';
@@ -31,6 +32,7 @@ function App() {
       <DataProvider>
         <BrowserRouter>
           <Routes>
+                          
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
               <Route index element={<LandingPage/>} />
@@ -39,6 +41,7 @@ function App() {
               <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
               <Route path="permissions-test" element={<Test />}/>
               <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
+              <Route path="my-posts" element={<MyPosts />} />
               <Route path="sign-up" element={<Signup />} />
               <Route path="*" element={<NotFound />} />
               <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>

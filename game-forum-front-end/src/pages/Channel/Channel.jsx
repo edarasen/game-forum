@@ -21,6 +21,7 @@ function getChannelData(userHeaders, id){
 
 function Channel({onLogout}){
   const [channelData, setChannelData] = useState('');
+  // {channel_id, post_id} can be used for later
   let {channel_id} = useParams();
   let {userHeaders} = useData();
 

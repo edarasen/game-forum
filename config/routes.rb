@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       patch "/apply_mod" => "users#apply_moderator"
       get "/latest" => "posts#latest"
       get "/search" => "search#search"
+      get "/all_posts" => "users#posts"
       resources :users
 
       resources :channelgroups, shallow: true do
