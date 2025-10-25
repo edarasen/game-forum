@@ -6,18 +6,25 @@ function getDayOfWeekString(day){
   switch (day){
     case 0:
       string = "Sun"
+      break;
     case 1:
       string = "Mon"
+      break;
     case 2:
       string = "Tue"
+      break;
     case 3: 
       string = "Wed"
+      break;
     case 4:
       string = "Thu"
+      break;
     case 5:
       string = "Fri"
+      break;
     case 6:
       string = "Sat"
+      break;
   }
   return string;
 }
@@ -26,28 +33,40 @@ function getMonthString(month){
   switch (month){
     case 0:
       string = "Jan"
+      break;
     case 1:
       string = "Feb"
+      break;
     case 2:
       string = "Mar"
+      break;
     case 3: 
       string = "Apr"
+      break;
     case 4:
       string = "May"
+      break;
     case 5:
       string = "Jun"
+      break;
     case 6:
       string = "Jul"
+      break;
     case 7:
       string = "Aug"
+      break;
     case 8:
       string = "Sep"
+      break;
     case 9:
       string = "Oct"
+      break;
     case 10:
       string = "Nov"
+      break;
     case 11:
       string = "Dec"
+      break;
   }
   return string;
 }
