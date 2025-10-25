@@ -2,22 +2,24 @@ class Api::V1::ReportsController < ApplicationController
   before_action :set_report, only: %i[ show destroy ]
   before_action :ensure_admin_moderator, only: %i[index show destroy]
 
+  # GET api/v1/reports
+  # Returns : @post_reports, @comment_reports data is converted to json using template in 'views/api/v1/reports/index.json.props'
   def index
     @post_reports = Report.posts
     @comment_reports = Report.comments
-    # render json: {
-    #   posts: @post_reports,
-    #   comments: @comment_reports
-    # } -> index.json.props
   end
 
-  # GET /reports/1
+  # GET api/v1/reports/:id
+  # Uses before_action set_report to specify a report
+  # Returns : @report data is converted to json using template in 'views/api/v1/reports/show.json.props'
   def show
-    # render json: @report -> show.json.props
   end
 
-  # POST /reports
-  # Make sure to add authorization token in the headers to be able to POST
+  # POST api/v1/reports
+  # Checks if the post/comment exists before allowing the report to be made
+  # Uses before_action ensure_admin_moderator before the action proceeds
+  # Returns : @report data is converted to json using template in 'views/api/v1/reports/create.json.props'
+  # OR an error message if object fails to save due to invalid parameters
   def create
     @report = Report.new(report_params)
     @report.user_id = current_user.id
@@ -36,41 +38,41 @@ class Api::V1::ReportsController < ApplicationController
       end
     end
 
-    if @report.save && valid_content
-      # render json: @report, status: :created -> create.json.props
-    else
+    if !@report.save && !valid_content
       render json: @report.errors, status: :unprocessable_content
     end
   end
 
-  # DELETE /reports/1
+  # DELETE api/v1/reports/:id
+  # Uses before_action ensure_admin_moderator before the action proceeds
+  # Uses before_action set_report to specify a report
+  # Returns : json message: "Destroy successful" after destroy action is executed
   def destroy
-    # if current_user.role != 'user'
-      @report.destroy!
-      render json: {message: 'Destroy successful'}, status: :accepted
-    # else
-    #   render json: {
-    #     message: 'Invalid delete request', 
-    #     data: 'Cannot delete reports unless current user role is admin or moderator'
-    #   }, status: :unprocessable_content
-    # end
+    @report.destroy!
+    render json: {message: 'Destroy successful'}, status: :accepted
   end
 
   private
-
-    def ensure_admin_moderator
-      authenticate_user!
-      if !current_user.admin? && !current_user.moderator?
-        render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
-      end
+  # Authenticates user and checks role of user
+  # Returns : json message: current_user is not an administrator or moderator
+  # OR proceeds to next action 
+  def ensure_admin_moderator
+    authenticate_user!
+    if !current_user.admin? && !current_user.moderator?
+      render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
     end
+  end
 
-    def set_report
-      @report = Report.find(params.expect(:id))
-    end
+  # Assigns a @report object before proceeding to next action
+  # @param id [Integer] the report id specified in params
+  def set_report
+    @report = Report.find(params.expect(:id))
+  end
 
-    # Only allow a list of trusted parameters through.
-    def report_params
-      params.expect(report: [:content_type, :content_id])
-    end
+  # Only allow a list of trusted parameters through
+  # @param content_type [Enum:Integer] post or comment
+  # @param id [Integer] the post/comment's id
+  def report_params
+    params.expect(report: [:content_type, :content_id])
+  end
 end
