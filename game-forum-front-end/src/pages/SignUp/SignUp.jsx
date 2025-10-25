@@ -4,30 +4,61 @@ import { Link } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
 import logo from "../../assets/pnb logo.webp";
 import Loader from "../../components/Loader/Loader";
+import axios from "axios";
 
-const Signup = () => {
+const API_URL = import.meta.env.VITE_API_URL;
+
+const Signup = ({ onLogin }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { userHeaders, resetHeadersDetails, userDetails } = useData();
+  const {
+    userHeaders,
+    resetHeadersDetails,
+    userDetails,
+    handleHeaders,
+    handleDetails,
+  } = useData();
   const navListTailwind =
     "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
-
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    try {
+      const signUpCredentials = {
+        user: {
+          username,
+          email,
+          password,
+        },
+      };
+      setIsLoading(true);
 
-   
+      const response = await axios.post(
+        `${API_URL}/users/signup`,
+        signUpCredentials
+      );
+
+      const { data, headers } = response;
+      if (data.data && headers) {
+        handleHeaders(headers);
+        handleDetails(data.data);
+        setIsLoading(false);
+        navigate("/login");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Signup error:", error);
+    }
+
     setTimeout(() => {
-      navigate("/login-test");
-    }, 3000); 
+      navigate("/login");
+    }, 3000);
   };
 
   return (
@@ -71,11 +102,8 @@ const Signup = () => {
         style={{ backgroundColor: "#FCE5CD" }}
       >
         {/* pang loading UI */}
-        {isLoading && (
-          <Loader />
-        )}
+        {isLoading && <Loader />}
 
-        
         {!isLoading && (
           <div
             className="w-full max-w-sm p-8 rounded-xl shadow-lg"
