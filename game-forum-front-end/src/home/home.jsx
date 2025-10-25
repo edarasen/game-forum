@@ -7,6 +7,8 @@ import { Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useData } from "../context/DataProvider";
+import { useEffect } from "react";
+import axios from "axios";
 import "swiper/css";
 import "swiper/css/navigation";
 import gal1 from "../assets/gal1.webp";
@@ -22,7 +24,35 @@ import symbol from "../assets/symbol.webp";
 import GamesGallery from "../component/GamesGallery";
 import ContactSection from "../component/ContactSection";
 
+const API_URL = import.meta.env.VITE_API_URL;
+function getGameData() {
+  return axios.get(`${API_URL}/itchdata`).then(
+    (response) => response.data,
+    (error) =>
+      error.response.data.error
+        ? console.log(error.response.data.error)
+        : console.log(error.response.data.message)
+  );
+}
+
+
 const LandingPage = () => {
+
+const [gameData, setGameData] = useState(false);
+
+useEffect(()=>{
+    let mounted = true
+    getGameData().then((data)=>{
+      if(mounted){
+        setGameData(data[0]);
+        console.log('data mounted successfully');
+        console.log(data[0])
+      }
+    })
+    return ()=>(mounted=false);
+  }, []);
+
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const {userHeaders, resetHeadersDetails, userDetails} = useData();
   const navigate = useNavigate();
@@ -62,11 +92,11 @@ const LandingPage = () => {
         {/* <img src="landing-page.webp" alt="PnB Logo" /> */}
       </div>
       <div className="abt">
-        <p class="font-Montserrat, text-3xl">
+        <p className="font-Montserrat, text-3xl">
           <strong>About the Game</strong>
         </p>
         <br />
-        <p class="font-Montserrat, text-xl">
+        <p className="font-Montserrat, text-xl">
           <strong>Pluck & Brew</strong> is a cozy potion making game in
           development – solve <br />
           puzzles to brew potions, forage for ingredients, and travel different
@@ -80,7 +110,7 @@ const LandingPage = () => {
       <div className="gpFeat">
         <br />
         <br />
-        <p class="text-3xl">
+        <p className="text-3xl">
           <strong>Gameplay Features</strong>
         </p>
         <br />
@@ -257,11 +287,11 @@ const LandingPage = () => {
         <br />
         <div className="record">
           <div>
-            <p className="font-bold text-4xl text-center">200</p>
+            <p className="font-bold text-4xl text-center">{gameData['views_count']}</p>
             <p className="text-3xl text-center">Views</p>
           </div>
           <div>
-            <p className="font-bold text-4xl">200</p>
+            <p className="font-bold text-4xl">{gameData['downloads_count']}</p>
             <p className="text-3xl text-center">Downloads</p>
           </div>
         </div>
@@ -288,11 +318,11 @@ const LandingPage = () => {
           <br />
           lore, and share fanart with other players!
         </p>
-        <div class="cta-buttons">
-          <button class="cta-btn outline" onClick={() => navigate("/forums")}>
+        <div className="cta-buttons">
+          <button classname="cta-btn outline" onClick={() => navigate("/forums")}>
             Go to Forums
           </button>
-          <button class="cta-btn outline">Join Discord</button>
+          <button className="cta-btn outline">Join Discord</button>
         </div>
       </div>
       <div>
