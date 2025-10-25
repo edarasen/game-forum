@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show report apply_moderator posts]
+  before_action :set_user, only: %i[show]
   def show
     @user = User.find(params[:id])
     # render json: @user
@@ -8,6 +8,7 @@ class Api::V1::UsersController < ApplicationController
 
   def posts
     current_user.posts
+    render json: { posts: current_user.posts }, status: :ok
   end
 
   def apply_moderator
