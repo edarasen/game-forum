@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound/NotFound';
 import ForumMain from './pages/ForumMain/ForumMain';
 import Channel from './pages/Channel/Channel';
 import LatestPosts from './pages/LatestPosts/LatestPosts';
+import SearchResults from './pages/SearchResults/SearchResults';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,14 +32,17 @@ function App() {
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
+              <Route path="*" element={<NotFound />} />
               <Route index element={<LandingPage/>} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
-              <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
-              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
-              {/* <Route path="permissions-test" element={<Test />}/> */}
+              {/* LOG IN / SIGN UP */}
               <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
-              <Route path="*" element={<NotFound />} />
+              {/* FORUMS */}
+              <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
+              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
+              <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
+              <Route path="search" element={<SearchResults onLogout={handleLogout}/>}/>
+              {/* <Route path="permissions-test" element={<Test />}/> */}
             </Route>
           </Routes>
         </BrowserRouter>
