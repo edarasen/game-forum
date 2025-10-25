@@ -17,19 +17,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  # KELCIE, NOTE
-  # optimized routes :
-  #   channelgroup#show should show its channels
-  #   channel#show should show its posts
-  #   post#show should show its comments
-  #   user#show should show their posts
-
   namespace :api do
     namespace :v1 do
       get "/itchdata" => "itchdata#index"
       get "/rawgdata" => "rawgdata#index"
       patch "/apply_mod" => "users#apply_moderator"
       get "/latest" => "posts#latest"
+      get "/search" => "search#search"
+      get "/all_posts" => "users#posts"
       resources :users
 
       resources :channelgroups, shallow: true do

@@ -4,6 +4,8 @@ import { useData } from "../../context/DataProvider";
 import './ForumMain.css';
 import ChannelGroup from "../../components/ChannelGroup/ChannelGroup";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
+import ForumMainActions from "../../components/ForumMainActions/ForumMainActions";
+import Loader from "../../components/Loader/Loader";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -34,6 +36,8 @@ function ForumMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
+      <ForumMainActions/>
+      <div>
         {
           channelGroupsData.length > 0 ? 
           <div className="py-6 flex flex-col gap-8">
@@ -43,8 +47,9 @@ function ForumMain({onLogout}){
                 channelgroup={channelgroup}
               />
             ))}
-          </div> : "Retrieving channel groups data..."
+          </div> : <Loader/>
         }
+      </div>
     </>
   )
 }

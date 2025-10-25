@@ -7,10 +7,13 @@ json.data do
   json.posts do
     json.array! @posts do |post|
       json.extract! post, :id, :title, :body
-      json.owner do
+      json.channel_details do
+        json.extract! post.channel, :id, :title, :post_permission
+      end
+      json.owner_details do
         json.extract! post.user, :id, :username
       end
-      json.post_count post.comments.count
+      json.comment_count post.comments.count
       json.extract! post, :created_at, :updated_at
     end
   end
