@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { useData } from "../../context/DataProvider"
 import axios from "axios";
 
@@ -19,47 +19,53 @@ function getCommentsCount(post) {
   return post.comments?.length || 0;
 }
 
-function getChannelData(userHeaders, id){
+function getUserPosts(userHeaders) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/channels/${id}`, requestHeaders).then(
-    (response)=> response.data, 
-    (error) => error.response.data.error ? console.log(error.response.data.error) : console.log(error.response.data.message))
+  return axios.get(`${API_URL}/all_posts`, requestHeaders).then(
+    (response) => {
+      console.log("Full API response:", response.data);
+      return response.data;
+    },
+    (error) => {
+      console.error("API Error:", error);
+      console.error("Error response:", error.response);
+      return null;
+    }
+  )
 }
 
 function MyPosts() {
-  const [posts, setPosts] = useState([]);
+  const [postsData, setPostsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { userHeaders, userDetails } = useData();
 
-  const getPosts = useCallback(async () => {
-    if (!userHeaders || !userDetails) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      // Fetch all posts and filter by current user
-      const response = await axios.get(`${API_URL}/api/v1/posts/:id`, { headers: userHeaders });
-      
-      // The data is nested under response.data.data.posts
-      // Filter posts by current user's username from the owner field
-      const userPosts = response.data.data.posts.filter(post => post.owner?.username === userDetails.username);
-      setPosts(userPosts);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-      // On error, just set posts to empty array and let the UI handle it
-      setPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [userHeaders, userDetails]);
+  // Debug logs
+  console.log("userDetails:", userDetails);
+  console.log("postsData:", postsData);
 
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+    let mounted = true;
+    
+    if (userHeaders) {
+      setLoading(true);
+      getUserPosts(userHeaders).then((data) => {
+        if (mounted && data) {
+          console.log('Full data received:', data);
+          // Handle both response structures:
+          // Current: { posts: [...] }
+          // Expected: { data: { posts: [...] } }
+          const posts = data.data?.posts || data.posts;
+          console.log('Posts array:', posts);
+          setPostsData({ posts: posts });
+          setLoading(false);
+        }
+      })
+    }
+    
+    return () => (mounted = false);
+  }, [userHeaders]);
 
   if (loading) {
     return (
@@ -95,11 +101,11 @@ function MyPosts() {
 
           {/* Rows */}
           <div className="bg-[#FAE5CA] px-6 py-4">
-            {posts.length === 0 ? (
+            {!postsData?.posts || postsData.posts.length === 0 ? (
               <p className="py-8 text-[#5B6153]">You haven&apos;t created any posts yet.</p>
             ) : (
               <ul className="divide-y divide-slate-300/60">
-                {posts.map((post) => (
+                {postsData.posts.map((post) => (
                   <li key={post.id} className="flex items-center justify-between py-8">
                     <div>
                       <h3 className="text-2xl font-semibold text-[#5B6153]">{post.title}</h3>
