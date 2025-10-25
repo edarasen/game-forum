@@ -4,6 +4,10 @@ import { useData } from "../../context/DataProvider";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import search_icon from "../../assets/search_icon.svg"
+import left_icon from "../../assets/arrow_left_icon.svg"
+import down_icon from "../../assets/arrow_down_icon.svg"
+import PostPreview from "../../components/PostPreview/PostPreview";
+import UserPreview from "../../components/UserPreview/UserPreview";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -19,20 +23,22 @@ function getSearchResultsData(userHeaders, queryParam){
 function SearchResultsRenderUsers({users}){
   return users.length > 0 ? 
   users.map((user) => (
-    <p>{user['username']}</p>
+    <UserPreview key={`postpreview-${user['id']}`} user={user}/>
   )) : <p>No users found</p>
 }
 
 function SearchResultsRenderPosts({posts}){
   return posts.length > 0 ? 
   posts.map((post) => (
-    <p>{post['title']}</p>
+    <PostPreview key={`postpreview-${post['id']}`} post={post}/>
   )) : <p>No posts found</p>
 }
 
 function SearchResults({onLogout}){
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const [collapseUsers, setCollapseUsers] = useState(false);
+  const [collapsePosts, setCollapsePosts] = useState(false);
 
   const submitSearch = (e) => {
     e.preventDefault();
@@ -53,6 +59,7 @@ function SearchResults({onLogout}){
     getSearchResultsData(userHeaders, query).then((data)=>{
       if(mounted){
         setSearchResultsData(data.data);
+        console.log(data.data)
         console.log('data mounted successfully');
       }
     })
@@ -75,10 +82,13 @@ function SearchResults({onLogout}){
           {
             searchResultsData ? 
             <div className="flex flex-col border-2 border-(--pnb-green)">
-              <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
+              <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row justify-between items-center gap-3">
                   <h1 className="font-semibold text-2xl">Posts</h1>
+                  <img src={collapsePosts ? left_icon : down_icon} alt={collapsePosts ? "Expand Posts" : "Collapse Posts"} className="w-8 h-8" onClick={()=>{setCollapsePosts(!collapsePosts)}}/>
               </div>
-              <SearchResultsRenderPosts posts={searchResultsData['posts']}/>
+              <div className={collapsePosts ? "hidden" : ""}>
+                <SearchResultsRenderPosts posts={searchResultsData['posts']}/>
+              </div>
             </div> : <></>
           }
         </div>
@@ -86,10 +96,13 @@ function SearchResults({onLogout}){
           {
             searchResultsData ? 
             <div className="flex flex-col border-2 border-(--pnb-green)">
-              <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
+              <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row justify-between items-center gap-3">
                   <h1 className="font-semibold text-2xl">Users</h1>
+                  <img src={collapseUsers ? left_icon : down_icon} alt={collapseUsers ? "Expand Posts" : "Collapse Posts"} className="w-8 h-8" onClick={()=>{setCollapseUsers(!collapseUsers)}}/>
               </div>
-              <SearchResultsRenderUsers users={searchResultsData['users']}/>
+              <div className={collapseUsers ? "hidden" : ""}>
+                <SearchResultsRenderUsers users={searchResultsData['users']}/>
+              </div>
             </div> : <></>
           }
         </div>

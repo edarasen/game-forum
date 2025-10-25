@@ -18,7 +18,7 @@ function ForumNavBar({onLogout}){
   return (
     <nav>
       <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-        {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}></img> : <Link to="/forums"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
+        {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/forums"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
         <h1 className="text-(--pnb-gold) text-lg font-medium">P&B Forums</h1>
         <div
           className={`hamburger ${menuOpen ? "open" : ""}`}

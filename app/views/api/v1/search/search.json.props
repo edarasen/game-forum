@@ -13,6 +13,7 @@ json.data do
       json.owner_details do
         json.extract! post.user, :id, :username
       end
+      json.comment_count post.comments.count
       json.extract! post, :created_at, :updated_at
     end
   end
