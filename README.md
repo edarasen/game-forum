@@ -1,24 +1,23 @@
-# README
+# Game Forum Project
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Avion School Project : A game forum for Pluck & Brew, a game in development
+- Front end : React Vite
+- Back end API : Ruby on Rails
 
-Things you may want to cover:
+### Table of Contents
+- [React External Dependencies](#react-external-dependencies)
+- [Ruby on Rails External Dependencies](#ruby-on-rails-external-dependencies)
 
-* Ruby version
+### React External Dependencies
+- Tailwind CSS
+- Axios
+- Daisy UI
+- React Router development
+- Swiper
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Ruby on Rails External Dependencies
+- httparty
+- devise
+- devise-jwt
+- pg
+- props_template
