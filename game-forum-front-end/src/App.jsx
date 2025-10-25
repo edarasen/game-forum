@@ -9,6 +9,7 @@ import AboutPage from "./about/about";
 import NotFound from './pages/NotFound/NotFound';
 import ForumMain from './pages/ForumMain/ForumMain';
 import Channel from './pages/Channel/Channel';
+import Signup from './pages/SignUp/SignUp';
 import LatestPosts from './pages/LatestPosts/LatestPosts';
 import SearchResults from './pages/SearchResults/SearchResults';
 
@@ -32,17 +33,16 @@ function App() {
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
-              <Route path="*" element={<NotFound />} />
               <Route index element={<LandingPage/>} />
               <Route path="/about" element={<AboutPage />} />
-              {/* LOG IN / SIGN UP */}
-              <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
-              {/* FORUMS */}
               <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
-              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
               <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
+              <Route path="permissions-test" element={<Test />}/>
+              <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
+              <Route path="sign-up" element={<Signup />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
               <Route path="search" element={<SearchResults onLogout={handleLogout}/>}/>
-              {/* <Route path="permissions-test" element={<Test />}/> */}
             </Route>
           </Routes>
         </BrowserRouter>

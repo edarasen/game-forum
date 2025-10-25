@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
-/* 
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
+/* @import "tailwindcss";
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -68,3 +73,42 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/pnb-front-end/src/assets/fonts/Montserrat-VariableFont_wght.ttf')
+        url('/pnb-front-end/src/assets/fonts/Montserrat-Italic-VariableFont_wght.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat';
+}
+
+/* .swiper-button-next,
+.swiper-button-prev {
+  @apply text-yellow-400;
+} */
+
+
+/*@layer utilities {
+  .swiper-button-next,
+  .swiper-button-prev {
+    @apply text-yellow-500; /* or your color */
+  /*}
+}*/
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #f7d486 !important;
+}
+
+.swiper-pagination-bullet {
+  background-color: #f7d486;
+}

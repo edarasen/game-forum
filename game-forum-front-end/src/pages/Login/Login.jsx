@@ -3,6 +3,7 @@ import './Login.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
+import { Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -55,10 +56,14 @@ function Login({onLogin}) {
         </div>
         <div>
           <label>Password</label>
-          <input type='text' onChange={(e) => setPassword(e.target.value)}></input>
+          <input type='password' onChange={(e) => setPassword(e.target.value)}></input>
         </div>
         <button type='submit'>Log In</button>
       </form>
+      <div>
+        <p>Not a member yet?</p>
+        <Link to="/sign-up">Click here!</Link>
+      </div>
     </>
   )
 }
