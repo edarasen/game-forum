@@ -75,7 +75,7 @@ end
 def test_data
   # Users
   puts "Seeding Users..."
-  admin = User.create(username: "god_mode", email:"admin_test@test.com", password: "password", profile_picture:"", role:"admin")
+  admin = User.create(username: "god_mode", email:"admin_test@test.com", password: "password", profile_picture:"https://cataas.com/cat", role:"admin")
   moderator_one = User.create(username: "moderater_one", email:"moderator_test@test.com", password:"password", profile_picture:"", role: "moderator", moderator_status:"approved")
   user_one = User.create(username:"user01", email: "user01_test@test.com", password: "password")
   user_two = User.create(username:"user02", email: "user02_test@test.com", password: "password")

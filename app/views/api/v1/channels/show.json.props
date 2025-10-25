@@ -13,7 +13,7 @@ json.data do
   end
   json.posts do
     json.array! @channel.posts do |post|
-      json.extract! post, :id, :title, :body
+      json.extract! post, :id, :title, :body, :created_at
       json.owner_details do
         json.extract! post.user, :id, :username
       end

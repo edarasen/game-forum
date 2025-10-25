@@ -66,7 +66,7 @@ function convertISOTimestamp(timestamp){
 function ChannelPreview(props){
   const navigate = useNavigate();
 
-  function navigateToChannel(channel_id){
+  const navigateToChannel = (channel_id) => {
     navigate(`/channels/${channel_id}`)
   }
 

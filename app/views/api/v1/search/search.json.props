@@ -1,6 +1,6 @@
 json.status do
   json.code 200
-  json.message "Fetched latest posts successfully"
+  json.message "Fetched search results successfully"
 end
 
 json.data do
@@ -8,13 +8,19 @@ json.data do
     json.array! @posts do |post|
       json.extract! post, :id, :title, :body
       json.channel_details do
-        json.extract! post.channel, :id, :title, :post_permission
+        json.extract! post.channel, :id, :title
       end
       json.owner_details do
         json.extract! post.user, :id, :username
       end
       json.comment_count post.comments.count
       json.extract! post, :created_at, :updated_at
+    end
+  end
+  json.users do
+    json.array! @users do |user|
+      json.extract! user, :id, :username, :role, :profile_picture
+      json.post_count user.posts.count
     end
   end
 end

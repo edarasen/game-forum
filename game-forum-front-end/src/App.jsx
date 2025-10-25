@@ -10,6 +10,8 @@ import NotFound from './pages/NotFound/NotFound';
 import ForumMain from './pages/ForumMain/ForumMain';
 import Channel from './pages/Channel/Channel';
 import Signup from './pages/SignUp/SignUp';
+import LatestPosts from './pages/LatestPosts/LatestPosts';
+import SearchResults from './pages/SearchResults/SearchResults';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +41,8 @@ function App() {
               <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
               <Route path="sign-up" element={<Signup />} />
               <Route path="*" element={<NotFound />} />
+              <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>
+              <Route path="search" element={<SearchResults onLogout={handleLogout}/>}/>
             </Route>
           </Routes>
         </BrowserRouter>
