@@ -36,7 +36,7 @@ function App() {
                           
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
-              <Route index element={<LandingPage/>} />
+              <Route index element={<LandingPage onLogout={handleLogout}/>} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
               <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
