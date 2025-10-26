@@ -4,25 +4,33 @@ json.status do
 end
 
 json.data do
-  json.post_details do
-    json.extract! @post, :id, :title, :body
-    json.comment_count @post.comments.count
-  end
-  json.channel_details do
-    json.extract! @post.channel, :id, :title, :post_permission
-  end
-  json.owner_details do
-    json.extract! @post.user, :id, :username
-  end
-  json.comments do
-    json.array! @post.comments do |comment|
-      json.extract! comment, :id, :body
-      json.owner do
-        json.extract! comment.user, :id, :username
-      end
-    end
-  end
-
+  json.id @post.id
+  json.title @post.title
+  json.body @post.body
+  json.channel_id @post.channel_id
+  json.comment_count @post.comments.count
   json.created_at @post.created_at
   json.updated_at @post.updated_at
+
+  json.owner_details do
+    json.id @post.user.id
+    json.username @post.user.username
+  end
+
+  json.channel_details do
+    json.id @post.channel.id
+    json.title @post.channel.title
+  end
+
+  json.comments @post.comments.order(created_at: :desc).map { |comment|
+    {
+      id: comment.id,
+      body: comment.body,
+      created_at: comment.created_at,
+      owner: {
+        id: comment.user.id,
+        username: comment.user.username
+      }
+    }
+  }
 end

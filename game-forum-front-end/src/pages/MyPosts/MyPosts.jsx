@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { useData } from "../../context/DataProvider"
 import axios from "axios";
 
@@ -24,13 +25,9 @@ function getUserPosts(userHeaders) {
     headers: { ...userHeaders, Accept: "application/json" }
   }
   return axios.get(`${API_URL}/all_posts`, requestHeaders).then(
-    (response) => {
-      console.log("Full API response:", response.data);
-      return response.data;
-    },
+    (response) => response.data,
     (error) => {
       console.error("API Error:", error);
-      console.error("Error response:", error.response);
       return null;
     }
   )
@@ -40,10 +37,7 @@ function MyPosts() {
   const [postsData, setPostsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { userHeaders, userDetails } = useData();
-
-  // Debug logs
-  console.log("userDetails:", userDetails);
-  console.log("postsData:", postsData);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let mounted = true;
@@ -52,12 +46,7 @@ function MyPosts() {
       setLoading(true);
       getUserPosts(userHeaders).then((data) => {
         if (mounted && data) {
-          console.log('Full data received:', data);
-          // Handle both response structures:
-          // Current: { posts: [...] }
-          // Expected: { data: { posts: [...] } }
           const posts = data.data?.posts || data.posts;
-          console.log('Posts array:', posts);
           setPostsData({ posts: posts });
           setLoading(false);
         }
@@ -78,7 +67,7 @@ function MyPosts() {
   return (
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
-        {/* Profile header (no image, just a placeholder) */}
+        {/* Profile header */}
         <div className="flex justify-center items-center gap-4 mb-8">
           <div className="h-16 w-16 rounded-md bg-yellow-200 ring-4 ring-yellow-300/80 shadow-sm flex items-center justify-center text-xl font-semibold text-slate-700">
             {userDetails?.username?.slice(0, 1)?.toUpperCase() ?? "U"}
@@ -94,19 +83,21 @@ function MyPosts() {
 
         {/* Posts card */}
         <div className="mt-8 rounded border border-[#6B796A] bg-stone-50 shadow-sm">
-          {/* Card header bar */}
           <div className="rounded-t bg-[#6B796A] px-6 py-4">
             <h2 className="text-2xl font-semibold text-[#F7D480]">My Posts</h2>
           </div>
 
-          {/* Rows */}
           <div className="bg-[#FAE5CA] px-6 py-4">
             {!postsData?.posts || postsData.posts.length === 0 ? (
               <p className="py-8 text-[#5B6153]">You haven&apos;t created any posts yet.</p>
             ) : (
               <ul className="divide-y divide-slate-300/60">
                 {postsData.posts.map((post) => (
-                  <li key={post.id} className="flex items-center justify-between py-8">
+                  <li 
+                    key={post.id} 
+                    onClick={() => navigate(`/posts/${post.id}`)}
+                    className="flex items-center justify-between py-8 cursor-pointer hover:bg-[#F5E0C0] transition-colors"
+                  >
                     <div>
                       <h3 className="text-2xl font-semibold text-[#5B6153]">{post.title}</h3>
                       <p className="mt-1 text-slate-500">
