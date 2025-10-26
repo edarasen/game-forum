@@ -131,7 +131,7 @@ useEffect(()=>{
               <div className="flex justify-center px-80 pb-20">
                 <img src={gal1} className="w-full h-full object-cover" />
               </div>
-              <div className="descript" class>
+              <div className="descript">
                 <p>Fulfill patron requests to acquire renown</p>
               </div>
             </SwiperSlide>
@@ -319,7 +319,7 @@ useEffect(()=>{
           lore, and share fanart with other players!
         </p>
         <div className="cta-buttons">
-          <button classname="cta-btn outline" onClick={() => navigate("/forums")}>
+          <button className="cta-btn outline" onClick={() => navigate("/forums")}>
             Go to Forums
           </button>
           <button className="cta-btn outline">Join Discord</button>
