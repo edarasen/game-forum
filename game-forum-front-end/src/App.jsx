@@ -13,6 +13,7 @@ import MyPosts from './pages/MyPosts/MyPosts';
 import Signup from './pages/SignUp/SignUp';
 import LatestPosts from './pages/LatestPosts/LatestPosts';
 import SearchResults from './pages/SearchResults/SearchResults';
+import MyProfile from './pages/MyProfile/MyProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,13 +36,14 @@ function App() {
                           
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace/> : <Login onLogin={handleLogin} /> }/>
             <Route path="/">
-              <Route index element={<LandingPage/>} />
+              <Route index element={<LandingPage onLogout={handleLogout}/>} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="forums" element={<ForumMain onLogout={handleLogout}/>} />
               <Route path="channels/:channel_id" element={<Channel onLogout={handleLogout}/>}/>
               <Route path="permissions-test" element={<Test />}/>
               <Route path="login-test" element={<Login onLogin={handleLogin} />}/>
               <Route path="my-posts" element={<MyPosts />} />
+              <Route path="my-profile" element={<MyProfile />} />
               <Route path="sign-up" element={<Signup />} />
               <Route path="*" element={<NotFound />} />
               <Route path="latest" element={<LatestPosts onLogout={handleLogout}/>}/>

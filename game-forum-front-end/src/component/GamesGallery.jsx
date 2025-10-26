@@ -1,6 +1,5 @@
 import GameCard from "./GameCard";
 import { useState } from "react";
-import { useData } from "../context/DataProvider";
 import { useEffect } from "react";
 import axios from "axios";
 

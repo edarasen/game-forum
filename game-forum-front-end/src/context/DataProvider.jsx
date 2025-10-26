@@ -8,6 +8,7 @@ const DataProvider = ({children}) => {
 
   const handleDetails = (data) => {
     const updatedDetails = {
+      'id': data['id'],
       'email': data['email'],
       'username': data['username'],
       'profile_picture': data['profile_picture'],

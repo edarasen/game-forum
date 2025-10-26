@@ -31,8 +31,13 @@ function ForumNavBar({onLogout}){
       </div>
       <div className={`${navOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <Link to="/" className={navButton}>Main Site</Link>
-        <Link to="/my-posts" className={navButton}>My Posts</Link>
-        <Link to="/forums" className={navButton}>Profile</Link>
+        {/* shows only when userHeaders exist */}
+        {userHeaders ?
+          <>
+          <Link to="/my-posts" className={navButton}>My Posts</Link>
+          <Link to="/my-profile" className={navButton}>Profile</Link>
+          </> :
+          <> </>}
         {userHeaders ? <button onClick={handleLogout} className={navButton}>Log Out</button> : <Link to="/login-test" className={navButton}>Log In</Link> }
         {userHeaders ? 
           <div className="flex flex-row items-center gap-10 bg-(--pnb-green) px-6 py-4 text-(--pnb-gold) rounded-2xl">
