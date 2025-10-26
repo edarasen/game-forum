@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 function getDayOfWeekString(day){
   var string = '';
   switch (day){
@@ -80,8 +82,13 @@ function convertISOTimestamp(timestamp){
 }
 
 function PostPreview(props){
+  const navigate = useNavigate();
+  
   return(
-    <div className="flex flex-row items-center justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)">
+    <div 
+      onClick={() => navigate(`/posts/${props.post['id']}`)}
+      className="flex flex-row items-center justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green) cursor-pointer"
+    >
       <div className="text-left">
         <h4 className="font-semibold text-2xl">{props.post['title']}</h4>
         <h6 className="text-sm">By : {props.post['owner_details']['username']}</h6>
@@ -93,7 +100,6 @@ function PostPreview(props){
       </div>
     </div>
   )
-  // onClick={()=>{navigateToChannel(props.channel['id'])}}
 }
 
 export default PostPreview;
