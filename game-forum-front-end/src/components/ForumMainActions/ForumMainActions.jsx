@@ -26,24 +26,54 @@ function ForumMainActions(){
       <div className={`${searchOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <div className="flex flex-col items-center w-[80%] gap-4">
           <div className="flex flex-row gap-4">
-            <img src={search_icon} alt="Search Icon" className="w-8 h-8"/>
+            <img src={search_icon} alt="Search Icon" className="w-8 h-8" />
             <p className="font-semibold text-2xl">Search</p>
           </div>
           <form className="w-full" onSubmit={submitSearch}>
-            <input type='text' className="rounded-md p-2 text-lg border border-(--pnb-green) h-20 w-full" onChange={(e) => {setSearch(e.target.value)}} placeholder="Type here"></input>
+            <input
+              type="text"
+              className="rounded-md p-2 text-lg border border-(--pnb-green) h-20 w-full"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              placeholder="Type here"
+            ></input>
           </form>
         </div>
-        <button className={mainActionLink} onClick={submitSearch}>Submit</button>
-        <button className={secondaryActionLink} onClick={()=>{setMenuOpen(!menuOpen)}}>Back</button>
+        <button className={mainActionLink} onClick={submitSearch}>
+          Submit
+        </button>
+        <button
+          className={secondaryActionLink}
+          onClick={() => {
+            setMenuOpen(!menuOpen);
+          }}
+        >
+          Back
+        </button>
       </div>
-      {
-        userHeaders ?
-        <Link to="/posts/new" className={mainActionLink}><img src={add_icon} alt="Add Icon" className="w-8 h-8"/>New Post</Link> : <></>
-      }
-      <Link to="/latest" className={secondaryActionLink}><img src={latest_icon} alt="Auto Renew Icon" className="w-8 h-8"/>Latest Posts</Link>
-      <button className={secondaryActionLink} onClick={()=>{setMenuOpen(!menuOpen)}}><img src={search_icon} alt="Search Icon" className="w-8 h-8"/></button>
+      {userHeaders ? (
+        <Link to="/channels/posts/new" className={mainActionLink}>
+          <img src={add_icon} alt="Add Icon" className="w-8 h-8" />
+          New Post
+        </Link>
+      ) : (
+        <></>
+      )}
+      <Link to="/latest" className={secondaryActionLink}>
+        <img src={latest_icon} alt="Auto Renew Icon" className="w-8 h-8" />
+        Latest Posts
+      </Link>
+      <button
+        className={secondaryActionLink}
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+        }}
+      >
+        <img src={search_icon} alt="Search Icon" className="w-8 h-8" />
+      </button>
     </div>
-  )
+  );
 }
 
 export default ForumMainActions;
