@@ -4,9 +4,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import DataProvider from "./context/DataProvider";
 import Login from "./pages/Login/Login";
-import Test from "./pages/Test/Test";
-import LandingPage from "./home/home";
-import AboutPage from "./about/about";
+import LandingPage from "./pages/home/home";
 import NotFound from "./pages/NotFound/NotFound";
 import ForumMain from "./pages/ForumMain/ForumMain";
 import Channel from "./pages/Channel/Channel";
@@ -50,7 +48,6 @@ function App() {
             />
             <Route path="/">
               <Route index element={<LandingPage onLogout={handleLogout} />} />
-              <Route path="/about" element={<AboutPage />} />
               <Route
                 path="forums"
                 element={<ForumMain onLogout={handleLogout} />}

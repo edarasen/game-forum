@@ -3,22 +3,22 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
-import horti1 from "../assets/horti1.jpg";
-import horti2 from "../assets/horti2.jpg";
-import horti3 from "../assets/horti3.jpg";
+import horti1 from "../../assets/horti1.jpg";
+import horti2 from "../../assets/horti2.jpg";
+import horti3 from "../../assets/horti3.jpg";
 
-import witchy1 from "../assets/witchy1.jpg";
-import witchy2 from "../assets/witchy2.jpg";
-import witchy3 from "../assets/witchy3.jpg";
+import witchy1 from "../../assets/witchy1.jpg";
+import witchy2 from "../../assets/witchy2.jpg";
+import witchy3 from "../../assets/witchy3.jpg";
 
-import pot1 from "../assets/pot1.jpg";
-import pot2 from "../assets/pot2.jpg";
-import pot3 from "../assets/pot3.jpg";
+import pot1 from "../../assets/pot1.jpg";
+import pot2 from "../../assets/pot2.jpg";
+import pot3 from "../../assets/pot3.jpg";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function getInspiredData() {
-  return axios.get(`${API_URL}/rawgdata`).then(
+async function getInspiredData() {
+  return await axios.get(`${API_URL}/rawgdata`).then(
     (response) => response.data,
     (error) =>
       error.response.data.error

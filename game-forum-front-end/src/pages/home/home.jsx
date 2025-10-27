@@ -1,33 +1,33 @@
 import { useState } from "react";
-import logo from "../assets/pnb logo.webp";
+import logo from "../../assets/pnb logo.webp";
 import "./new-home.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useData } from "../context/DataProvider";
+import { useData } from "../../context/DataProvider";
 import { useEffect } from "react";
 import axios from "axios";
 import "swiper/css";
 import "swiper/css/navigation";
-import gal1 from "../assets/gal1.webp";
-import gal2 from "../assets/gal2.webp";
-import gal3 from "../assets/gal3.webp";
-import gal4 from "../assets/gal4.webp";
-import stars from "../assets/stars.webp";
-import nalshira from "../assets/nalshira.webp";
-import roselle from "../assets/roselle.webp";
-import Nel from "../assets/Nel.webp";
-import Hannah from "../assets/Hannah.webp";
-import symbol from "../assets/symbol.webp";
-import GamesGallery from "../component/GamesGallery";
-import ContactSection from "../component/ContactSection";
-import ForumNavBar from "../components/ForumNavBar/ForumNavBar";
+import gal1 from "../../assets/gal1.webp";
+import gal2 from "../../assets/gal2.webp";
+import gal3 from "../../assets/gal3.webp";
+import gal4 from "../../assets/gal4.webp";
+import stars from "../../assets/stars.webp";
+import nalshira from "../../assets/nalshira.webp";
+import roselle from "../../assets/roselle.webp";
+import Nel from "../../assets/Nel.webp";
+import Hannah from "../../assets/Hannah.webp";
+import symbol from "../../assets/symbol.webp";
+import GamesGallery from "./GamesGallery";
+import ContactSection from "./ContactSection";
+import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
-function getGameData() {
-  return axios.get(`${API_URL}/itchdata`).then(
+async function getGameData() {
+  return await axios.get(`${API_URL}/itchdata`).then(
     (response) => response.data,
     (error) =>
       error.response.data.error

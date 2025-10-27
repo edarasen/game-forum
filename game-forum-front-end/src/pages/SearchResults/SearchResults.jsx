@@ -11,11 +11,11 @@ import UserPreview from "../../components/UserPreview/UserPreview";
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function getSearchResultsData(userHeaders, queryParam){
+async function getSearchResultsData(userHeaders, queryParam){
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/search?query=${queryParam}`, requestHeaders).then(
+  return await axios.get(`${API_URL}/search?query=${queryParam}`, requestHeaders).then(
     (response)=> response.data, 
     (error) => error.response.data.error ? console.log(error.response.data.error) : console.log(error.response.data.message))
 }
