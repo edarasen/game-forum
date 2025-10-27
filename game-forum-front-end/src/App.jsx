@@ -59,16 +59,16 @@ function App() {
                 path="channels/:channel_id"
                 element={<Channel onLogout={handleLogout} />}
               />
-              <Route path="/channels/posts/new" element={<PostCreate />} />
-              <Route path="permissions-test" element={<Test />} />
+              <Route path="/channels/posts/new" element={<PostCreate onLogout={handleLogout} />} />
+              {/* <Route path="permissions-test" element={<Test />} /> */}
               <Route
-                path="login-test"
+                path="login"
                 element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
               />
               <Route path="my-posts" element={<MyPosts />} />
               <Route path="my-profile" element={<MyProfile />} />
               <Route path="/posts/:id" element={<Post />} />
-              <Route path="sign-up" element={<Signup />} />
+              <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
               <Route path="*" element={<NotFound />} />
               <Route
                 path="latest"

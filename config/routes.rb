@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get "/latest" => "posts#latest"
       get "/search" => "search#search"
       get "/all_posts" => "users#posts"
+      get "/channels/all" => "channels#all"
       resources :users
 
       resources :channelgroups, shallow: true do

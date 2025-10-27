@@ -76,9 +76,10 @@ def test_data
   # Users
   puts "Seeding Users..."
   admin = User.create(username: "god_mode", email:"admin_test@test.com", password: "password", profile_picture:"https://cataas.com/cat", role:"admin")
-  moderator_one = User.create(username: "moderater_one", email:"moderator_test@test.com", password:"password", profile_picture:"", role: "moderator", moderator_status:"approved")
-  user_one = User.create(username:"user01", email: "user01_test@test.com", password: "password")
-  user_two = User.create(username:"user02", email: "user02_test@test.com", password: "password")
+  moderator_one = User.create(username: "moderater_one", email:"moderator_test@test.com", password:"password", profile_picture:"https://cataas.com/cat", role: "moderator", moderator_status:"approved")
+  user_one = User.create(username:"user01", email: "user01_test@test.com", profile_picture:"https://cataas.com/cat", password: "password")
+  user_two = User.create(username:"user02", email: "user02_test@test.com", profile_picture:"https://cataas.com/cat",  password: "password")
+  user_three = User.create(username:"user03", email: "user03_test@test.com", profile_picture:"https://cataas.com/cat",  password: "password")
   puts "Users seeded!"
 
   # Channel Groups
@@ -107,8 +108,13 @@ def test_data
   delete_post_test = Post.create(title:"Delete Post Test", body:"Delete This Please", channel:delete_this_c, user: user_two)
   
   game_post_test = Post.create(title:"The puzzles are hard!", body:"Is it just me? Am I just stupid? haha", channel:game_discussion_c, user: user_one)
+  game_post_test_two = Post.create(title:"The puzzles are soooo easy", body:"When is it going to get harder!! I crave the challenge.", channel:game_discussion_c, user: user_three)
+  game_post_test_three = Post.create(title:"The characters are really hot", body:"When do we get to romance them? Devs, I'm begging on my knees. Let me kiss Sebastien.", channel:game_discussion_c, user: user_two)
+  
   guide_post_test = Post.create(title:"Here's how I solve the brewing puzzles every time", body:"Just count the number of lines coming from each node and make sure they're in the same position as the one on the chalkboard", channel:guides_c, user: user_two)
+  
   support_post_test = Post.create(title:"Please add an inventory view outside of selling or foraging", body:"Would be nice to see everything I'm missing before I travel to a sanctum", channel:game_suggestions_c, user: user_one)
+  support_post_test_test = Post.create(title:"The game crashes for me huhu", body:"I played the demo on itch and after a while, the brewing puzzle just bugs out.", channel:game_suggestions_c, user: user_three)
   puts "Posts seeded!"
 
   # Comments
@@ -116,6 +122,8 @@ def test_data
   delete_comment_test = Comment.create(body:"Delete Comment Test", post: delete_post_test, user: user_one)
 
   game_comment_test = Comment.create(body:"You're not stupid. The puzzles take a while to get used to!", post: game_post_test, user: user_two)
+  game_comment_test_two = Comment.create(body:"Nettle's my girlfriend.", post: game_post_test_three, user: user_three)
+  game_comment_test_three = Comment.create(body:"Trevor is so tsundere-coded. I need him badly.", post: game_post_test_three, user: user_one)
   guide_comment_test = Comment.create(body:"Woah! I should try that!", post:guide_post_test, user:user_one)
   support_comment_test = Comment.create(body:"I would love that as well!", post:support_post_test, user: user_two)
   puts "Comments seeded!"

@@ -23,6 +23,7 @@ import Hannah from "../assets/Hannah.webp";
 import symbol from "../assets/symbol.webp";
 import GamesGallery from "../component/GamesGallery";
 import ContactSection from "../component/ContactSection";
+import ForumNavBar from "../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 function getGameData() {
@@ -67,27 +68,7 @@ useEffect(()=>{
 
   return (
     <>
-      <nav>
-            <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-              {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10"></img> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
-              <h1 className="text-(--pnb-gold) text-lg font-medium">About P&B</h1>
-              <div
-                className={`hamburger ${menuOpen ? "open" : ""}`}
-                onClick={() => setMenuOpen(!menuOpen)}
-              >
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-            <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
-              <p>{userDetails['username']}</p>
-              <Link to="/">Main Site</Link>
-              <Link to="/forums">My Posts</Link>
-              <Link to="/forums">Profile</Link>
-              {userHeaders ? <button onClick={handleLogout}>Log Out</button> : <Link to="/login-test">Log In</Link> }
-            </div>
-          </nav>
+      <ForumNavBar onLogout={onLogout}/>
       <div className="PnB">
         {/* <img src="landing-page.webp" alt="PnB Logo" /> */}
       </div>
