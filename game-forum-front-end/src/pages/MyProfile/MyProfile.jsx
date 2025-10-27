@@ -4,11 +4,11 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function getUserProfile(userHeaders, userId) {
+async function getUserProfile(userHeaders, userId) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/users/${userId}`, requestHeaders).then(
+  return await axios.get(`${API_URL}/users/${userId}`, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("API Error:", error);
@@ -18,11 +18,11 @@ function getUserProfile(userHeaders, userId) {
   )
 }
 
-function applyModerator(userHeaders) {
+async function applyModerator(userHeaders) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.patch(`${API_URL}/apply_mod`, {}, requestHeaders).then(
+  return await axios.patch(`${API_URL}/apply_mod`, {}, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("Moderator application error:", error);
