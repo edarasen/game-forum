@@ -49,7 +49,7 @@ const Signup = ({ onLogin }) => {
         handleHeaders(headers);
         handleDetails(data.data);
         setIsLoading(false);
-        navigate("/login");
+        navigate("/login-test");
       }
     } catch (error) {
       setIsLoading(false);
@@ -57,7 +57,7 @@ const Signup = ({ onLogin }) => {
     }
 
     setTimeout(() => {
-      navigate("/login");
+      navigate("/login-test");
     }, 3000);
   };
 

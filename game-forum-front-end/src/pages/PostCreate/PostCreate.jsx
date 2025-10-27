@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import logo from "../../assets/pnb logo.webp";
 
 const API_URL = import.meta.env.VITE_API_URL; // e.g., http://localhost:3000/api/v1
 
 export default function PostCreate() {
-  const { userHeaders } = useData(); // 👈 from your existing DataProvider
-  const { channel_id } = useParams();
-  console.log("🚀 channel_id:", channel_id);
+  const { userHeaders, userDetails } = useData(); // 👈 from your existing DataProvider
+  const [channelId, setChannelId] = useState(0);
+  const [allChannelData, setAllChannelData] = useState();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navListTailwind =
+    "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
 
   const [form, setForm] = useState({ title: "", body: "" });
   const [loading, setLoading] = useState(false);
@@ -19,24 +24,36 @@ export default function PostCreate() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleChannelChange = (e) => {
+    setChannelId(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const allChannel = async (e) => {
+    const requestHeaders = {
+      headers: { Accept: "application/json" },
+    };
+    const response = await axios.get(`${API_URL}/channels/all`, requestHeaders);
+    return response.data;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    console.log(form);
 
+    console.log(userHeaders);
     try {
-      console.log("🚀 channel_id:", channel_id);
-      console.log("🔑 userHeaders:", userHeaders);
-
       // Build proper headers for Rails
       const headers = {
-        Authorization: userHeaders.authorization, // 👈 your key stays lowercase
-        "Content-Type": "application/json",
+        ...userHeaders,
+        Accept: "application/json",
       };
 
       // Send POST to Rails
       const response = await axios.post(
-        `${API_URL}/channels/${channel_id}/posts`,
+        `${API_URL}/channels/${channelId}/posts`,
         { post: form },
         { headers }
       );
@@ -44,7 +61,7 @@ export default function PostCreate() {
       console.log("✅ Post created:", response.data);
 
       // Navigate back to channel page after success
-      navigate(`/channels/${channel_id}`);
+      navigate(`/channels/${channelId}`);
     } catch (err) {
       console.error("❌ Error creating post:", err.response?.data || err);
       setError(
@@ -57,231 +74,148 @@ export default function PostCreate() {
     }
   };
 
+  useEffect(() => {
+    let mounted = true;
+
+    allChannel().then((data) => {
+      if (mounted) {
+        setAllChannelData(data.data);
+        console.log("data mounted");
+        console.log(data.data.channels);
+      }
+    });
+    return () => (mounted = false);
+  }, []);
+
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Create New Post</h2>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
+    <>
+      <nav>
+        <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
+          {userHeaders ? (
+            <img
+              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399"
+              className="w-10 h-10"
+            ></img>
+          ) : (
+            <Link to="/">
+              <img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10" />
+            </Link>
+          )}
+          <h1 className="text-(--pnb-gold) text-lg font-medium">New Post</h1>
+          <div
+            className={`hamburger ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
-
-        <div>
-          <label>Body:</label>
-          <textarea
-            name="body"
-            value={form.body}
-            onChange={handleChange}
-            required
-          />
+        <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
+          <p>{userDetails["username"]}</p>
+          <Link to="/">Main Site</Link>
+          <Link to="/forums">My Posts</Link>
+          <Link to="/forums">Profile</Link>
         </div>
+      </nav>
+      <h2
+        className="text-2xl font-bold text-center mb-6"
+        style={{ color: "#677365" }}
+      >
+        Want to Participate? Create your post below!
+      </h2>
+      <div
+        style={{ padding: "1rem", backgroundColor: "#FCE5CD" }}
+        className="min-h-screen flex items-center justify-center"
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-[#677365] p-8 rounded-xl shadow-lg space-y-4"
+        >
+          <div>
+            <div>
+              <label
+                className="block text-xl font-medium mb-2"
+                style={{ color: "#f7d486" }}
+              >
+                Channels:
+              </label>
+            </div>
+            {allChannelData ? (
+              <div className="space-y-2">
+                {[...allChannelData["channels"]].map((channel) => (
+                  <div className="border border-transparent p-2">
+                    <label
+                      htmlFor={channel["title"]}
+                      className="cursor-pointer transition-colors duration-200 hover:bg-[#f7d486] px-2 py-1 rounded"
+                      style={{ color: "#f7d486" }}
+                      onMouseOver={(e) => (e.target.style.color = "#677365")}
+                      onMouseOut={(e) => (e.target.style.color = "#f7d486")}
+                    >
+                      {channel["title"]}
+                    </label>
+                    <input
+                      type="radio"
+                      id={channel["title"]}
+                      name="channel_id"
+                      value={channel["id"]}
+                      onChange={handleChannelChange}
+                      required
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div>
+            <label
+              className="block text-xl font-medium mb-2"
+              style={{ color: "#f7d486" }}
+            >
+              Title:
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md outline-none bg-[#FCE5CD] text-[#677365]"
+              placeholder="Enter your title..."
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Post"}
-        </button>
-      </form>
+          <div>
+            <label
+              className="block text-xl font-medium mb-2"
+              style={{ color: "#f7d486" }}
+            >
+              Body:
+            </label>
+            <textarea
+              name="body"
+              value={form.body}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md outline-none min-h-[150px] bg-[#FCE5CD] text-[#677365]"
+              placeholder="Write your post content here..."
+            />
+          </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full p-3 rounded-md font-bold transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#f7d486", color: "#677365" }}
+          >
+            {loading ? "Creating..." : "Create Post"}
+          </button>
+        </form>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
+    </>
   );
 }
-
-// const API_URL = import.meta.env.VITE_API_URL;
-
-// const CreatePost  = () => {
-
-//   function createPost(userHeaders, channelId, postTitle, postBody)
-//     const requestHeaders = {
-//     headers: { ...userHeaders, Accept: "application/json" }
-//   }
-
-//   return axios.post(
-//     `${API_URL}/channels/${channelId}/posts`,
-//     { comment: { body: commentBody } },
-//     requestHeaders
-//   ).then(
-//     (response) => response.data,
-//     (error) => {
-//       console.error("Can't post", error);
-//       return null;
-//     }
-//   )
-// }
-
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useData } from "../../context/DataProvider";
-// import axios from "axios";
-
-// const API_URL = import.meta.env.VITE_API_URL;
-
-// function PostCreate() {
-//   const navigate = useNavigate();
-//   const [isLoading, setIsLoading] = useState(false);
-//   const { userHeaders } = useData();
-
-//   const [title, setTitle] = useState("");
-//   const [body, setBody] = useState("");
-//   const [error, setError] = useState("");
-//   const [channelId, setChannelId] = useState("1"); // Default channel or you can fetch channels
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     // Add detailed token validation
-//     if (
-//       !userHeaders ||
-//       !userHeaders["access-token"] ||
-//       !userHeaders.client ||
-//       !userHeaders.uid
-//     ) {
-//       console.log("Missing required headers:", userHeaders);
-//       setError("Authentication tokens missing. Please log in again.");
-//       navigate("/login");
-//       return;
-//     }
-
-//     setIsLoading(true);
-//     setError("");
-
-//     try {
-//       // Log full request details for debugging
-//       console.log("Making request with:", {
-//         url: `${API_URL}/channels/${channelId}/posts`,
-//         headers: {
-//           "access-token": userHeaders["access-token"],
-//           client: userHeaders.client,
-//           uid: userHeaders.uid,
-//           "token-type": "Bearer",
-//         },
-//         data: {
-//           post: {
-//             title,
-//             body,
-//             channel_id: channelId,
-//           },
-//         },
-//       });
-
-//       const response = await axios.post(
-//         `${API_URL}/channels/${channelId}/posts`,
-//         {
-//           post: {
-//             title,
-//             body,
-//             channel_id: channelId,
-//           },
-//         },
-//         {
-//           headers: {
-//             "access-token": userHeaders["access-token"],
-//             client: userHeaders.client,
-//             uid: userHeaders.uid,
-//             "token-type": "Bearer",
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-
-//       if (response.data) {
-//         console.log("Post created successfully:", response.data);
-//         navigate(`/channels/${channelId}`);
-//       }
-//     } catch (err) {
-//       console.error("Request failed:", {
-//         status: err.response?.status,
-//         statusText: err.response?.statusText,
-//         data: err.response?.data,
-//         headers: err.response?.headers,
-//       });
-//       const errorMessage =
-//         err.response?.data?.error ||
-//         err.response?.data?.message ||
-//         err.message ||
-//         "Failed to create post. Please try again.";
-//       setError(errorMessage);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div
-//       className="min-h-screen flex items-center justify-center"
-//       style={{ backgroundColor: "#FCE5CD" }}
-//     >
-//       <div
-//         className="w-full max-w-sm p-8 rounded-xl shadow-lg"
-//         style={{ backgroundColor: "#677365" }}
-//       >
-//         <h2
-//           className="text-2xl font-bold text-center mb-6"
-//           style={{ color: "#f7d486" }}
-//         >
-//           Create New Post
-//         </h2>
-
-//         {error && (
-//           <div
-//             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-//             role="alert"
-//           >
-//             {error}
-//           </div>
-//         )}
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <select
-//               value={channelId}
-//               onChange={(e) => setChannelId(e.target.value)}
-//               className="w-full p-3 rounded-md outline-none mb-4"
-//               required
-//             >
-//               <option value="1">General Discussion</option>
-//               {/* Add more channels as needed */}
-//             </select>
-//           </div>
-
-//           <input
-//             type="text"
-//             placeholder="Post Title"
-//             className="w-full p-3 rounded-md outline-none"
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//             required
-//             minLength={3}
-//             maxLength={100}
-//           />
-
-//           <textarea
-//             placeholder="Post Content"
-//             className="w-full p-3 rounded-md outline-none min-h-[150px]"
-//             value={body}
-//             onChange={(e) => setBody(e.target.value)}
-//             required
-//             minLength={10}
-//           />
-
-//           <button
-//             type="submit"
-//             disabled={isLoading}
-//             className="w-full p-3 rounded-md font-bold hover:opacity-90 transition-opacity"
-//             style={{ backgroundColor: "#f7d486", color: "#677365" }}
-//           >
-//             {isLoading ? "Creating..." : "Create Post"}
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default PostCreate;
