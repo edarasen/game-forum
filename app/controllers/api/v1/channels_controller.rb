@@ -2,6 +2,10 @@ class Api::V1::ChannelsController < ApplicationController
   before_action :set_channel, only: %i[ show update destroy ]
   before_action :ensure_admin_moderator, only: %i[ create update destroy ]
 
+  def all
+    @channels = Channel.all
+  end
+
   # GET api/v1/channelgroups/:channelgroup_id/channels
   # @param channelgroup_id [Integer] the channelgroup id specified in params
   # Returns : @channels data is converted to json using template in 'views/api/v1/channels/index.json.props'

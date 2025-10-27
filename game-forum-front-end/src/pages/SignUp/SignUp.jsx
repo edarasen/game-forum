@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import { useData } from "../../context/DataProvider";
-import logo from "../../assets/pnb logo.webp";
 import Loader from "../../components/Loader/Loader";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const Signup = ({ onLogin }) => {
+const Signup = ({ onLogout }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -49,7 +48,7 @@ const Signup = ({ onLogin }) => {
         handleHeaders(headers);
         handleDetails(data.data);
         setIsLoading(false);
-        navigate("/login-test");
+        navigate("/login");
       }
     } catch (error) {
       setIsLoading(false);
@@ -57,46 +56,13 @@ const Signup = ({ onLogin }) => {
     }
 
     setTimeout(() => {
-      navigate("/login-test");
+      navigate("/login");
     }, 3000);
   };
 
   return (
     <>
-      <nav>
-        <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-          {userHeaders ? (
-            <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399"
-              className="w-10 h-10"
-            ></img>
-          ) : (
-            <Link to="/">
-              <img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10" />
-            </Link>
-          )}
-          <h1 className="text-(--pnb-gold) text-lg font-medium">Sign Up</h1>
-          <div
-            className={`hamburger ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-        <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
-          <p>{userDetails["username"]}</p>
-          <Link to="/">Main Site</Link>
-          <Link to="/forums">My Posts</Link>
-          <Link to="/forums">Profile</Link>
-          {userHeaders ? (
-            <button onClick={handleLogout}>Log Out</button>
-          ) : (
-            <Link to="/login-test">Log In</Link>
-          )}
-        </div>
-      </nav>
+      <ForumNavBar onLogout={onLogout}/>
       <div
         className="min-h-screen flex items-center justify-center"
         style={{ backgroundColor: "#FCE5CD" }}
@@ -156,7 +122,7 @@ const Signup = ({ onLogin }) => {
             <p className="text-center mt-4" style={{ color: "#f7d486" }}>
               Already have an account?{" "}
               <span
-                onClick={() => navigate("/login-test")}
+                onClick={() => navigate("/login")}
                 className="underline cursor-pointer"
               >
                 Login
