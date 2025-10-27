@@ -461,7 +461,7 @@ function Post() {
             ) : (
               <ul className="divide-y divide-slate-300/60">
                 {[...postData.comments]
-                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                  .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
                   .map((comment) => (
                     <li key={comment.id} className="px-6 py-4">
                       {editingCommentId === comment.id ? (

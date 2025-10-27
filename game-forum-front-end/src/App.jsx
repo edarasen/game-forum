@@ -1,33 +1,33 @@
-import './App.css'
+import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import DataProvider from './context/DataProvider';
-import Login from './pages/Login/Login';
-import Test from './pages/Test/Test'
+import DataProvider from "./context/DataProvider";
+import Login from "./pages/Login/Login";
+import Test from "./pages/Test/Test";
 import LandingPage from "./home/home";
 import AboutPage from "./about/about";
-import NotFound from './pages/NotFound/NotFound';
-import ForumMain from './pages/ForumMain/ForumMain';
-import Channel from './pages/Channel/Channel';
-import MyPosts from './pages/MyPosts/MyPosts';
-import Signup from './pages/SignUp/SignUp';
-import LatestPosts from './pages/LatestPosts/LatestPosts';
-import SearchResults from './pages/SearchResults/SearchResults';
-import MyProfile from './pages/MyProfile/MyProfile';
-import Post from './pages/Post/Post';
-import PostCreate from './pages/PostCreate/PostCreate'
+import NotFound from "./pages/NotFound/NotFound";
+import ForumMain from "./pages/ForumMain/ForumMain";
+import Channel from "./pages/Channel/Channel";
+import MyPosts from "./pages/MyPosts/MyPosts";
+import Signup from "./pages/SignUp/SignUp";
+import LatestPosts from "./pages/LatestPosts/LatestPosts";
+import SearchResults from "./pages/SearchResults/SearchResults";
+import MyProfile from "./pages/MyProfile/MyProfile";
+import Post from "./pages/Post/Post";
+import PostCreate from "./pages/PostCreate/PostCreate";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   const handleLogin = (status) => {
-    console.log('Hello!')
+    console.log("Hello!");
     setIsAuthenticated(status);
   };
 
   const handleLogout = () => {
-    console.log('Bye!')
+    console.log("Bye!");
     setIsAuthenticated(false);
   };
 
@@ -44,7 +44,7 @@ function App() {
                 isAuthenticated ? (
                   <Navigate to="/" replace />
                 ) : (
-                  <Login onLogin={handleLogin} />
+                  <Login onLogin={handleLogin} onLogout={handleLogout} />
                 )
               }
             />
@@ -59,10 +59,11 @@ function App() {
                 path="channels/:channel_id"
                 element={<Channel onLogout={handleLogout} />}
               />
+              <Route path="/channels/posts/new" element={<PostCreate />} />
               <Route path="permissions-test" element={<Test />} />
               <Route
                 path="login-test"
-                element={<Login onLogin={handleLogin} />}
+                element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
               />
               <Route path="my-posts" element={<MyPosts />} />
               <Route path="my-profile" element={<MyProfile />} />
@@ -77,10 +78,6 @@ function App() {
                 path="search"
                 element={<SearchResults onLogout={handleLogout} />}
               />
-              <Route
-                path="/channels/:channel_id/posts/new"
-                element={<PostCreate />}
-              />
             </Route>
           </Routes>
         </BrowserRouter>
@@ -89,4 +86,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

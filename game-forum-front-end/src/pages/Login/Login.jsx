@@ -8,7 +8,7 @@ import logo from "../../assets/pnb logo.webp";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Login({ onLogin }) {
+function Login({ onLogin, onLogout }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +80,7 @@ function Login({ onLogin }) {
           <Link to="/forums">My Posts</Link>
           <Link to="/forums">Profile</Link>
           {userHeaders ? (
-            <button onClick={handleLogout}>Log Out</button>
+            <button onClick={onLogout}>Log Out</button>
           ) : (
             <Link to="/login-test">Log In</Link>
           )}

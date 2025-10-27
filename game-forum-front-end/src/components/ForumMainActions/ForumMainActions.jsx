@@ -53,7 +53,7 @@ function ForumMainActions(){
         </button>
       </div>
       {userHeaders ? (
-        <Link to="/channels/${channel_Id}/posts/new" className={mainActionLink}>
+        <Link to="/channels/posts/new" className={mainActionLink}>
           <img src={add_icon} alt="Add Icon" className="w-8 h-8" />
           New Post
         </Link>
