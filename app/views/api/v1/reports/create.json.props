@@ -12,7 +12,7 @@ json.data do
       json.extract! Post.find(@report.content_id), :id, :title, :body
     end
   elsif @report.content_type == 'comment'
-    json.extract! Post.find(@report.content_id), :id, :body
+    json.extract! Comment.find(@report.content_id), :id, :body
   end
   json.reporter_details do
     json.extract! User.find(@report.user_id), :id, :username, :email, :role

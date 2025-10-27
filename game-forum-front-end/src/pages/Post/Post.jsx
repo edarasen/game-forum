@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useData } from "../../context/DataProvider"
 import axios from "axios";
+import KebabMenu from "../../components/KebabMenu/KebabMenu";
+import Report from "../../components/Report/Report";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -29,6 +31,53 @@ function getPost(postId) {
   )
 }
 
+function updatePost(userHeaders, postId, title, body) {
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" }
+  }
+  return axios.patch(
+    `${API_URL}/posts/${postId}`,
+    { post: { title, body } },
+    requestHeaders
+  ).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Post update error:", error);
+      return null;
+    }
+  )
+}
+
+function deletePost(userHeaders, postId) {
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" }
+  }
+  return axios.delete(`${API_URL}/posts/${postId}`, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Post deletion error:", error);
+      return null;
+    }
+  )
+}
+
+function createReport(userHeaders, contentType, contentId) {
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" }
+  }
+  return axios.post(
+    `${API_URL}/reports`,
+    { report: { content_type: contentType, content_id: contentId } },
+    requestHeaders
+  ).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Report creation error:", error);
+      return null;
+    }
+  )
+}
+
 function createComment(userHeaders, postId, commentBody) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
@@ -41,6 +90,23 @@ function createComment(userHeaders, postId, commentBody) {
     (response) => response.data,
     (error) => {
       console.error("Comment creation error:", error);
+      return null;
+    }
+  )
+}
+
+function updateComment(userHeaders, commentId, body) {
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" }
+  }
+  return axios.patch(
+    `${API_URL}/comments/${commentId}`,
+    { comment: { body } },
+    requestHeaders
+  ).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Comment update error:", error);
       return null;
     }
   )
@@ -65,6 +131,19 @@ function Post() {
   const [loading, setLoading] = useState(true);
   const [commentBody, setCommentBody] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
+  
+  // Post edit state
+  const [isEditingPost, setIsEditingPost] = useState(false);
+  const [editPostTitle, setEditPostTitle] = useState("");
+  const [editPostBody, setEditPostBody] = useState("");
+  
+  // Comment edit state
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editCommentBody, setEditCommentBody] = useState("");
+  
+  // Report modal state
+  const [report, setReport] = useState({ isOpen: false, type: null, id: null });
+  
   const { userHeaders, userDetails } = useData();
   const navigate = useNavigate();
 
@@ -76,6 +155,8 @@ function Post() {
       getPost(id).then((data) => {
         if (mounted && data) {
           setPostData(data.data);
+          setEditPostTitle(data.data.title);
+          setEditPostBody(data.data.body);
         }
         setLoading(false);
       });
@@ -83,6 +164,106 @@ function Post() {
     
     return () => (mounted = false);
   }, [id]);
+
+  const handlePostMenuSelect = async (action) => {
+    switch (action) {
+      case "edit":
+        setIsEditingPost(true);
+        break;
+      case "delete":
+        if (window.confirm("Are you sure you want to delete this post? This will also delete all comments.")) {
+          const result = await deletePost(userHeaders, id);
+          if (result) {
+            alert("Post deleted successfully");
+            navigate(-1);
+          } else {
+            alert("Failed to delete post");
+          }
+        }
+        break;
+      case "report":
+        setReport({ isOpen: true, type: "post", id: postData.id });
+        break;
+    }
+  };
+
+  const handlePostUpdate = async (e) => {
+    e.preventDefault();
+    
+    if (!editPostTitle.trim() || !editPostBody.trim()) {
+      alert("Title and body cannot be empty");
+      return;
+    }
+
+    const result = await updatePost(userHeaders, id, editPostTitle, editPostBody);
+    
+    if (result) {
+      const updatedData = await getPost(id);
+      if (updatedData) {
+        setPostData(updatedData.data);
+        setIsEditingPost(false);
+        alert("Post updated successfully");
+      }
+    } else {
+      alert("Failed to update post");
+    }
+  };
+
+  const handleCancelPostEdit = () => {
+    setEditPostTitle(postData.title);
+    setEditPostBody(postData.body);
+    setIsEditingPost(false);
+  };
+
+  const handleCommentMenuSelect = async (action, comment) => {
+    switch (action) {
+      case "edit":
+        setEditingCommentId(comment.id);
+        setEditCommentBody(comment.body);
+        break;
+      case "delete":
+        if (window.confirm("Are you sure you want to delete this comment?")) {
+          const result = await deleteComment(userHeaders, comment.id);
+          if (result) {
+            const updatedData = await getPost(id);
+            if (updatedData) {
+              setPostData(updatedData.data);
+            }
+          } else {
+            alert("Failed to delete comment");
+          }
+        }
+        break;
+      case "report":
+        setReport({ isOpen: true, type: "comment", id: comment.id });
+        break;
+    }
+  };
+
+  const handleCommentUpdate = async (commentId) => {
+    if (!editCommentBody.trim()) {
+      alert("Comment cannot be empty");
+      return;
+    }
+
+    const result = await updateComment(userHeaders, commentId, editCommentBody);
+    
+    if (result) {
+      const updatedData = await getPost(id);
+      if (updatedData) {
+        setPostData(updatedData.data);
+        setEditingCommentId(null);
+        setEditCommentBody("");
+      }
+    } else {
+      alert("Failed to update comment");
+    }
+  };
+
+  const handleCancelCommentEdit = () => {
+    setEditingCommentId(null);
+    setEditCommentBody("");
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -113,21 +294,53 @@ function Post() {
     setSubmittingComment(false);
   };
 
-  const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) {
-      return;
-    }
-
-    const result = await deleteComment(userHeaders, commentId);
+  const handleReport = async () => {
+    const result = await createReport(userHeaders, report.type, report.id);
     
     if (result) {
-      const updatedData = await getPost(id);
-      if (updatedData) {
-        setPostData(updatedData.data);
-      }
+      alert("Report submitted successfully. Thank you for helping keep our community safe.");
+      setReport({ isOpen: false, type: null, id: null });
     } else {
-      alert("Failed to delete comment");
+      alert("Failed to submit report");
     }
+  };
+
+  const canEditPost = userDetails && (
+    postData?.owner_details?.id === userDetails.id ||
+    userDetails.role === 'admin' ||
+    userDetails.role === 'moderator'
+  );
+
+  const canEditComment = (comment) => {
+    return userDetails && (
+      comment.owner?.id === userDetails.id ||
+      userDetails.role === 'admin' ||
+      userDetails.role === 'moderator'
+    );
+  };
+
+  const getPostMenuOptions = () => {
+    const options = [];
+    if (canEditPost) {
+      options.push({ label: "Edit", value: "edit" });
+      options.push({ label: "Delete", value: "delete", danger: true });
+    }
+    if (userHeaders) {
+      options.push({ label: "Report", value: "report", danger: true });
+    }
+    return options;
+  };
+
+  const getCommentMenuOptions = (comment) => {
+    const options = [];
+    if (canEditComment(comment)) {
+      options.push({ label: "Edit", value: "edit" });
+      options.push({ label: "Delete", value: "delete", danger: true });
+    }
+    if (userHeaders) {
+      options.push({ label: "Report", value: "report", danger: true });
+    }
+    return options;
   };
 
   if (loading) {
@@ -159,33 +372,80 @@ function Post() {
 
         {/* Post Card */}
         <div className="rounded border border-[#6B796A] bg-stone-50 shadow-sm mb-6">
-          {/* Post Header */}
-          <div className="rounded-t bg-[#6B796A] px-6 py-4">
-            <h1 className="text-3xl font-bold text-[#F7D480]">
-              {postData.title}
-            </h1>
-            <div className="mt-2 flex justify-center items-center gap-4 text-sm text-[#FAE5CA]">
-              <span>By: {postData.owner_details?.username}</span>
-              <span>•</span>
-              <span>Channel: {postData.channel_details?.title}</span>
-              <span>•</span>
-              <span>{postData.created_at ? formatDate(postData.created_at) : "—"}</span>
-              <span>•</span>
-              <span>{postData.comment_count ?? 0} comments</span>
-            </div>
-          </div>
+          {isEditingPost ? (
+            /* Post Edit Form */
+            <form onSubmit={handlePostUpdate}>
+              <div className="rounded-t bg-[#6B796A] px-6 py-4">
+                <input
+                  type="text"
+                  value={editPostTitle}
+                  onChange={(e) => setEditPostTitle(e.target.value)}
+                  className="w-full text-3xl font-bold text-[#5B6153] bg-white px-4 py-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+                  placeholder="Post title..."
+                />
+              </div>
+              <div className="bg-[#FAE5CA] px-6 py-6">
+                <textarea
+                  value={editPostBody}
+                  onChange={(e) => setEditPostBody(e.target.value)}
+                  className="w-full text-[#5B6153] bg-white px-4 py-3 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#6B796A] resize-none"
+                  rows="10"
+                  placeholder="Post body..."
+                />
+                <div className="mt-4 flex gap-3 justify-end">
+                  <button
+                    type="button"
+                    onClick={handleCancelPostEdit}
+                    className="px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors font-semibold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            /* Post Display */
+            <>
+              <div className="rounded-t bg-[#6B796A] px-6 py-4 flex justify-between items-start">
+                <div className="flex-1">
+                  <h1 className="text-3xl font-bold text-[#F7D480]">
+                    {postData.title}
+                  </h1>
+                  <div className="mt-2 flex items-center gap-4 text-sm text-[#FAE5CA]">
+                    <span>By: {postData.owner_details?.username}</span>
+                    <span>•</span>
+                    <span>Channel: {postData.channel_details?.title}</span>
+                    <span>•</span>
+                    <span>{postData.created_at ? formatDate(postData.created_at) : "—"}</span>
+                    <span>•</span>
+                    <span>{postData.comment_count ?? 0} comments</span>
+                  </div>
+                </div>
+                {getPostMenuOptions().length > 0 && (
+                  <KebabMenu
+                    options={getPostMenuOptions()}
+                    onSelect={handlePostMenuSelect}
+                  />
+                )}
+              </div>
 
-          {/* Post Body */}
-          <div className="bg-[#FAE5CA] px-6 py-6">
-            <div className="text-[#5B6153] whitespace-pre-wrap">
-              {postData.body}
-            </div>
-          </div>
+              <div className="bg-[#FAE5CA] px-6 py-6">
+                <div className="text-[#5B6153] whitespace-pre-wrap">
+                  {postData.body}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Comments Section */}
         <div className="rounded border border-[#6B796A] bg-stone-50 shadow-sm">
-          {/* Comments Header */}
           <div className="rounded-t bg-[#6B796A] px-6 py-4">
             <h2 className="text-2xl font-semibold text-[#F7D480]">
               Comments ({postData.comments?.length ?? 0})
@@ -201,39 +461,60 @@ function Post() {
             ) : (
               <ul className="divide-y divide-slate-300/60">
                 {[...postData.comments]
-                  .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                   .map((comment) => (
-                  <li key={comment.id} className="px-6 py-4">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="font-semibold text-[#5B6153]">
-                            {comment.owner?.username}
-                          </span>
-                          <span className="text-sm text-slate-500">
-                            {comment.created_at ? formatDate(comment.created_at) : "—"}
-                          </span>
+                    <li key={comment.id} className="px-6 py-4">
+                      {editingCommentId === comment.id ? (
+                        /* Comment Edit Form */
+                        <div>
+                          <textarea
+                            value={editCommentBody}
+                            onChange={(e) => setEditCommentBody(e.target.value)}
+                            className="w-full px-4 py-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A] resize-none"
+                            rows="3"
+                          />
+                          <div className="mt-2 flex gap-3 justify-end">
+                            <button
+                              onClick={handleCancelCommentEdit}
+                              className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors text-sm font-semibold"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => handleCommentUpdate(comment.id)}
+                              className="px-4 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors text-sm font-semibold"
+                            >
+                              Save
+                            </button>
+                          </div>
                         </div>
-                        <div className="text-slate-700 whitespace-pre-wrap">
-                          {comment.body}
+                      ) : (
+                        /* Comment Display */
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="font-semibold text-[#5B6153]">
+                                {comment.owner?.username}
+                              </span>
+                              <span className="text-sm text-slate-500">
+                                {comment.created_at ? formatDate(comment.created_at) : "—"}
+                              </span>
+                            </div>
+                            <div className="text-slate-700 whitespace-pre-wrap">
+                              {comment.body}
+                            </div>
+                          </div>
+                          
+                          {getCommentMenuOptions(comment).length > 0 && (
+                            <KebabMenu
+                              options={getCommentMenuOptions(comment)}
+                              onSelect={(action) => handleCommentMenuSelect(action, comment)}
+                            />
+                          )}
                         </div>
-                      </div>
-                      
-                      {userDetails && (
-                        comment.owner?.id === userDetails.id || 
-                        userDetails.role === 'admin' || 
-                        userDetails.role === 'moderator'
-                      ) && (
-                        <button
-                          onClick={() => handleDeleteComment(comment.id)}
-                          className="ml-4 underline cursor-pointer text-red-600 hover:text-red-700 text-sm"
-                        >
-                          Delete
-                        </button>
                       )}
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
@@ -268,6 +549,14 @@ function Post() {
           )}
         </div>
       </div>
+
+      {/* Report Modal */}
+      <Report
+        isOpen={report.isOpen}
+        onClose={() => setReport({ isOpen: false, type: null, id: null })}
+        onConfirm={handleReport}
+        type={report.type}
+      />
     </div>
   )
 }
