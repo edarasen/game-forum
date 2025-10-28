@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
-import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import logo from "../../assets/pnb logo.webp";
 
-const API_URL = import.meta.env.VITE_API_URL; // e.g., http://localhost:3000/api/v1
+const API_URL = import.meta.env.VITE_API_URL;
 
-export default function PostCreate({ onLogout }) {
-  const { userHeaders, userDetails } = useData(); // 👈 from your existing DataProvider
+export default function PostCreate() {
+  const { userHeaders, userDetails } = useData();
   const [channelId, setChannelId] = useState(0);
   const [allChannelData, setAllChannelData] = useState();
   const navigate = useNavigate();
@@ -57,12 +58,12 @@ export default function PostCreate({ onLogout }) {
         { headers }
       );
 
-      console.log("✅ Post created:", response.data);
+      console.log("Post created:", response.data);
 
       // Navigate back to channel page after success
       navigate(`/channels/${channelId}`);
     } catch (err) {
-      console.error("❌ Error creating post:", err.response?.data || err);
+      console.error("Error creating post:", err.response?.data || err);
       setError(
         err.response?.data?.message ||
           err.response?.data?.errors?.join(", ") ||
@@ -88,7 +89,35 @@ export default function PostCreate({ onLogout }) {
 
   return (
     <>
-      <ForumNavBar onLogout={onLogout}/>
+      <nav>
+        <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
+          {userHeaders ? (
+            <img
+              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399"
+              className="w-10 h-10"
+            ></img>
+          ) : (
+            <Link to="/">
+              <img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10" />
+            </Link>
+          )}
+          <h1 className="text-(--pnb-gold) text-lg font-medium">New Post</h1>
+          <div
+            className={`hamburger ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
+          <p>{userDetails["username"]}</p>
+          <Link to="/">Main Site</Link>
+          <Link to="/forums">My Posts</Link>
+          <Link to="/forums">Profile</Link>
+        </div>
+      </nav>
       <h2
         className="text-2xl font-bold text-center mb-6"
         style={{ color: "#677365" }}
@@ -141,46 +170,27 @@ export default function PostCreate({ onLogout }) {
             )}
           </div>
           <div>
-            <label
-              className="block text-xl font-medium mb-2"
-              style={{ color: "#f7d486" }}
-            >
-              Title:
-            </label>
+            <label>Title:</label>
             <input
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-md outline-none bg-[#FCE5CD] text-[#677365]"
-              placeholder="Enter your title..."
             />
           </div>
 
           <div>
-            <label
-              className="block text-xl font-medium mb-2"
-              style={{ color: "#f7d486" }}
-            >
-              Body:
-            </label>
+            <label>Body:</label>
             <textarea
               name="body"
               value={form.body}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-md outline-none min-h-[150px] bg-[#FCE5CD] text-[#677365]"
-              placeholder="Write your post content here..."
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full p-3 rounded-md font-bold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#f7d486", color: "#677365" }}
-          >
+          <button type="submit" disabled={loading}>
             {loading ? "Creating..." : "Create Post"}
           </button>
         </form>

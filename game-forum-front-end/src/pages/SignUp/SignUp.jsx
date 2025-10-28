@@ -48,7 +48,7 @@ const Signup = ({ onLogout }) => {
         handleHeaders(headers);
         handleDetails(data.data);
         setIsLoading(false);
-        navigate("/login");
+        navigate("/forums");
       }
     } catch (error) {
       setIsLoading(false);
@@ -56,13 +56,13 @@ const Signup = ({ onLogout }) => {
     }
 
     setTimeout(() => {
-      navigate("/login");
+      navigate("/forums");
     }, 3000);
   };
 
   return (
     <>
-      <ForumNavBar onLogout={onLogout}/>
+      <ForumNavBar onLogout={onLogout} />
       <div
         className="min-h-screen flex items-center justify-center"
         style={{ backgroundColor: "#FCE5CD" }}
@@ -90,6 +90,7 @@ const Signup = ({ onLogout }) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                style={{ background: "#FCE5CD" }}
               />
 
               <input
@@ -99,6 +100,7 @@ const Signup = ({ onLogout }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                style={{ background: "#FCE5CD" }}
               />
 
               <input
@@ -108,6 +110,7 @@ const Signup = ({ onLogout }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                style={{ background: "#FCE5CD" }}
               />
 
               <button
