@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import DataProvider from "./context/DataProvider";
 import Login from "./pages/Login/Login";
 import LandingPage from "./pages/home/home";
@@ -19,21 +18,8 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = (status) => {
-    console.log("Hello!");
-    setIsAuthenticated(status);
-  };
-
-  const handleLogout = () => {
-    console.log("Bye!");
-    setIsAuthenticated(false);
-  };
-
-  const { channel_id } = useParams();
-
   return (
-    <DataProvider>
+    <DataProvider setAppAuth={setIsAuthenticated}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -42,7 +28,7 @@ function App() {
               isAuthenticated ? (
                 <Navigate to="/" replace />
               ) : (
-                <Login onLogin={handleLogin} onLogout={handleLogout} />
+                <Login />
               )
             }
           />
@@ -50,31 +36,31 @@ function App() {
             <Route
               index
               element={
-                <LandingPage onLogin={handleLogin} onLogout={handleLogout} />
+                <LandingPage />
               }
             />
             <Route
               path="forums"
               element={
-                <ForumMain onLogin={handleLogin} onLogout={handleLogout} />
+                <ForumMain />
               }
             />
             <Route
               path="channels/:channel_id"
               element={
-                <Channel onLogin={handleLogin} onLogout={handleLogout} />
+                <Channel />
               }
             />
             <Route
               path="/channels/posts/new"
               element={
-                <PostCreate onLogin={handleLogin} onLogout={handleLogout} />
+                <PostCreate />
               }
             />
             {/* <Route path="permissions-test" element={<Test />} /> */}
             <Route
               path="login"
-              element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
+              element={<Login />}
             />
             <Route
               path="my-posts"
@@ -95,19 +81,19 @@ function App() {
             <Route path="/posts/:id" element={<Post />} />
             <Route
               path="sign-up"
-              element={<Signup onLogin={handleLogin} onLogout={handleLogout} />}
+              element={<Signup />}
             />
             <Route path="*" element={<NotFound />} />
             <Route
               path="latest"
               element={
-                <LatestPosts onLogin={handleLogin} onLogout={handleLogout} />
+                <LatestPosts />
               }
             />
             <Route
               path="search"
               element={
-                <SearchResults onLogin={handleLogin} onLogout={handleLogout} />
+                <SearchResults />
               }
             />
           </Route>

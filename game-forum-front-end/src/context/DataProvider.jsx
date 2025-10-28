@@ -2,9 +2,20 @@ import { useState, createContext, useContext } from "react";
 
 const DataContext = createContext();
 
-const DataProvider = ({children}) => {
+const DataProvider = ({setAppAuth, children}) => {
   const [userHeaders, setUserHeaders] = useState('');
   const [userDetails, setUserDetails] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const onLogin = (status) => {
+    setAppAuth(status);
+    setIsAuthenticated(status);
+  };
+
+  const onLogout = () => {
+    setAppAuth(false);
+    setIsAuthenticated(false);
+  };
 
   const handleDetails = (data) => {
     const updatedDetails = {
@@ -42,7 +53,10 @@ const DataProvider = ({children}) => {
         handleDetails,
         resetHeadersDetails,
         userHeaders,
-        userDetails
+        userDetails,
+        onLogin,
+        onLogout,
+        isAuthenticated
       }
     }>
       {children}

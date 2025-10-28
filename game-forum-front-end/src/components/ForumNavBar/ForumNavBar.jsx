@@ -5,7 +5,8 @@ import logo from "../../assets/pnb logo.webp";
 import Modal from "../Modals/Modal";
 import Login from "../../pages/Login/Login";
 
-function ForumNavBar({ onLogin, onLogout }){
+function ForumNavBar(){
+  const {onLogin, onLogout} = useData();
   const navigate = useNavigate()
   const {userHeaders, resetHeadersDetails, userDetails} = useData();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,10 +20,15 @@ function ForumNavBar({ onLogin, onLogout }){
     resetHeadersDetails()
   }
 
+  const handleLogin = () => {
+    onLogin()
+    setShowLoginModal(false)
+  }
+
     if (showLoginModal) {
       return (
         <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
-          <Login onLogin={() => setShowLoginModal(false)} onLogout={onLogout} />
+          <Login onLogin={() => handleLogin} onLogout={onLogout} />
         </Modal>
       );
     }

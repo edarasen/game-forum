@@ -8,7 +8,8 @@ import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Login({ onLogin, onLogout }) {
+function Login() {
+  const {onLogin, onLogout} = useData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [showPassword, setShowPassword] = useState(false);
@@ -76,7 +77,7 @@ function Login({ onLogin, onLogout }) {
             <input
               type="email"
               placeholder="E-mail"
-              className="w-full p-3 rounded-md outline-none"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -87,7 +88,7 @@ function Login({ onLogin, onLogout }) {
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-3 rounded-md outline-none"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
