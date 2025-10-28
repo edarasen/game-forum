@@ -15,8 +15,8 @@ import Signup from "./pages/SignUp/SignUp";
 import LatestPosts from "./pages/LatestPosts/LatestPosts";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import MyProfile from "./pages/MyProfile/MyProfile";
-import Post from "./pages/Post/Post";
 import PostCreate from "./pages/PostCreate/PostCreate";
+import PostView from "./pages/PostView/Postview";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,7 +67,7 @@ function App() {
               />
               <Route path="my-posts" element={<MyPosts />} />
               <Route path="my-profile" element={<MyProfile />} />
-              <Route path="/posts/:id" element={<Post />} />
+              <Route path="/posts/:id" element={<PostView />} />
               <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
               <Route path="*" element={<NotFound />} />
               <Route
