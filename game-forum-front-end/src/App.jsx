@@ -33,7 +33,6 @@ function App() {
   const { channel_id } = useParams();
 
   return (
-    <div>
       <DataProvider>
         <BrowserRouter>
           <Routes>
@@ -88,7 +87,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </DataProvider>
-    </div>
   );
 }
 
