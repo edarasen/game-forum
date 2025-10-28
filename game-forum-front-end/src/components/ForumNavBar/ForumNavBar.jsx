@@ -25,8 +25,17 @@ function ForumNavBar({onLogout}){
             "About P&B" : "P&B Forums"
           }</h1>
         </div>
-        <div className="hidden flex-row md:flex text-(--pnb-gold) gap-18 text-xl">
+        <div className="hidden flex-row lg:flex text-(--pnb-gold) gap-18 text-md">
           <Link to="/" className={navButton}>Main Site</Link>
+          {
+            window.location.pathname === "/" ? 
+            <a
+              href="https://nalshiragames.itch.io"
+              target="_blank"
+            >
+             Play Demo 
+            </a> : <></>
+          }
           <Link to="/forums" className={navButton}>Forums</Link>
           {/* shows only when userHeaders exist */}
           {userHeaders ?
@@ -36,18 +45,9 @@ function ForumNavBar({onLogout}){
             </> :
             <> </>}
           {userHeaders ? <button onClick={handleLogout} className={navButton}>Log Out</button> : <Link to="/login" className={navButton}>Log In</Link> }
-          {userHeaders ? 
-            <div className="flex flex-row items-center gap-10 bg-(--pnb-green) px-6 py-4 text-(--pnb-gold) rounded-2xl">
-              <img src={userDetails['profile_picture']} className="w-28 h-28 border-3 border-(--pnb-gold)"></img>
-              <div className="flex flex-col text-left text-2xl">
-                <p className="font-semibold">{userDetails['username']}</p>
-                <p>{userDetails['role']}</p>
-              </div>
-            </div>
-          : <></>}
         </div>
         <div
-          className={`hamburger flex ${menuOpen ? "open" : ""} md:hidden`}
+          className={`hamburger flex ${menuOpen ? "open" : ""} lg:hidden`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
@@ -57,6 +57,15 @@ function ForumNavBar({onLogout}){
       </div>
       <div className={`${navOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <Link to="/" className={navButton}>Main Site</Link>
+        {
+            window.location.pathname === "/" ? 
+            <a
+              href="https://nalshiragames.itch.io"
+              target="_blank"
+            >
+             Play Demo 
+            </a> : <></>
+          }
         <Link to="/forums" className={navButton}>Forums</Link>
         {/* shows only when userHeaders exist */}
         {userHeaders ?

@@ -66,9 +66,7 @@ function MyProfile() {
 
   if (!profileData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-red-600">Failed to load profile data. Please try again.</div>
-      </div>
+      <></>
     );
   }
 
