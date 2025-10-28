@@ -24,14 +24,14 @@ function SearchResultsRenderUsers({users}){
   return users.length > 0 ? 
   users.map((user) => (
     <UserPreview key={`postpreview-${user['id']}`} user={user}/>
-  )) : <p>No users found</p>
+  )) : <p className="text-xl p-8 font-bold">No users found</p>
 }
 
 function SearchResultsRenderPosts({posts}){
   return posts.length > 0 ? 
   posts.map((post) => (
     <PostPreview key={`postpreview-${post['id']}`} post={post}/>
-  )) : <p>No posts found</p>
+  )) : <p className="text-xl p-8 font-bold">No posts found</p>
 }
 
 function SearchResults({onLogout}){

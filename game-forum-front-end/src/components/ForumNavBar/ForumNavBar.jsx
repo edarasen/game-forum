@@ -1,6 +1,6 @@
 import {useState} from "react"
 import { useData } from "../../context/DataProvider";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/pnb logo.webp";
 
 function ForumNavBar({onLogout}){
@@ -16,15 +16,38 @@ function ForumNavBar({onLogout}){
   }
 
   return (
-    <nav>
+      <nav>
       <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-        {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
-        <h1 className="text-(--pnb-gold) text-lg font-medium">{
-        window.location.pathname === "/" ? 
-          "About P&B" : "P&B Forums"
-        }</h1>
+        <div className="flex flex-row items-center gap-2">
+          {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
+          <h1 className="text-(--pnb-gold) text-lg font-medium">{
+          window.location.pathname === "/" ? 
+            "About P&B" : "P&B Forums"
+          }</h1>
+        </div>
+        <div className="hidden flex-row md:flex text-(--pnb-gold) gap-18 text-xl">
+          <Link to="/" className={navButton}>Main Site</Link>
+          <Link to="/forums" className={navButton}>Forums</Link>
+          {/* shows only when userHeaders exist */}
+          {userHeaders ?
+            <>
+            <Link to="/my-posts" className={navButton}>My Posts</Link>
+            <Link to="/my-profile" className={navButton}>Profile</Link>
+            </> :
+            <> </>}
+          {userHeaders ? <button onClick={handleLogout} className={navButton}>Log Out</button> : <Link to="/login" className={navButton}>Log In</Link> }
+          {userHeaders ? 
+            <div className="flex flex-row items-center gap-10 bg-(--pnb-green) px-6 py-4 text-(--pnb-gold) rounded-2xl">
+              <img src={userDetails['profile_picture']} className="w-28 h-28 border-3 border-(--pnb-gold)"></img>
+              <div className="flex flex-col text-left text-2xl">
+                <p className="font-semibold">{userDetails['username']}</p>
+                <p>{userDetails['role']}</p>
+              </div>
+            </div>
+          : <></>}
+        </div>
         <div
-          className={`hamburger ${menuOpen ? "open" : ""}`}
+          className={`hamburger flex ${menuOpen ? "open" : ""} md:hidden`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
