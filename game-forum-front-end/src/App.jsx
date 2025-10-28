@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import DataProvider from "./context/DataProvider";
 import Login from "./pages/Login/Login";
 import LandingPage from "./pages/home/home";
@@ -20,80 +19,93 @@ import AdminMain from "./pages/AdminMain/AdminMain";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const handleLogin = (status, roleCheck) => {
-    console.log("Hello!");
-    setIsAuthenticated(status);
-    setIsAdmin(roleCheck);
-  };
-
-  const handleLogout = () => {
-    console.log("Bye!");
-    setIsAuthenticated(false);
-    setIsAdmin(false);
-  };
-
   return (
-      <DataProvider>
-        <BrowserRouter>
-          <Routes>
+    <DataProvider setAppAuth={setIsAuthenticated}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Login />
+              )
+            }
+          />
+          <Route path="/">
             <Route
-              path="/login"
+              index
               element={
-                isAuthenticated ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <Login onLogin={handleLogin} onLogout={handleLogout} />
-                )
+                <LandingPage />
               }
             />
-            <Route path="/">
-              <Route index element={<LandingPage onLogout={handleLogout} />} />
-              <Route
-                path="forums"
-                element={<ForumMain onLogout={handleLogout} />}
-              />
-              <Route
-                path="channels/:channel_id"
-                element={<Channel onLogout={handleLogout} />}
-              />
-              <Route path="/channels/posts/new" element={<PostCreate onLogout={handleLogout} />} />
-              {/* <Route path="permissions-test" element={<Test />} /> */}
-              <Route
-                path="login"
-                element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
-              />
-              <Route path="my-posts" element={
+            <Route
+              path="forums"
+              element={
+                <ForumMain />
+              }
+            />
+            <Route
+              path="channels/:channel_id"
+              element={
+                <Channel />
+              }
+            />
+            <Route
+              path="/channels/posts/new"
+              element={
+                <PostCreate />
+              }
+            />
+            {/* <Route path="permissions-test" element={<Test />} /> */}
+            <Route
+              path="login"
+              element={<Login />}
+            />
+            <Route
+              path="my-posts"
+              element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <MyPosts />
                 </ProtectedRoute>
-              } />
-              <Route path="my-profile" element={
+              }
+            />
+            <Route
+              path="my-profile"
+              element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <MyProfile />
                 </ProtectedRoute>
-              } />
-              <Route path="/posts/:id" element={<Post />} />
-              <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
-              <Route path="*" element={<NotFound />} />
-              <Route
-                path="latest"
-                element={<LatestPosts onLogout={handleLogout} />}
-              />
-              <Route
-                path="search"
-                element={<SearchResults onLogout={handleLogout} />}
-              />
+              }
+            />
+            <Route path="/posts/:id" element={<Post />} />
+            <Route
+              path="sign-up"
+              element={<Signup />}
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="latest"
+              element={
+                <LatestPosts />
+              }
+            />
+            <Route
+              path="search"
+              element={
+                <SearchResults />
+              }
+            />
               <Route path="admin-tools" element={
                 <ProtectedRoute isAuthenticated={isAdmin}>
                   <AdminMain onLogout={handleLogout}/>
                 </ProtectedRoute>
               }/>
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </DataProvider>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </DataProvider>
   );
 }
 
