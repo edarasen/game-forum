@@ -16,21 +16,23 @@ import MyProfile from "./pages/MyProfile/MyProfile";
 import Post from "./pages/Post/Post";
 import PostCreate from "./pages/PostCreate/PostCreate";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import AdminMain from "./pages/AdminMain/AdminMain";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const handleLogin = (status) => {
+  const handleLogin = (status, roleCheck) => {
     console.log("Hello!");
     setIsAuthenticated(status);
+    setIsAdmin(roleCheck);
   };
 
   const handleLogout = () => {
     console.log("Bye!");
     setIsAuthenticated(false);
+    setIsAdmin(false);
   };
-
-  const { channel_id } = useParams();
 
   return (
       <DataProvider>
@@ -83,6 +85,11 @@ function App() {
                 path="search"
                 element={<SearchResults onLogout={handleLogout} />}
               />
+              <Route path="admin-tools" element={
+                <ProtectedRoute isAuthenticated={isAdmin}>
+                  <AdminMain onLogout={handleLogout}/>
+                </ProtectedRoute>
+              }/>
             </Route>
           </Routes>
         </BrowserRouter>

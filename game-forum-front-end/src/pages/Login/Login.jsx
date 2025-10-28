@@ -40,7 +40,8 @@ function Login({ onLogin, onLogout }) {
       if (data.data && headers) {
         handleHeaders(headers);
         handleDetails(data.data);
-        onLogin(true);
+        const isAdmin = data.data['role'] === 'admin'
+        onLogin(true, isAdmin);
         navigate("/"); // Changed from "/forums" to "/" to route to home
       }
     } catch (error) {

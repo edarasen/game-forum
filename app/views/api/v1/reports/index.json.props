@@ -6,6 +6,7 @@ end
 json.data do
   json.posts do
     json.array! @post_reports do |post|
+      json.extract! post, :id
       json.post_details do
         json.extract! Post.find(post.content_id), :id, :title, :body
       end
@@ -17,6 +18,7 @@ json.data do
   end
   json.comments do
     json.array! @comment_reports do |comment|
+      json.extract! comment, :id
       json.comment_details do
         json.extract! Comment.find(comment.content_id), :id, :body
       end
