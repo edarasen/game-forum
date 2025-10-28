@@ -1,6 +1,6 @@
 import {useState} from "react"
 import { useData } from "../../context/DataProvider";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/pnb logo.webp";
 
 function ForumNavBar({onLogout}){
@@ -16,15 +16,38 @@ function ForumNavBar({onLogout}){
   }
 
   return (
-    <nav>
+      <nav>
       <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-        {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
-        <h1 className="text-(--pnb-gold) text-lg font-medium">{
-        window.location.pathname === "/" ? 
-          "About P&B" : "P&B Forums"
-        }</h1>
+        <div className="flex flex-row items-center gap-2">
+          {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
+          <h1 className="text-(--pnb-gold) text-lg font-medium">{
+          window.location.pathname === "/" ? 
+            "About P&B" : "P&B Forums"
+          }</h1>
+        </div>
+        <div className="hidden flex-row lg:flex text-(--pnb-gold) gap-18 text-md">
+          <Link to="/" className={navButton}>Main Site</Link>
+          {
+            window.location.pathname === "/" ? 
+            <a
+              href="https://nalshiragames.itch.io"
+              target="_blank"
+            >
+             Play Demo 
+            </a> : <></>
+          }
+          <Link to="/forums" className={navButton}>Forums</Link>
+          {/* shows only when userHeaders exist */}
+          {userHeaders ?
+            <>
+            <Link to="/my-posts" className={navButton}>My Posts</Link>
+            <Link to="/my-profile" className={navButton}>Profile</Link>
+            </> :
+            <> </>}
+          {userHeaders ? <button onClick={handleLogout} className={navButton}>Log Out</button> : <Link to="/login" className={navButton}>Log In</Link> }
+        </div>
         <div
-          className={`hamburger ${menuOpen ? "open" : ""}`}
+          className={`hamburger flex ${menuOpen ? "open" : ""} lg:hidden`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
@@ -34,6 +57,15 @@ function ForumNavBar({onLogout}){
       </div>
       <div className={`${navOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <Link to="/" className={navButton}>Main Site</Link>
+        {
+            window.location.pathname === "/" ? 
+            <a
+              href="https://nalshiragames.itch.io"
+              target="_blank"
+            >
+             Play Demo 
+            </a> : <></>
+          }
         <Link to="/forums" className={navButton}>Forums</Link>
         {/* shows only when userHeaders exist */}
         {userHeaders ?

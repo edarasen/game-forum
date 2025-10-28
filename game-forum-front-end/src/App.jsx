@@ -15,6 +15,7 @@ import SearchResults from "./pages/SearchResults/SearchResults";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import Post from "./pages/Post/Post";
 import PostCreate from "./pages/PostCreate/PostCreate";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -62,8 +63,16 @@ function App() {
                 path="login"
                 element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
               />
-              <Route path="my-posts" element={<MyPosts />} />
-              <Route path="my-profile" element={<MyProfile />} />
+              <Route path="my-posts" element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <MyPosts />
+                </ProtectedRoute>
+              } />
+              <Route path="my-profile" element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <MyProfile />
+                </ProtectedRoute>
+              } />
               <Route path="/posts/:id" element={<Post />} />
               <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
               <Route path="*" element={<NotFound />} />
