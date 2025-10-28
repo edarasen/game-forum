@@ -19,8 +19,9 @@ import AdminMain from "./pages/AdminMain/AdminMain";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   return (
-    <DataProvider setAppAuth={setIsAuthenticated}>
+    <DataProvider setAppAuth={setIsAuthenticated} setAdminAuth={setIsAdmin}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -99,7 +100,7 @@ function App() {
             />
               <Route path="admin-tools" element={
                 <ProtectedRoute isAuthenticated={isAdmin}>
-                  <AdminMain onLogout={handleLogout}/>
+                  <AdminMain/>
                 </ProtectedRoute>
               }/>
           </Route>

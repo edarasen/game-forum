@@ -2,7 +2,7 @@ import { useState, createContext, useContext } from "react";
 
 const DataContext = createContext();
 
-const DataProvider = ({setAppAuth, children}) => {
+const DataProvider = ({setAppAuth, setAdminAuth, children}) => {
   const [userHeaders, setUserHeaders] = useState('');
   const [userDetails, setUserDetails] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,9 +10,14 @@ const DataProvider = ({setAppAuth, children}) => {
   const onLogin = (status) => {
     setAppAuth(status);
     setIsAuthenticated(status);
+    if(userDetails['role'] === 'admin' || userDetails['role'] === 'moderator')
+    {
+      setAdminAuth(true)
+    }
   };
 
   const onLogout = () => {
+    setAdminAuth(false);
     setAppAuth(false);
     setIsAuthenticated(false);
   };

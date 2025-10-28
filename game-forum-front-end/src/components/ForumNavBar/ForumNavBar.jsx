@@ -20,15 +20,15 @@ function ForumNavBar(){
     resetHeadersDetails()
   }
 
-  const handleLogin = () => {
-    onLogin()
-    setShowLoginModal(false)
-  }
+  // const handleLogin = () => {
+  //   onLogin()
+  //   setShowLoginModal(false)
+  // }
 
     if (showLoginModal) {
       return (
-        <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
-          <Login onLogin={() => handleLogin} onLogout={onLogout} />
+        <Modal isOpen={showLoginModal} onClose={() => (setShowLoginModal(false))}>
+          <Login setShowLoginModal={setShowLoginModal} />
         </Modal>
       );
     }
@@ -69,9 +69,6 @@ function ForumNavBar(){
           ) : (
             <></>
           )}
-          <Link to="/forums" className={navButton}>
-            Forums
-          </Link>
           <Link to="/forums" className={navButton}>Forums</Link>
           {
             (window.location.pathname === "/forums" || window.location.pathname === "/admin-tools")  && userDetails['role'] === 'admin' ? 
