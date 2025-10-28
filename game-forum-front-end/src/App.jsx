@@ -12,8 +12,8 @@ import Signup from "./pages/SignUp/SignUp";
 import LatestPosts from "./pages/LatestPosts/LatestPosts";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import MyProfile from "./pages/MyProfile/MyProfile";
-import Post from "./pages/Post/Post";
 import PostCreate from "./pages/PostCreate/PostCreate";
+import PostView from "./pages/PostView/Postview";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
@@ -78,7 +78,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/posts/:id" element={<Post />} />
+            <Route path="/posts/:id" element={<PostView />} />
             <Route
               path="sign-up"
               element={<Signup />}

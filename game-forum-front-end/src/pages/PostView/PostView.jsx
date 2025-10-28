@@ -61,13 +61,13 @@ async function deletePost(userHeaders, postId) {
   )
 }
 
-async function createReport(userHeaders, contentType, contentId) {
+async function createReport(userHeaders, contentType, contentId, reportReason) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
   return await axios.post(
     `${API_URL}/reports`,
-    { report: { content_type: contentType, content_id: contentId } },
+    { report: { content_type: contentType, content_id: contentId, report_reason: reportReason } },
     requestHeaders
   ).then(
     (response) => response.data,
@@ -125,7 +125,7 @@ async function deleteComment(userHeaders, commentId) {
   )
 }
 
-function Post() {
+function PostView() {
   const { id } = useParams();
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -147,6 +147,7 @@ function Post() {
   const { userHeaders, userDetails } = useData();
   const navigate = useNavigate();
 
+  // Fetch post data on mount or when id changes
   useEffect(() => {
     let mounted = true;
     
@@ -165,6 +166,7 @@ function Post() {
     return () => (mounted = false);
   }, [id]);
 
+  // Handlers for post actions (popup from kebab menu)
   const handlePostMenuSelect = async (action) => {
     switch (action) {
       case "edit":
@@ -187,6 +189,7 @@ function Post() {
     }
   };
 
+  // Handlers for post editing
   const handlePostUpdate = async (e) => {
     e.preventDefault();
     
@@ -209,12 +212,14 @@ function Post() {
     }
   };
 
+  // Cancel post editing
   const handleCancelPostEdit = () => {
     setEditPostTitle(postData.title);
     setEditPostBody(postData.body);
     setIsEditingPost(false);
   };
 
+  // Handlers for comment actions (popups from kebab menu)
   const handleCommentMenuSelect = async (action, comment) => {
     switch (action) {
       case "edit":
@@ -240,6 +245,7 @@ function Post() {
     }
   };
 
+  // Handlers for comment editing
   const handleCommentUpdate = async (commentId) => {
     if (!editCommentBody.trim()) {
       alert("Comment cannot be empty");
@@ -260,11 +266,13 @@ function Post() {
     }
   };
 
+  // Cancel comment editing
   const handleCancelCommentEdit = () => {
     setEditingCommentId(null);
     setEditCommentBody("");
   };
 
+  // Handler for submitting a new comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     
@@ -294,8 +302,14 @@ function Post() {
     setSubmittingComment(false);
   };
 
-  const handleReport = async () => {
-    const result = await createReport(userHeaders, report.type, report.id);
+  // Handler for reporting content
+  const handleReport = async (reportReason) => {
+    const result = await createReport(
+      userHeaders, 
+      report.type, 
+      report.id,
+      reportReason
+    );
     
     if (result) {
       alert("Report submitted successfully. Thank you for helping keep our community safe.");
@@ -305,6 +319,7 @@ function Post() {
     }
   };
 
+  // Permission checks
   const canEditPost = userDetails && (
     postData?.owner_details?.id === userDetails.id ||
     userDetails.role === 'admin' ||
@@ -343,6 +358,7 @@ function Post() {
     return options;
   };
 
+  // Render loading, error, or main content
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -351,6 +367,7 @@ function Post() {
     );
   }
 
+  // Render error if post data failed to load
   if (!postData) {
     return (
       <></>
@@ -562,4 +579,4 @@ function Post() {
   )
 }
 
-export default Post
+export default PostView
