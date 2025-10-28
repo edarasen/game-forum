@@ -7,7 +7,7 @@ function ForumNavBar({onLogout}){
   const navigate = useNavigate()
   const {userHeaders, resetHeadersDetails, userDetails} = useData();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-12 gap-16"
+  const navOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-12 gap-16"
   const navButton = "hover:font-semibold"
 
   const handleLogout = () => {
@@ -16,7 +16,7 @@ function ForumNavBar({onLogout}){
   }
 
   return (
-      <nav>
+      <nav className="sticky top-0 z-50">
       <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
         <div className="flex flex-row items-center gap-2">
           {userHeaders ? <img src={userDetails['profile_picture']} className="w-10 h-10 border border-(--pnb-gold) cursor-pointer" onClick={()=>{navigate('/forums')}}/> : <Link to="/"><img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10"/></Link>}
@@ -29,7 +29,7 @@ function ForumNavBar({onLogout}){
           <Link to="/" className={navButton}>Main Site</Link>
           {
             window.location.pathname === "/" ? 
-            <a
+            <a className={navButton}
               href="https://nalshiragames.itch.io"
               target="_blank"
             >
@@ -55,11 +55,28 @@ function ForumNavBar({onLogout}){
           <span></span>
         </div>
       </div>
+      {
+        window.location.pathname === "/" ? 
+        <div className="flex flex-row justify-around py-2 md:px-20 lg:px-40 bg-(--pnb-parchment)">
+          <a className={`${navButton} underline`}
+                href="#about"> About </a>
+          <a className={`${navButton} underline`}
+                href="#features"> Features </a>
+          <a className={`${navButton} underline`}
+                href="#roadmap"> Roadmap </a>
+          <a className={`${navButton} underline`}
+                href="#team"> Team </a>
+          <a className={`${navButton} underline`}
+                href="#community"> Community </a>
+          <a className={`${navButton} underline`}
+                href="#contact"> Contact </a>
+        </div> : <></> 
+      }
       <div className={`${navOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <Link to="/" className={navButton}>Main Site</Link>
         {
             window.location.pathname === "/" ? 
-            <a
+            <a className={navButton}
               href="https://nalshiragames.itch.io"
               target="_blank"
             >
