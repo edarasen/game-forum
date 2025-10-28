@@ -36,30 +36,27 @@ async function getGameData() {
   );
 }
 
+const LandingPage = ({ onLogout }) => {
+  const [gameData, setGameData] = useState(false);
 
-const LandingPage = ({onLogout}) => {
-
-const [gameData, setGameData] = useState(false);
-
-useEffect(()=>{
-    let mounted = true
-    getGameData().then((data)=>{
-      if(mounted){
+  useEffect(() => {
+    let mounted = true;
+    getGameData().then((data) => {
+      if (mounted) {
         setGameData(data[0]);
-        console.log('data mounted successfully');
-        console.log(data[0])
+        console.log("data mounted successfully");
+        console.log(data[0]);
       }
-    })
-    return ()=>(mounted=false);
+    });
+    return () => (mounted = false);
   }, []);
 
-  
   const [menuOpen, setMenuOpen] = useState(false);
-  const {userHeaders, resetHeadersDetails, userDetails} = useData();
+  const { userHeaders, resetHeadersDetails, userDetails } = useData();
   const navigate = useNavigate();
 
   const navListTailwind =
-    "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
+    "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-3xl py-4 gap-6";
 
   const handleLogout = () => {
     onLogout();
@@ -68,16 +65,16 @@ useEffect(()=>{
 
   return (
     <>
-      <ForumNavBar onLogout={onLogout}/>
+      <ForumNavBar onLogout={onLogout} />
       <div className="PnB">
         {/* <img src="landing-page.webp" alt="PnB Logo" /> */}
       </div>
-      <div className="abt">
-        <p className="font-Montserrat, text-3xl">
+      <div className="abt" id="about">
+        <p className="font-Montserrat, text-4xl">
           <strong>About the Game</strong>
         </p>
         <br />
-        <p className="font-Montserrat, text-xl">
+        <p className="font-Montserrat, text-2xl">
           <strong>Pluck & Brew</strong> is a cozy potion making game in
           development – solve <br />
           puzzles to brew potions, forage for ingredients, and travel different
@@ -88,10 +85,10 @@ useEffect(()=>{
         <br />
         <br />
       </div>
-      <div className="gpFeat">
+      <div className="gpFeat" id="features">
         <br />
         <br />
-        <p className="text-3xl">
+        <p className="text-4xl">
           <strong>Gameplay Features</strong>
         </p>
         <br />
@@ -143,14 +140,14 @@ useEffect(()=>{
           </Swiper>
         </div>
       </div>
-      <div className="rdMap text-center">
+      <div className="rdMap text-center" id="roadmap">
         <br />
         <br />
-        <p className="text-3xl font-bold mb-10">Development Roadmap</p>
+        <p className="text-4xl font-bold mb-10">Development Roadmap</p>
 
         <div className="flex justify-center items-start gap-3 mb-6">
           <img src={stars} className="w-6 h-6" />
-          <p className="font-bold text-lg">Chat & Gift</p>
+          <p className="font-bold text-xl">Chat & Gift</p>
         </div>
         <p>
           Build relationships with your patrons by giving them gifts
@@ -160,7 +157,7 @@ useEffect(()=>{
 
         <div className="flex justify-center items-start gap-3 mb-6">
           <img src={stars} className="w-6 h-6" />
-          <p className="font-bold text-lg">More Renown Ranks, More Recipes</p>
+          <p className="font-bold text-xl">More Renown Ranks, More Recipes</p>
         </div>
         <p>
           Gaining experience and advancing your renown rank allows
@@ -170,7 +167,7 @@ useEffect(()=>{
 
         <div className="flex justify-center items-start gap-3">
           <img src={stars} className="w-6 h-6" />
-          <p className="font-bold text-lg">More Ingredients, More Patrons</p>
+          <p className="font-bold text-xl">More Ingredients, More Patrons</p>
         </div>
         <p>
           Gain the ability to craft potions with more ingredients and <br />
@@ -180,18 +177,18 @@ useEffect(()=>{
         <br />
       </div>
 
-      <div className="abtTeam w-full bg-[#6B7160] py-16 text-white">
-        <p className="text-3xl font-bold text-center mb-12">About the Team</p>
+      <div className="abtTeam w-full bg-[#6B7160] py-16 text-white" id="team">
+        <p className="text-4xl font-bold text-center mb-12">About the Team</p>
 
         <div className="max-w-4xl mx-auto">
           <div className="flex gap-6 mb-12 items-start">
             <img src={nalshira} className="w-20 h-20" />
             <div className="text-left">
-              <p className="text-xl font-bold">Kelcie Regine Reyes</p>
-              <p className="font-medium mb-3 text-sm">
+              <p className="text-2xl font-bold">Kelcie Regine Reyes</p>
+              <p className="font-medium mb-3 text-base">
                 Lead Developer, Designer, Writer, & Artist
               </p>
-              <p className="text-sm leading-relaxed">
+              <p className="text-base leading-relaxed">
                 Kelcie has been working in the Philippine game development
                 industry for five years and counting. She has illustrated and
                 animated 2D sprites for educational games, designed UI for
@@ -203,11 +200,11 @@ useEffect(()=>{
           <div className="flex gap-6 mb-12 items-start">
             <img src={roselle} className="w-20 h-20" />
             <div className="text-left">
-              <p className="text-xl font-bold">Roselle Mae Menchavez</p>
+              <p className="text-2xl font-bold">Roselle Mae Menchavez</p>
               <p className="font-medium mb-3 text-sm">
                 Sound Designer and Producer
               </p>
-              <p className="text-sm leading-relaxed">
+              <p className="text-base leading-relaxed">
                 Roselle is a freelance music scorer and sound designer who has
                 over six years of experience contributing to indie video games.
                 She won Best Sound Design in GameJamPlus 21/22 in Brazil for the
@@ -219,11 +216,11 @@ useEffect(()=>{
           <div className="flex gap-6 mb-12 items-start">
             <img src={Nel} className="w-20 h-20" />
             <div className="text-left">
-              <p className="text-xl font-bold">Nel Kyle Montelijao</p>
+              <p className="text-2xl font-bold">Nel Kyle Montelijao</p>
               <p className="font-medium mb-3 text-sm">
                 [ Commission ] Concept and Background Artist
               </p>
-              <p className="text-sm leading-relaxed">
+              <p className="text-base leading-relaxed">
                 Nel has over six years of experience as a background artist. He
                 began his career at Toei Animation PH contributing to the
                 globally acclaimed anime One Piece. In 2023, he expanded his
@@ -235,11 +232,11 @@ useEffect(()=>{
           <div className="flex gap-6 mb-12 items-start">
             <img src={Hannah} className="w-20 h-20" />
             <div className="text-left">
-              <p className="text-xl font-bold">Hannah R. Nolasco</p>
-              <p className="font-medium mb-3 text-sm">
+              <p className="text-2xl font-bold">Hannah R. Nolasco</p>
+              <p className="font-medium mb-3 text-base">
                 [ Commission ] Writer, Editor, Design Consultant
               </p>
-              <p className="text-sm leading-relaxed">
+              <p className="text-base leading-relaxed">
                 Hannah has more than ten years of experience in writing and
                 design in journalism, advertising, & academia. They started as
                 an editorial correspondent for the Philippine Daily Inquirer
@@ -253,14 +250,14 @@ useEffect(()=>{
       </div>
 
       <div className="demo w-full py-16 p-0 m-0">
-        <p className="text-3xl font-bold text-center mb-12">
+        <p className="text-4xl font-bold text-center mb-12">
           Play the Demo in itch.io!
         </p>
         <br />
         <a
           href="https://nalshiragames.itch.io"
           target="_blank"
-          className="text-5xl text-center"
+          className="text-6xl text-center"
         >
           https://nalshiragames.itch.io
         </a>
@@ -268,12 +265,16 @@ useEffect(()=>{
         <br />
         <div className="record">
           <div>
-            <p className="font-bold text-4xl text-center">{gameData ? gameData['views_count'] : "" }</p>
-            <p className="text-3xl text-center">Views</p>
+            <p className="font-bold text-5xl text-center">
+              {gameData ? gameData["views_count"] : ""}
+            </p>
+            <p className="text-4xl text-center">Views</p>
           </div>
           <div>
-            <p className="font-bold text-4xl">{gameData ? gameData['downloads_count'] : "" }</p>
-            <p className="text-3xl text-center">Downloads</p>
+            <p className="font-bold text-5xl">
+              {gameData ? gameData["downloads_count"] : ""}
+            </p>
+            <p className="text-4xl text-center">Downloads</p>
           </div>
         </div>
         <br />
@@ -286,10 +287,10 @@ useEffect(()=>{
         </div>
       </div>
       <div className="discussion py-16">
-        <p className="text-3xl font-bold text-center mb-12">
+        <p className="text-4xl font-bold text-center mb-12">
           Join the Discussion
         </p>
-        <p className="text-xl text-center mb-12">
+        <p className="text-2xl text-center mb-12">
           The official P&B Forum is open alongside the P&B Discord to discuss
           <br />
           anything and everything related to the magical voyage of
@@ -299,8 +300,11 @@ useEffect(()=>{
           <br />
           lore, and share fanart with other players!
         </p>
-        <div className="cta-buttons">
-          <button className="cta-btn outline" onClick={() => navigate("/forums")}>
+        <div className="cta-buttons" id="community">
+          <button
+            className="cta-btn outline"
+            onClick={() => navigate("/forums")}
+          >
             Go to Forums
           </button>
           <button className="cta-btn outline">Join Discord</button>
@@ -309,7 +313,7 @@ useEffect(()=>{
       <div>
         <GamesGallery />
       </div>
-      <div>
+      <div id="contact">
         <ContactSection />
       </div>
     </>

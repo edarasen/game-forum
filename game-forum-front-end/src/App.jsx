@@ -33,60 +33,87 @@ function App() {
   const { channel_id } = useParams();
 
   return (
-      <DataProvider>
-        <BrowserRouter>
-          <Routes>
+    <DataProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Login onLogin={handleLogin} onLogout={handleLogout} />
+              )
+            }
+          />
+          <Route path="/">
             <Route
-              path="/login"
+              index
               element={
-                isAuthenticated ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <Login onLogin={handleLogin} onLogout={handleLogout} />
-                )
+                <LandingPage onLogin={handleLogin} onLogout={handleLogout} />
               }
             />
-            <Route path="/">
-              <Route index element={<LandingPage onLogout={handleLogout} />} />
-              <Route
-                path="forums"
-                element={<ForumMain onLogout={handleLogout} />}
-              />
-              <Route
-                path="channels/:channel_id"
-                element={<Channel onLogout={handleLogout} />}
-              />
-              <Route path="/channels/posts/new" element={<PostCreate onLogout={handleLogout} />} />
-              {/* <Route path="permissions-test" element={<Test />} /> */}
-              <Route
-                path="login"
-                element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
-              />
-              <Route path="my-posts" element={
+            <Route
+              path="forums"
+              element={
+                <ForumMain onLogin={handleLogin} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="channels/:channel_id"
+              element={
+                <Channel onLogin={handleLogin} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/channels/posts/new"
+              element={
+                <PostCreate onLogin={handleLogin} onLogout={handleLogout} />
+              }
+            />
+            {/* <Route path="permissions-test" element={<Test />} /> */}
+            <Route
+              path="login"
+              element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
+            />
+            <Route
+              path="my-posts"
+              element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <MyPosts />
                 </ProtectedRoute>
-              } />
-              <Route path="my-profile" element={
+              }
+            />
+            <Route
+              path="my-profile"
+              element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <MyProfile />
                 </ProtectedRoute>
-              } />
-              <Route path="/posts/:id" element={<Post />} />
-              <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
-              <Route path="*" element={<NotFound />} />
-              <Route
-                path="latest"
-                element={<LatestPosts onLogout={handleLogout} />}
-              />
-              <Route
-                path="search"
-                element={<SearchResults onLogout={handleLogout} />}
-              />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </DataProvider>
+              }
+            />
+            <Route path="/posts/:id" element={<Post />} />
+            <Route
+              path="sign-up"
+              element={<Signup onLogin={handleLogin} onLogout={handleLogout} />}
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="latest"
+              element={
+                <LatestPosts onLogin={handleLogin} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="search"
+              element={
+                <SearchResults onLogin={handleLogin} onLogout={handleLogout} />
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </DataProvider>
   );
 }
 
