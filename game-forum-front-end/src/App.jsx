@@ -1,12 +1,9 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import DataProvider from "./context/DataProvider";
 import Login from "./pages/Login/Login";
-import Test from "./pages/Test/Test";
-import LandingPage from "./home/home";
-import AboutPage from "./about/about";
+import LandingPage from "./pages/home/home";
 import NotFound from "./pages/NotFound/NotFound";
 import ForumMain from "./pages/ForumMain/ForumMain";
 import Channel from "./pages/Channel/Channel";
@@ -17,72 +14,92 @@ import SearchResults from "./pages/SearchResults/SearchResults";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import PostCreate from "./pages/PostCreate/PostCreate";
 import PostView from "./pages/PostView/Postview";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = (status) => {
-    console.log("Hello!");
-    setIsAuthenticated(status);
-  };
-
-  const handleLogout = () => {
-    console.log("Bye!");
-    setIsAuthenticated(false);
-  };
-
-  const { channel_id } = useParams();
-
   return (
-    <div>
-      <DataProvider>
-        <BrowserRouter>
-          <Routes>
+    <DataProvider setAppAuth={setIsAuthenticated}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Login />
+              )
+            }
+          />
+          <Route path="/">
             <Route
-              path="/login"
+              index
               element={
-                isAuthenticated ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <Login onLogin={handleLogin} onLogout={handleLogout} />
-                )
+                <LandingPage />
               }
             />
-            <Route path="/">
-              <Route index element={<LandingPage onLogout={handleLogout} />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route
-                path="forums"
-                element={<ForumMain onLogout={handleLogout} />}
-              />
-              <Route
-                path="channels/:channel_id"
-                element={<Channel onLogout={handleLogout} />}
-              />
-              <Route path="/channels/posts/new" element={<PostCreate onLogout={handleLogout} />} />
-              {/* <Route path="permissions-test" element={<Test />} /> */}
-              <Route
-                path="login"
-                element={<Login onLogin={handleLogin} onLogout={handleLogout} />}
-              />
-              <Route path="my-posts" element={<MyPosts />} />
-              <Route path="my-profile" element={<MyProfile />} />
-              <Route path="/posts/:id" element={<PostView />} />
-              <Route path="sign-up" element={<Signup onLogout={handleLogout} />} />
-              <Route path="*" element={<NotFound />} />
-              <Route
-                path="latest"
-                element={<LatestPosts onLogout={handleLogout} />}
-              />
-              <Route
-                path="search"
-                element={<SearchResults onLogout={handleLogout} />}
-              />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </DataProvider>
-    </div>
+            <Route
+              path="forums"
+              element={
+                <ForumMain />
+              }
+            />
+            <Route
+              path="channels/:channel_id"
+              element={
+                <Channel />
+              }
+            />
+            <Route
+              path="/channels/posts/new"
+              element={
+                <PostCreate />
+              }
+            />
+            {/* <Route path="permissions-test" element={<Test />} /> */}
+            <Route
+              path="login"
+              element={<Login />}
+            />
+            <Route
+              path="my-posts"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <MyPosts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="my-profile"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <MyProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/posts/:id" element={<PostView />} />
+            <Route
+              path="sign-up"
+              element={<Signup />}
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="latest"
+              element={
+                <LatestPosts />
+              }
+            />
+            <Route
+              path="search"
+              element={
+                <SearchResults />
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </DataProvider>
   );
 }
 

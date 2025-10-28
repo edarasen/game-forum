@@ -11,11 +11,11 @@ import UserPreview from "../../components/UserPreview/UserPreview";
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function getSearchResultsData(userHeaders, queryParam){
+async function getSearchResultsData(userHeaders, queryParam){
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/search?query=${queryParam}`, requestHeaders).then(
+  return await axios.get(`${API_URL}/search?query=${queryParam}`, requestHeaders).then(
     (response)=> response.data, 
     (error) => error.response.data.error ? console.log(error.response.data.error) : console.log(error.response.data.message))
 }
@@ -24,14 +24,14 @@ function SearchResultsRenderUsers({users}){
   return users.length > 0 ? 
   users.map((user) => (
     <UserPreview key={`postpreview-${user['id']}`} user={user}/>
-  )) : <p>No users found</p>
+  )) : <p className="text-xl p-8 font-bold">No users found</p>
 }
 
 function SearchResultsRenderPosts({posts}){
   return posts.length > 0 ? 
   posts.map((post) => (
     <PostPreview key={`postpreview-${post['id']}`} post={post}/>
-  )) : <p>No posts found</p>
+  )) : <p className="text-xl p-8 font-bold">No posts found</p>
 }
 
 function SearchResults({onLogout}){

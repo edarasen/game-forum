@@ -19,9 +19,8 @@ function formatDate(dateString) {
   });
 }
 
-// API call to GET a post by ID
-function getPost(postId) {
-  return axios.get(`${API_URL}/posts/${postId}`, {
+async function getPost(postId) {
+  return await axios.get(`${API_URL}/posts/${postId}`, {
     headers: { Accept: "application/json" }
   }).then(
     (response) => response.data,
@@ -31,12 +30,12 @@ function getPost(postId) {
     }
   )
 }
-// API call to UPDATE a post
-function updatePost(userHeaders, postId, title, body) {
+
+async function updatePost(userHeaders, postId, title, body) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.patch(
+  return await axios.patch(
     `${API_URL}/posts/${postId}`,
     { post: { title, body } },
     requestHeaders
@@ -49,12 +48,11 @@ function updatePost(userHeaders, postId, title, body) {
   )
 }
 
-// API call to DELETE a post
-function deletePost(userHeaders, postId) {
+async function deletePost(userHeaders, postId) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.delete(`${API_URL}/posts/${postId}`, requestHeaders).then(
+  return await axios.delete(`${API_URL}/posts/${postId}`, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("Post deletion error:", error);
@@ -63,12 +61,11 @@ function deletePost(userHeaders, postId) {
   )
 }
 
-// API call to CREATE a report
-function createReport(userHeaders, contentType, contentId, reportReason) {
+async function createReport(userHeaders, contentType, contentId, reportReason) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.post(
+  return await axios.post(
     `${API_URL}/reports`,
     { report: { content_type: contentType, content_id: contentId, report_reason: reportReason } },
     requestHeaders
@@ -81,12 +78,11 @@ function createReport(userHeaders, contentType, contentId, reportReason) {
   )
 }
 
-// API call to CREATE a comment
-function createComment(userHeaders, postId, commentBody) {
+async function createComment(userHeaders, postId, commentBody) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.post(
+  return await axios.post(
     `${API_URL}/posts/${postId}/comments`, 
     { comment: { body: commentBody } },
     requestHeaders
@@ -99,12 +95,11 @@ function createComment(userHeaders, postId, commentBody) {
   )
 }
 
-// API call to UPDATE a comment
-function updateComment(userHeaders, commentId, body) {
+async function updateComment(userHeaders, commentId, body) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.patch(
+  return await axios.patch(
     `${API_URL}/comments/${commentId}`,
     { comment: { body } },
     requestHeaders
@@ -117,12 +112,11 @@ function updateComment(userHeaders, commentId, body) {
   )
 }
 
-// API call to DELETE a comment
-function deleteComment(userHeaders, commentId) {
+async function deleteComment(userHeaders, commentId) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.delete(`${API_URL}/comments/${commentId}`, requestHeaders).then(
+  return await axios.delete(`${API_URL}/comments/${commentId}`, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("Comment deletion error:", error);
@@ -376,9 +370,10 @@ function PostView() {
   // Render error if post data failed to load
   if (!postData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-red-600">Failed to load post. Post may not exist.</div>
-      </div>
+      <></>
+      // <div className="min-h-screen flex items-center justify-center">
+      //   <div className="text-xl text-red-600">Failed to load post. Post may not exist.</div>
+      // </div>
     );
   }
 

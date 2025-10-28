@@ -9,7 +9,7 @@ import ForumMainActions from "../../components/ForumMainActions/ForumMainActions
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function getLatestPostsData(userHeaders){
+async function getLatestPostsData(userHeaders){
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }

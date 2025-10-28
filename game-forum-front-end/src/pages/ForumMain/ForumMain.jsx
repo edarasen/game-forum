@@ -9,11 +9,11 @@ import Loader from "../../components/Loader/Loader";
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function getChannelGroupsData(userHeaders){
+async function getChannelGroupsData(userHeaders){
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/channelgroups`, requestHeaders).then(
+  return await axios.get(`${API_URL}/channelgroups`, requestHeaders).then(
     (response)=> response.data, 
     (error) => error.response.data.error ? console.log(error.response.data.error) : console.log(error.response.data.message))
 }

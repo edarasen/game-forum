@@ -20,11 +20,11 @@ function getCommentsCount(post) {
   return post.comments?.length || 0;
 }
 
-function getUserPosts(userHeaders) {
+async function getUserPosts(userHeaders) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
   }
-  return axios.get(`${API_URL}/all_posts`, requestHeaders).then(
+  return await axios.get(`${API_URL}/all_posts`, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("API Error:", error);
