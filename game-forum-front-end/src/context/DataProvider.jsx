@@ -10,10 +10,6 @@ const DataProvider = ({setAppAuth, setAdminAuth, children}) => {
   const onLogin = (status) => {
     setAppAuth(status);
     setIsAuthenticated(status);
-    if(userDetails['role'] === 'admin' || userDetails['role'] === 'moderator')
-    {
-      setAdminAuth(true)
-    }
   };
 
   const onLogout = () => {
@@ -37,6 +33,9 @@ const DataProvider = ({setAppAuth, setAdminAuth, children}) => {
       'updated_at': data['updated_at']
     }
     setUserDetails(updatedDetails);
+    if(updatedDetails['role'] === 'admin' || updatedDetails['role'] === 'moderator'){
+      setAdminAuth(true)
+    }
   }
 
   const handleHeaders = (header) => {

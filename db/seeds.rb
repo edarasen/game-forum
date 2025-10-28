@@ -130,8 +130,8 @@ def test_data
 
   # Reports
   puts "Seeding Reports..."
-  report_post = Report.create(content_type: 'post', content_id:1, user_id: 3)
-  report_comment = Report.create(content_type: 'comment', content_id:1, user_id: 4)
+  report_post = Report.create(content_type: 'post', content_id:1, user_id: 3, report_reason:0)
+  report_comment = Report.create(content_type: 'comment', content_id:1, user_id: 4, report_reason:0)
   puts "Reports seeded!"
 
 end
