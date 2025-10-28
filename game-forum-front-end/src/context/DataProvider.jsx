@@ -2,7 +2,7 @@ import { useState, createContext, useContext } from "react";
 
 const DataContext = createContext();
 
-const DataProvider = ({setAppAuth, children}) => {
+const DataProvider = ({setAppAuth, setAdminAuth, children}) => {
   const [userHeaders, setUserHeaders] = useState('');
   const [userDetails, setUserDetails] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,6 +13,7 @@ const DataProvider = ({setAppAuth, children}) => {
   };
 
   const onLogout = () => {
+    setAdminAuth(false);
     setAppAuth(false);
     setIsAuthenticated(false);
   };
@@ -32,6 +33,9 @@ const DataProvider = ({setAppAuth, children}) => {
       'updated_at': data['updated_at']
     }
     setUserDetails(updatedDetails);
+    if(updatedDetails['role'] === 'admin' || updatedDetails['role'] === 'moderator'){
+      setAdminAuth(true)
+    }
   }
 
   const handleHeaders = (header) => {

@@ -8,7 +8,7 @@ import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Login() {
+function Login({setShowLoginModal}) {
   const {onLogin, onLogout} = useData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +44,9 @@ function Login() {
       if (data.data && headers) {
         handleHeaders(headers);
         handleDetails(data.data);
+        const isAdmin = data.data['role'] === 'admin'
         onLogin(true);
+        setShowLoginModal(false);
         navigate("/"); // Changed from "/forums" to "/" to route to home
       }
     } catch (error) {

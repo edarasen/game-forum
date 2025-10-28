@@ -15,11 +15,13 @@ import MyProfile from "./pages/MyProfile/MyProfile";
 import PostCreate from "./pages/PostCreate/PostCreate";
 import PostView from "./pages/PostView/Postview";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import AdminMain from "./pages/AdminMain/AdminMain";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   return (
-    <DataProvider setAppAuth={setIsAuthenticated}>
+    <DataProvider setAppAuth={setIsAuthenticated} setAdminAuth={setIsAdmin}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -96,6 +98,11 @@ function App() {
                 <SearchResults />
               }
             />
+              <Route path="admin-tools" element={
+                <ProtectedRoute isAuthenticated={isAdmin}>
+                  <AdminMain/>
+                </ProtectedRoute>
+              }/>
           </Route>
         </Routes>
       </BrowserRouter>
