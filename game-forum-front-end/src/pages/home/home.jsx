@@ -257,7 +257,7 @@ const LandingPage = ({ onLogout }) => {
         <a
           href="https://nalshiragames.itch.io"
           target="_blank"
-          className="text-6xl text-center"
+          className="text-6xl text-center underline"
         >
           https://nalshiragames.itch.io
         </a>

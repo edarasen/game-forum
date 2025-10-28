@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import logo from "../../assets/pnb logo.webp";
+import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -12,6 +11,7 @@ export default function PostCreate() {
   const [channelId, setChannelId] = useState(0);
   const [allChannelData, setAllChannelData] = useState();
   const navigate = useNavigate();
+  const { onLogin, onLogout } = useData();
   const [menuOpen, setMenuOpen] = useState(false);
   const navListTailwind =
     "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
@@ -89,35 +89,7 @@ export default function PostCreate() {
 
   return (
     <>
-      <nav>
-        <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-          {userHeaders ? (
-            <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399"
-              className="w-10 h-10"
-            ></img>
-          ) : (
-            <Link to="/">
-              <img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10" />
-            </Link>
-          )}
-          <h1 className="text-(--pnb-gold) text-lg font-medium">New Post</h1>
-          <div
-            className={`hamburger ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-        <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
-          <p>{userDetails["username"]}</p>
-          <Link to="/">Main Site</Link>
-          <Link to="/forums">My Posts</Link>
-          <Link to="/forums">Profile</Link>
-        </div>
-      </nav>
+      <ForumNavBar onLogout={onLogout} />
       <h2
         className="text-2xl font-bold text-center mb-6"
         style={{ color: "#677365" }}
@@ -169,28 +141,39 @@ export default function PostCreate() {
               <></>
             )}
           </div>
-          <div>
-            <label>Title:</label>
+          <div className="space-y-4">
+            <label style={{ color: "#f7d486" }}>Title:</label>
             <input
+              placeholder="Title"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
+              style={{ background: "#FCE5CD" }}
             />
           </div>
 
-          <div>
-            <label>Body:</label>
+          <div className="space-y-4">
+            <label style={{ color: "#f7d486" }}>Body:</label>
             <textarea
+              placeholder="Body"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               name="body"
               value={form.body}
               onChange={handleChange}
               required
+              style={{ background: "#FCE5CD" }}
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            className="w-full p-3 rounded-md font-bold"
+            disabled={loading}
+            style={{ backgroundColor: "#f7d486", color: "#677365" }}
+          >
             {loading ? "Creating..." : "Create Post"}
           </button>
         </form>
