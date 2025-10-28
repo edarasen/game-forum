@@ -30,21 +30,24 @@ function ReportsIndex(){
     return <></>
   }
   return (
-    <>
-      <p>Reports Index</p>
-      <p>Reported Posts</p>
-      {
-        reportsData['posts'].map((post)=>(
-          <p key={`post-${post['id']}`}>{post['post_details']['title']}</p>
-        ))
-      }
-      <p>Reported Comments</p>
-      {
-        reportsData['comments'].map((comment)=>(
-          <p key={`comment-${comment['id']}`}>{comment['comment_details']['body']}</p>
-        ))
-      }
-    </>
+    <div className="flex flex-col gap-4 py-6 px-4">
+      <div className="border-2 border-(--pnb-green) px-4 py-2">
+        <p>Reported Posts</p>
+        {
+          reportsData['posts'].map((post)=>(
+            <p key={`post-${post['id']}`}>{post['post_details']['title']} : {post['report_reason']}</p>
+          ))
+        }
+      </div>
+      <div className="border-2 border-(--pnb-green) px-4 py-2">
+        <p>Reported Comments</p>
+        {
+          reportsData['comments'].map((comment)=>(
+            <p key={`comment-${comment['id']}`}>{comment['comment_details']['body']} : {comment['report_reason']}</p>
+          ))
+        }
+      </div>
+    </div>
   )
 }
 
