@@ -5,7 +5,7 @@ end
 
 json.data do
   json.report_details do
-    json.extract! @report, :id, :content_type
+    json.extract! @report, :id, :content_type, :report_reason
   end
   if @report.content_type == 'post'
     json.post_details do

@@ -73,6 +73,6 @@ class Api::V1::ReportsController < ApplicationController
   # @param content_type [Enum:Integer] post or comment
   # @param id [Integer] the post/comment's id
   def report_params
-    params.expect(report: [:content_type, :content_id])
+    params.expect(report: [:content_type, :content_id, :report_reason])
   end
 end

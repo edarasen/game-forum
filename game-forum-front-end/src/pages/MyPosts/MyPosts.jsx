@@ -67,6 +67,13 @@ function MyPosts() {
   return (
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="w-1/9 mb-4 px-4 py-2 cursor-pointer text-left text-[#5B6153] hover:text-[#6B796A] transition-colors"
+        >
+          ← <span className="underline">Back</span> 
+        </button>
         {/* Profile header */}
         <div className="flex justify-center items-center gap-4 mb-8">
           <div className="h-16 w-16 rounded-md bg-yellow-200 ring-4 ring-yellow-300/80 shadow-sm flex items-center justify-center text-xl font-semibold text-slate-700">
