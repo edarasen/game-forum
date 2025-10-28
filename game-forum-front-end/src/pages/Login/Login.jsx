@@ -52,7 +52,7 @@ function Login({ onLogin, onLogout }) {
 
   return (
     <>
-      <ForumNavBar onLogout={onLogout}/>
+      <ForumNavBar onLogout={onLogout} />
       <div
         className="min-h-screen flex flex-col items-center justify-center"
         style={{ backgroundColor: "#FCE5CD" }}
@@ -72,10 +72,12 @@ function Login({ onLogin, onLogout }) {
             <label>Email</label>
             <input
               type="email"
+              placeholder="E-mail"
               className="w-full p-3 rounded-md outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              style={{ background: "#FCE5CD" }}
             />
 
             <label>Password</label>
@@ -86,6 +88,7 @@ function Login({ onLogin, onLogout }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              style={{ background: "#FCE5CD" }}
             />
 
             <button
@@ -96,14 +99,14 @@ function Login({ onLogin, onLogout }) {
               Log In
             </button>
           </form>
-        </div>
-        <div className="mt-6 text-center">
-          <p className="text-center" style={{ color: "#677365" }}>
-            Not a member yet?{" "}
-            <Link to="/sign-up" className="underline">
-              Click here!
-            </Link>
-          </p>
+          <div className="mt-6 text-center">
+            <p className="text-center-lg" style={{ color: "#f7d486" }}>
+              Not a member yet?{" "}
+              <Link to="/sign-up" className="underline">
+                Click here!
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </>
