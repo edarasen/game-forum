@@ -1,3 +1,4 @@
+import { useData } from "../../context/DataProvider";
 import "./ChannelPreview.css"
 import { useNavigate } from "react-router-dom";
 
@@ -83,21 +84,32 @@ function convertISOTimestamp(timestamp){
 }
 
 function ChannelPreview(props){
+  const {userDetails} = useData();
   const navigate = useNavigate();
+
+  const navButton = "hover:font-semibold cursor-pointer"
+  const adminPermission = userDetails && (
+    window.location.pathname === "/admin-tools" && (userDetails.role === 'admin' ||
+    userDetails.role === 'moderator')
+  );
 
   const navigateToChannel = (channel_id) => {
     navigate(`/channels/${channel_id}`)
   }
 
   return (
-    <div className="flex flex-row justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)" onClick={()=>{navigateToChannel(props.channel['id'])}}>
+    <div className="flex flex-row justify-between px-6 py-4 hover:bg-(--pnb-alternate-parchment) text-(--pnb-text-green)" onClick={()=>{adminPermission ? navigate(`/edit/channel/${props.channel['id']}`) : navigateToChannel(props.channel['id'])}}>
       <div>
         <h4 className="font-semibold text-2xl">{props.channel['title']}</h4>
         <h6 className="text-sm">Last Updated : {convertISOTimestamp(props.channel['updated_at'])}</h6>
       </div>
-      <div className="text-center">
-        <p className="font-semibold text-2xl">{props.channel['post_count']}</p>
-        <p className="text-sm">{props.channel['post_count'] > 1 ? "Posts": "Post"}</p>
+      <div className="flex flex-row gap-10">
+        <div className="text-center">
+          <p className="font-semibold text-2xl">{props.channel['post_count']}</p>
+          <p className="text-sm">{props.channel['post_count'] > 1 ? "Posts": "Post"}</p>
+        </div>
+        {adminPermission && 
+            <button className={`${navButton} underline`} onClick={() => (navigate(`/edit/channel/${props.channel['id']}`))}>Edit</button>}
       </div>
     </div>
   )

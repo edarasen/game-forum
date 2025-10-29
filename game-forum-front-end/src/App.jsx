@@ -19,6 +19,7 @@ import AdminMain from "./pages/AdminMain/AdminMain";
 import EditChannelGroup from "./pages/EditChannelGroup/EditChannelGroup";
 import NewChannelGroup from "./pages/NewChannelGroup/NewChannelGroup";
 import NewChannel from "./pages/NewChannel/NewChannel";
+import EditChannel from "./pages/EditChannel/EditChannel";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,7 +28,7 @@ function App() {
     <DataProvider setAppAuth={setIsAuthenticated} setAdminAuth={setIsAdmin}>
       <BrowserRouter>
         <Routes>
-          <Route
+          {/* <Route
             path="/login"
             element={
               isAuthenticated ? (
@@ -36,7 +37,7 @@ function App() {
                 <Login />
               )
             }
-          />
+          /> */}
           <Route path="/">
             <Route
               index
@@ -63,10 +64,10 @@ function App() {
               }
             />
             {/* <Route path="permissions-test" element={<Test />} /> */}
-            <Route
+            {/* <Route
               path="login"
               element={<Login />}
-            />
+            /> */}
             <Route
               path="my-posts"
               element={
@@ -119,6 +120,11 @@ function App() {
             <Route path="new/channel" element={
               <ProtectedRoute isAuthenticated={isAdmin}>
                 <NewChannel/>
+              </ProtectedRoute>
+            }/>
+            <Route path="edit/channel/:id" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <EditChannel/>
               </ProtectedRoute>
             }/>
           </Route>
