@@ -32,15 +32,15 @@ function ReportsIndex(){
     return <></>
   }
   return (
-    <div className="flex flex-col gap-4 py-6 px-4">
+    <div className="flex flex-col gap-4 py-6 px-4 text-(--pnb-text-green)">
       <div className="border-2 border-(--pnb-green) mx-4 my-2">
         <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
           <h1 className="font-semibold text-2xl">Reported Posts</h1>
         </div>
         {
-          reportsData['posts'].map((post)=>(
+          reportsData['posts'].length > 0 ? reportsData['posts'].map((post)=>(
             <ReportPostPreview key={`post-${post['report_details']['id']}`} post={post}/>
-          ))
+          )) : <p className="text-xl p-8 font-bold">No Reported Posts</p>
         }
       </div>
       <div className="border-2 border-(--pnb-green) mx-4 my-2">
@@ -48,9 +48,9 @@ function ReportsIndex(){
           <h1 className="font-semibold text-2xl">Reported Comments</h1>
         </div>
         {
-          reportsData['comments'].map((comment)=>(
+          reportsData['comments'].length > 0 ? reportsData['comments'].map((comment)=>(
             <ReportCommentPreview key={`comment-${comment['report_details']['id']}`} comment={comment}/>
-          ))
+          )) : <p className="text-xl p-8 font-bold">No Reported Posts</p>
         }
       </div>
     </div>
