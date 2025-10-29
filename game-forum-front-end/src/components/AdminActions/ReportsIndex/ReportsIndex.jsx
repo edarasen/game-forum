@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useData } from "../../../context/DataProvider";
+import ReportPostPreview from "../../ReportPostPreview/ReportPostPreview";
+import ReportCommentPreview from "../../ReportCommentPreview/ReportCommentPreview";
+import Loader from "../../Loader/Loader";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -27,24 +30,31 @@ function ReportsIndex(){
     getReportsData();
   }, []);
   if (!reportsData){
-    return <></>
+    return <Loader/>
   }
   return (
-    <>
-      <p>Reports Index</p>
-      <p>Reported Posts</p>
-      {
-        reportsData['posts'].map((post)=>(
-          <p key={`post-${post['id']}`}>{post['post_details']['title']}</p>
-        ))
-      }
-      <p>Reported Comments</p>
-      {
-        reportsData['comments'].map((comment)=>(
-          <p key={`comment-${comment['id']}`}>{comment['comment_details']['body']}</p>
-        ))
-      }
-    </>
+    <div className="flex flex-col gap-4 py-6 px-4 text-(--pnb-text-green)">
+      <div className="border-2 border-(--pnb-green) mx-4 my-2">
+        <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
+          <h1 className="font-semibold text-2xl">Reported Posts</h1>
+        </div>
+        {
+          reportsData['posts'].length > 0 ? reportsData['posts'].map((post)=>(
+            <ReportPostPreview key={`post-${post['report_details']['id']}`} post={post}/>
+          )) : <p className="text-xl p-8 font-bold">No Reported Posts</p>
+        }
+      </div>
+      <div className="border-2 border-(--pnb-green) mx-4 my-2">
+        <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center gap-3">
+          <h1 className="font-semibold text-2xl">Reported Comments</h1>
+        </div>
+        {
+          reportsData['comments'].length > 0 ? reportsData['comments'].map((comment)=>(
+            <ReportCommentPreview key={`comment-${comment['report_details']['id']}`} comment={comment}/>
+          )) : <p className="text-xl p-8 font-bold">No Reported Posts</p>
+        }
+      </div>
+    </div>
   )
 }
 

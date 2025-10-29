@@ -12,6 +12,9 @@ json.data do
       json.post_details do
         json.extract! Post.find(post.content_id), :id, :title, :body
       end
+      json.owner_details do
+        json.extract! Post.find(post.content_id).user, :id, :username
+      end
       json.reporter_details do
         json.extract! User.find(post.user_id), :id, :username
       end
@@ -25,6 +28,9 @@ json.data do
       end
       json.comment_details do
         json.extract! Comment.find(comment.content_id), :id, :body
+      end
+      json.owner_details do
+        json.extract! Comment.find(comment.content_id).user, :id, :username
       end
       json.post_details do
         json.extract! Comment.find(comment.content_id).post, :id, :title, :body

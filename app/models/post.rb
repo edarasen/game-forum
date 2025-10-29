@@ -6,4 +6,14 @@ class Post < ApplicationRecord
   belongs_to :channel
 
   has_many :comments, dependent: :destroy
+
+  after_destroy :destroy_report
+
+  private
+  def destroy_report
+    @reports = Report.posts.where(content_id: self.id)
+    @reports.each do |report|
+      report.destroy!
+    end
+  end
 end
