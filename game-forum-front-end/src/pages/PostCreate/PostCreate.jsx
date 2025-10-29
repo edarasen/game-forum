@@ -4,10 +4,12 @@ import { useData } from "../../context/DataProvider";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../../assets/pnb logo.webp";
+import Filter from "leo-profanity";
+import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function PostCreate() {
+export default function PostCreate({ onLogout }) {
   const { userHeaders, userDetails } = useData();
   const [channelId, setChannelId] = useState(0);
   const [allChannelData, setAllChannelData] = useState();
@@ -19,6 +21,10 @@ export default function PostCreate() {
   const [form, setForm] = useState({ title: "", body: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    Filter.loadDictionary();
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,6 +48,28 @@ export default function PostCreate() {
     setLoading(true);
     setError(null);
     console.log(form);
+
+    const normalizeText = (text) =>
+      text
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+    const cleanTitle = normalizeText(form.title);
+    const cleanBody = normalizeText(form.body);
+
+    const hasProfanity = Filter.check(cleanTitle) || Filter.check(cleanBody);
+
+      if (hasProfanity) {
+        setError("Excuse your French.");
+        setLoading(false);
+        return;
+      }
+
+    const filteredTitle = Filter.clean(form.title);
+    const filteredBody = Filter.clean(form.body);
+
+  
 
     console.log(userHeaders);
     try {
@@ -89,35 +117,7 @@ export default function PostCreate() {
 
   return (
     <>
-      <nav>
-        <div className="flex justify-between items-center bg-(--pnb-green) px-4 py-2">
-          {userHeaders ? (
-            <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F69%2FWikimedia_logo_family_complete-2023.svg%2F1200px-Wikimedia_logo_family_complete-2023.svg.png%3F20230824201106&f=1&nofb=1&ipt=370c744281553dfb0122bf436fc2e6ad963a98392e23778fb315f83c06d2f399"
-              className="w-10 h-10"
-            ></img>
-          ) : (
-            <Link to="/">
-              <img src={logo} alt="Pluck and Brew Logo" className="w-10 h-10" />
-            </Link>
-          )}
-          <h1 className="text-(--pnb-gold) text-lg font-medium">New Post</h1>
-          <div
-            className={`hamburger ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-        <div className={`${navListTailwind} ${menuOpen ? "flex" : "hidden"}`}>
-          <p>{userDetails["username"]}</p>
-          <Link to="/">Main Site</Link>
-          <Link to="/forums">My Posts</Link>
-          <Link to="/forums">Profile</Link>
-        </div>
-      </nav>
+      <ForumNavBar onLogout={onLogout} />
       <h2
         className="text-2xl font-bold text-center mb-6"
         style={{ color: "#677365" }}
@@ -132,6 +132,14 @@ export default function PostCreate() {
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-[#677365] p-8 rounded-xl shadow-lg space-y-4"
         >
+          {error && (
+            <p
+              className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md"
+              style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
+            >
+              {error}
+            </p>
+          )}
           <div>
             <div>
               <label
@@ -170,32 +178,45 @@ export default function PostCreate() {
             )}
           </div>
           <div>
-            <label>Title:</label>
+            <label style={{ color: "#f7d486" }} className="font-bold">
+              Title:
+            </label>
             <input
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
+              style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
 
           <div>
-            <label>Body:</label>
+            <label style={{ color: "#f7d486" }} className="font-bold">
+              Body:
+            </label>
             <textarea
               name="body"
               value={form.body}
               onChange={handleChange}
               required
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
+              style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full p-3 rounded-md font-bold"
+            style={{ backgroundColor: "#f7d486", color: "#677365" }}
+          >
             {loading ? "Creating..." : "Create Post"}
           </button>
         </form>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
       </div>
     </>
   );
