@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../../assets/pnb logo.webp";
 import Filter from "leo-profanity";
@@ -9,11 +8,12 @@ import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function PostCreate({ onLogout }) {
+export default function PostCreate() {
   const { userHeaders, userDetails } = useData();
   const [channelId, setChannelId] = useState(0);
   const [allChannelData, setAllChannelData] = useState();
   const navigate = useNavigate();
+  const { onLogin, onLogout } = useData();
   const [menuOpen, setMenuOpen] = useState(false);
   const navListTailwind =
     "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
@@ -182,12 +182,13 @@ export default function PostCreate({ onLogout }) {
               Title:
             </label>
             <input
+              placeholder="Title"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
@@ -197,11 +198,12 @@ export default function PostCreate({ onLogout }) {
               Body:
             </label>
             <textarea
+              placeholder="Body"
+              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               name="body"
               value={form.body}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
               style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
