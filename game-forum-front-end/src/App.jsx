@@ -17,6 +17,8 @@ import PostView from "./pages/PostView/Postview";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import AdminMain from "./pages/AdminMain/AdminMain";
 import EditChannelGroup from "./pages/EditChannelGroup/EditChannelGroup";
+import NewChannelGroup from "./pages/NewChannelGroup/NewChannelGroup";
+import NewChannel from "./pages/NewChannel/NewChannel";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -107,6 +109,16 @@ function App() {
             <Route path="edit/channelgroup/:id" element={
               <ProtectedRoute isAuthenticated={isAdmin}>
                 <EditChannelGroup/>
+              </ProtectedRoute>
+            }/>
+            <Route path="new/channelgroup" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <NewChannelGroup/>
+              </ProtectedRoute>
+            }/>
+            <Route path="new/channel" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <NewChannel/>
               </ProtectedRoute>
             }/>
           </Route>

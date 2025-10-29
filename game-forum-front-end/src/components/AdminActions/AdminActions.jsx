@@ -2,8 +2,10 @@ import report_icon from "../../assets/report_icon.svg"
 import all_users_icon from "../../assets/all_users_icon.svg"
 import channels_icon from "../../assets/channels_icon.svg"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function AdminActions({handleReports, handleAllUsers, handleChannels}){
+  const navigate = useNavigate();
   const [subActions, setSubActions] = useState('reports');
   const handleReportsSub =() => {
     setSubActions('reports')
@@ -39,20 +41,20 @@ function AdminActions({handleReports, handleAllUsers, handleChannels}){
         </button>
       </div>
       { 
-        subActions === 'reports' ? <div className="flex flex-row justify-around pt-4">
+        subActions === 'reports' && <div className="flex flex-row justify-around pt-4">
           <p>Report sub actions : delete, edit, update</p>
-        </div> : <></>
+        </div>
       }
       { 
-        subActions === 'all-users' ? <div className="flex flex-row justify-around pt-4">
+        subActions === 'all-users' && <div className="flex flex-row justify-around pt-4">
           <p>User sub actions : all users with collapsible headers, users crud</p>
-        </div> : <></>
+        </div>
       }
       { 
-        subActions === 'channels' ? <div className="flex flex-row justify-around pt-4">
-          <p className={subActionButton}>New Channel</p>
-          <p className={subActionButton}>New Channel Group</p>
-        </div> : <></>
+        subActions === 'channels' && <div className="flex flex-row justify-around pt-4">
+          <button className={subActionButton} onClick={() => navigate('/new/channel')}>New Channel</button>
+          <button className={subActionButton} onClick={() => navigate('/new/channelgroup')}>New Channel Group</button>
+        </div>
       }
     </>
   )

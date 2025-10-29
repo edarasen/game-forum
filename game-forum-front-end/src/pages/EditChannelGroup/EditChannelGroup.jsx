@@ -1,4 +1,3 @@
-import forums_cg_logo from "../../assets/forums-channelgroup-icon.webp";
 import axios from "axios";
 import { useData } from "../../context/DataProvider";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,11 +15,6 @@ function EditChannelGroup(){
   const [channelGroupData, setChannelGroupData] = useState('')
   const [editChannelGroupTitle, setEditChannelGroupTitle] = useState('');
   const [editChannelGroupDescription, setEditChannelGroupDescription] = useState('');
-
-  const adminPermission = userDetails && (
-    userDetails.role === 'admin' ||
-    userDetails.role === 'moderator'
-  );
 
   const getChannelGroupData = async (e) => {
     try {
