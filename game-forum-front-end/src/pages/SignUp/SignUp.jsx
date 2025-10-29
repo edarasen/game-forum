@@ -5,7 +5,9 @@ import { useData } from "../../context/DataProvider";
 import Loader from "../../components/Loader/Loader";
 import axios from "axios";
 
+
 const API_URL = import.meta.env.VITE_API_URL;
+const EMAIL_RE = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const Signup = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -25,9 +27,16 @@ const Signup = ({ onLogout }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(null);
+
+    function onBlur() {
+      setError(EMAIL_RE.test(email) ? null : "Invalid e-mail");
+    }
 
   const handleSignup = async (e) => {
     e.preventDefault();
+     setErrorMessage("");
     try {
       const signUpCredentials = {
         user: {
@@ -53,12 +62,16 @@ const Signup = ({ onLogout }) => {
     } catch (error) {
       setIsLoading(false);
       console.error("Signup error:", error);
+      setErrorMessage(
+        "We're sorry your Signup failed, Please try again."
+      );
     }
 
     setTimeout(() => {
       navigate("/forums");
     }, 3000);
   };
+
 
   return (
     <>
@@ -75,6 +88,23 @@ const Signup = ({ onLogout }) => {
             className="w-full max-w-sm p-8 rounded-xl shadow-lg"
             style={{ backgroundColor: "#677365" }}
           >
+            {errorMessage && (
+              <p
+                className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md"
+                style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
+              >
+                &#9888; {errorMessage}
+              </p>
+            )}
+
+            {error && (
+              <p
+                className="w-full p-3 mt-3 mb-6 text-center text-red-300 font-semibold rounded-md"
+                style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
+              >
+                {error}
+              </p>
+            )}
             <h2
               className="text-2xl font-bold text-center mb-6"
               style={{ color: "#f7d486" }}
@@ -95,6 +125,7 @@ const Signup = ({ onLogout }) => {
 
               <input
                 type="email"
+                onBlur={onBlur}
                 placeholder="Email"
                 className="w-full p-3 rounded-md outline-none"
                 value={email}
