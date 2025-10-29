@@ -16,6 +16,7 @@ import PostCreate from "./pages/PostCreate/PostCreate";
 import PostView from "./pages/PostView/Postview";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import AdminMain from "./pages/AdminMain/AdminMain";
+import EditChannelGroup from "./pages/EditChannelGroup/EditChannelGroup";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -98,11 +99,16 @@ function App() {
                 <SearchResults />
               }
             />
-              <Route path="admin-tools" element={
-                <ProtectedRoute isAuthenticated={isAdmin}>
-                  <AdminMain/>
-                </ProtectedRoute>
-              }/>
+            <Route path="admin-tools" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <AdminMain/>
+              </ProtectedRoute>
+            }/>
+            <Route path="edit/channelgroup/:id" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <EditChannelGroup/>
+              </ProtectedRoute>
+            }/>
           </Route>
         </Routes>
       </BrowserRouter>

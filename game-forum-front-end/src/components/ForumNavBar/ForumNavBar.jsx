@@ -159,6 +159,12 @@ function ForumNavBar(){
         <Link to="/forums" className={navButton}>
           Forums
         </Link>
+        {
+          (window.location.pathname === "/forums" || window.location.pathname === "/admin-tools")  && userDetails['role'] === 'admin' ? 
+          <Link to="/admin-tools" className={navButton}>
+            Admin Tools 
+          </Link> : <></>
+        }
         {/* shows only when userHeaders exist */}
         {userHeaders ? (
           <>

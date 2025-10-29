@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useData } from "../../../context/DataProvider";
 import ReportPostPreview from "../../ReportPostPreview/ReportPostPreview";
 import ReportCommentPreview from "../../ReportCommentPreview/ReportCommentPreview";
+import Loader from "../../Loader/Loader";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -29,7 +30,7 @@ function ReportsIndex(){
     getReportsData();
   }, []);
   if (!reportsData){
-    return <></>
+    return <Loader/>
   }
   return (
     <div className="flex flex-col gap-4 py-6 px-4 text-(--pnb-text-green)">
