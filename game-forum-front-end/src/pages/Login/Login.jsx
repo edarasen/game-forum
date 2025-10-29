@@ -8,8 +8,8 @@ import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Login({setShowLoginModal}) {
-  const {onLogin, onLogout} = useData();
+function Login({ setShowLoginModal }) {
+  const { onLogin, onLogout } = useData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [showPassword, setShowPassword] = useState(false);
@@ -18,16 +18,17 @@ function Login({setShowLoginModal}) {
 
   const navigate = useNavigate();
   const { handleHeaders, handleDetails } = useData();
+  const [errorMessage, setErrorMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const { userHeaders, resetHeadersDetails, userDetails } = useData();
   const navListTailwind =
     "absolute w-[100%] bg-(--pnb-parchment) opacity-94 z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-4 gap-6";
 
-  const isModal = !!onLogin;    
-
+  const isModal = !!onLogin;
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
     try {
       const loginCredentials = {
         user: {
@@ -44,7 +45,7 @@ function Login({setShowLoginModal}) {
       if (data.data && headers) {
         handleHeaders(headers);
         handleDetails(data.data);
-        const isAdmin = data.data['role'] === 'admin'
+        const isAdmin = data.data["role"] === "admin";
         onLogin(true);
         setShowLoginModal(false);
         navigate("/"); // Changed from "/forums" to "/" to route to home
@@ -52,6 +53,9 @@ function Login({setShowLoginModal}) {
     } catch (error) {
       if (error) {
         console.log(error);
+        setErrorMessage( 
+          "Invalid Email or password, please check the spelling of your email or password or you can Sign up for a new account"
+        );
       }
     }
   };
@@ -63,57 +67,65 @@ function Login({setShowLoginModal}) {
         className="min-h-screen flex flex-col items-center justify-center"
         style={{ backgroundColor: "#FCE5CD" }}
       > */}
-        <div
-          className="w-full max-w-sm p-8 rounded-xl shadow-lg"
-          style={{ backgroundColor: "#677365" }}
+      {errorMessage && (
+        <p
+          className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md"
+          style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
         >
-          <h1
-            className="text-2xl font-bold text-center mb-6"
-            style={{ color: "#f7d486" }}
+          &#9888; {errorMessage}
+        </p>
+      )}
+      <div
+        className="w-full max-w-sm p-8 rounded-xl shadow-lg"
+        style={{ backgroundColor: "#677365" }}
+      >
+        <h1
+          className="text-2xl font-bold text-center mb-6"
+          style={{ color: "#f7d486" }}
+        >
+          Log In
+        </h1>
+        {!isModal && <ForumNavBar onLogout={onLogout} />}
+        <form onSubmit={handleSignIn} className="space-y-4">
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="E-mail"
+            className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ background: "#FCE5CD" }}
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ background: "#FCE5CD" }}
+          />
+
+          <button
+            type="submit"
+            className="w-full p-3 rounded-md font-bold"
+            style={{ backgroundColor: "#f7d486", color: "#677365" }}
           >
             Log In
-          </h1>
-          {!isModal && <ForumNavBar onLogout={onLogout} />}
-          <form onSubmit={handleSignIn} className="space-y-4">
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="E-mail"
-              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{ background: "#FCE5CD" }}
-            />
-
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{ background: "#FCE5CD" }}
-            />
-
-            <button
-              type="submit"
-              className="w-full p-3 rounded-md font-bold"
-              style={{ backgroundColor: "#f7d486", color: "#677365" }}
-            >
-              Log In
-            </button>
-          </form>
-          <div className="mt-6 text-center">
-            <p className="text-center-lg" style={{ color: "#f7d486" }}>
-              Not a member yet?{" "}
-              <Link to="/sign-up" className="underline">
-                Click here!
-              </Link>
-            </p>
-          </div>
+          </button>
+        </form>
+        <div className="mt-6 text-center">
+          <p className="text-center-lg" style={{ color: "#f7d486" }}>
+            Not a member yet?{" "}
+            <Link to="/sign-up" className="underline">
+              Click here!
+            </Link>
+          </p>
         </div>
+      </div>
       {/* </div> */}
     </>
   );

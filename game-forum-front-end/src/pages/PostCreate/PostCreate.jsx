@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataProvider";
 import axios from "axios";
+import logo from "../../assets/pnb logo.webp";
+import Filter from "leo-profanity";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -19,6 +21,10 @@ export default function PostCreate() {
   const [form, setForm] = useState({ title: "", body: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    Filter.loadDictionary();
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,6 +48,28 @@ export default function PostCreate() {
     setLoading(true);
     setError(null);
     console.log(form);
+
+    const normalizeText = (text) =>
+      text
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+    const cleanTitle = normalizeText(form.title);
+    const cleanBody = normalizeText(form.body);
+
+    const hasProfanity = Filter.check(cleanTitle) || Filter.check(cleanBody);
+
+      if (hasProfanity) {
+        setError("Excuse your French.");
+        setLoading(false);
+        return;
+      }
+
+    const filteredTitle = Filter.clean(form.title);
+    const filteredBody = Filter.clean(form.body);
+
+  
 
     console.log(userHeaders);
     try {
@@ -104,6 +132,14 @@ export default function PostCreate() {
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-[#677365] p-8 rounded-xl shadow-lg space-y-4"
         >
+          {error && (
+            <p
+              className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md"
+              style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
+            >
+              {error}
+            </p>
+          )}
           <div>
             <div>
               <label
@@ -141,8 +177,10 @@ export default function PostCreate() {
               <></>
             )}
           </div>
-          <div className="space-y-4">
-            <label style={{ color: "#f7d486" }}>Title:</label>
+          <div>
+            <label style={{ color: "#f7d486" }} className="font-bold">
+              Title:
+            </label>
             <input
               placeholder="Title"
               className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
@@ -151,12 +189,14 @@ export default function PostCreate() {
               value={form.title}
               onChange={handleChange}
               required
-              style={{ background: "#FCE5CD" }}
+              style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
 
-          <div className="space-y-4">
-            <label style={{ color: "#f7d486" }}>Body:</label>
+          <div>
+            <label style={{ color: "#f7d486" }} className="font-bold">
+              Body:
+            </label>
             <textarea
               placeholder="Body"
               className="w-full p-3 rounded-md outline-none text-(--pnb-text-green)"
@@ -164,21 +204,21 @@ export default function PostCreate() {
               value={form.body}
               onChange={handleChange}
               required
-              style={{ background: "#FCE5CD" }}
+              style={{ background: "#FCE5CD", color: "#677365" }}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full p-3 rounded-md font-bold"
             disabled={loading}
+            className="w-full p-3 rounded-md font-bold"
             style={{ backgroundColor: "#f7d486", color: "#677365" }}
           >
             {loading ? "Creating..." : "Create Post"}
           </button>
         </form>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
       </div>
     </>
   );
