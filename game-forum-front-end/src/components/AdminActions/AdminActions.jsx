@@ -22,7 +22,7 @@ function AdminActions({handleReports, handleAllUsers, handleChannels}){
   //handleallusers : users, search (admin only: admin, moderator)
   //handlechannels : new channel group, new channel
   //mods have no access to mod or admin list and cannot modify them. but all actions remain as is.
-  const actionButton = "flex flex-row gap-2 rounded-full text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-2 items-center"
+  const actionButton = "flex lg:flex-row flex-col gap-2 lg:rounded-full rounded-xl text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-4 items-center"
   const subActionButton = "flex flex-row gap-2 rounded-full border-2 border-(--pnb-green) text-(--pnb-text-green) cursor-pointer px-4 py-2 items-center"
   return (
     <>
