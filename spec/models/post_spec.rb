@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  let (:test_channelgroup) {create(:channelgroup)}
-  let (:test_channel) {create(:channel, channelgroup: test_channelgroup)}
-  let (:test_user) {create(:user)}
-  let (:test_post) {create(:post, user: test_user, channel: test_channel)}
+  let (:test_channelgroup) { create(:channelgroup) }
+  let (:test_channel) { create(:channel, channelgroup: test_channelgroup) }
+  let (:test_user) { create(:user) }
+  let (:test_post) { create(:post, user: test_user, channel: test_channel) }
 
   context "initial test" do
     it "creates post" do
@@ -35,8 +35,8 @@ RSpec.describe Post, type: :model do
     end
     it "has many comments" do
       post = test_post
-      comment_one = post.comments.create(body:"comment one", user: test_user)
-      comment_two = post.comments.create(body:"comment two", user: test_user)
+      comment_one = post.comments.create(body: "comment one", user: test_user)
+      comment_two = post.comments.create(body: "comment two", user: test_user)
       expect(post.comments[0].body).to eq("comment one")
       expect(post.comments[1].body).to eq("comment two")
       expect(post.comments.count).to eq(2)

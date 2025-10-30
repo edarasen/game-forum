@@ -20,9 +20,9 @@ class ItchdataFetchJob < ApplicationJob
         end
 
         # Returns an array, must get element 0
-        pluck_brew = datum['games'].filter {|game| game['title'] == 'Pluck & Brew v0.2'}
-        views_count = pluck_brew[0]['views_count']
-        downloads_count = pluck_brew[0]['downloads_count']
+        pluck_brew = datum["games"].filter { |game| game["title"] == "Pluck & Brew v0.2" }
+        views_count = pluck_brew[0]["views_count"]
+        downloads_count = pluck_brew[0]["downloads_count"]
 
         itch_datum.update!(
           views_count: views_count,

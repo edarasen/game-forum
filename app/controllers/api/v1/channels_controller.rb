@@ -50,13 +50,13 @@ class Api::V1::ChannelsController < ApplicationController
   # Returns : json message: "Destroy successful" after destroy action is executed
   def destroy
     @channel.destroy!
-    render json: {message: 'Destroy successful'}, status: :accepted
+    render json: { message: "Destroy successful" }, status: :accepted
   end
 
   private
   # Authenticates user and checks role of user
   # Returns : json message: current_user is not an administrator or moderator
-  # OR proceeds to next action 
+  # OR proceeds to next action
   def ensure_admin_moderator
     authenticate_user!
     if !current_user.admin? && !current_user.moderator?
@@ -74,6 +74,6 @@ class Api::V1::ChannelsController < ApplicationController
   # @param title [String] the channel's title
   # @param description [String] the channel's description
   def channel_params
-    params.expect(channel: [:title, :description, :post_permission])
+    params.expect(channel: [ :title, :description, :post_permission ])
   end
 end

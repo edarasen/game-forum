@@ -29,14 +29,14 @@ Rails.application.routes.draw do
       resources :users
 
       resources :channelgroups, shallow: true do
-        resources :channels, shallow:true do
-          resources :posts, shallow:true do
+        resources :channels, shallow: true do
+          resources :posts, shallow: true do
             resources :comments
           end
         end
       end
 
-      resources :reports, only: [:index, :show, :create, :destroy]
+      resources :reports, only: [ :index, :show, :create, :destroy ]
 
       namespace :admins do
         get "/show_reports" => "users#show_reports"

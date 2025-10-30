@@ -35,20 +35,20 @@ class Api::V1::PostsController < ApplicationController
 
     can_post = false
     case @channel.post_permission
-    when 'admin_only'
+    when "admin_only"
       if current_user.admin?
         can_post = true
       end
-    when 'admin_moderator_only'
+    when "admin_moderator_only"
       if current_user.admin? || current_user.moderator?
         can_post = true
       end
-    when 'all_users'
+    when "all_users"
       can_post = true
     end
 
     if can_post == false
-      render json: {message: "User does not have the permission to post in this channel"}, status: :forbidden
+      render json: { message: "User does not have the permission to post in this channel" }, status: :forbidden
     elsif can_post == true && @post.save
       # render json: @post, status: :created -> create.json.props
     else
@@ -63,14 +63,14 @@ class Api::V1::PostsController < ApplicationController
   # Returns : @post data is converted to json using template in 'views/api/v1/post/update.json.props'
   # OR an error message if conditions aren't fulfilled
   def update
-    if @post.user == current_user || current_user.role != 'user'
+    if @post.user == current_user || current_user.role != "user"
       if !@post.update(post_params)
         render json: @post.errors, status: :unprocessable_content
       end
     else
       render json: {
-        message: 'Invalid update request', 
-        data: 'Cannot update posts that the current user did not author; exception : current user role is admin or moderator'
+        message: "Invalid update request",
+        data: "Cannot update posts that the current user did not author; exception : current user role is admin or moderator"
         }, status: :unprocessable_content
     end
   end
@@ -82,13 +82,13 @@ class Api::V1::PostsController < ApplicationController
   # Returns : json message: "Destroy successful" after destroy action is executed
   # OR an error message if conditions aren't fulfilled
   def destroy
-    if @post.user == current_user || current_user.role != 'user'
+    if @post.user == current_user || current_user.role != "user"
       @post.destroy!
-      render json: {message: 'Destroy successful'}, status: :accepted
+      render json: { message: "Destroy successful" }, status: :accepted
     else
       render json: {
-        message: 'Invalid delete request', 
-        data: 'Cannot delete posts that the current user did not author; exception : current user role is admin or moderator'
+        message: "Invalid delete request",
+        data: "Cannot delete posts that the current user did not author; exception : current user role is admin or moderator"
       }, status: :unprocessable_content
     end
   end
@@ -104,6 +104,6 @@ class Api::V1::PostsController < ApplicationController
     # @param title [String] the post's title
     # @param body [String] the post's body
     def post_params
-      params.expect(post: [:title, :body])
+      params.expect(post: [ :title, :body ])
     end
 end

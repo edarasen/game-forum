@@ -1,4 +1,4 @@
-require 'redis'
+require "redis"
 
 class RawgdataFetchJob < ApplicationJob
   queue_as :default
@@ -6,7 +6,7 @@ class RawgdataFetchJob < ApplicationJob
   def perform(*args)
     redis = Redis.new(host: "localhost", port: 6379)
 
-    game_slugs = ["strange-horticulture", "witchy-life-story", "potion-craft-alchemist-simulator"]
+    game_slugs = [ "strange-horticulture", "witchy-life-story", "potion-craft-alchemist-simulator" ]
 
     puts "Starting rawg data update job..."
     Rawgdatum.find_each do |rawg_datum|
@@ -19,32 +19,32 @@ class RawgdataFetchJob < ApplicationJob
           end
           response
         end
-        
-        name_original = datum['name_original']
-        background_image = datum['background_image']
-        website = datum['website']
-        
+
+        name_original = datum["name_original"]
+        background_image = datum["background_image"]
+        website = datum["website"]
+
         # Convert datum['developers'] into string object
-        developer_array = datum['developers']
+        developer_array = datum["developers"]
         developer = []
         developer_array.each do |dev|
-          developer << dev['name']
+          developer << dev["name"]
         end
-        developer_string = developer.join(', ')
+        developer_string = developer.join(", ")
 
         # Convert response['genres'] into string object
-        genres_array = datum['genres']
+        genres_array = datum["genres"]
         genres = []
         genres_array.each do |genre|
-          genres << genre['name']
+          genres << genre["name"]
         end
-        genres_string = genres.join(', ')
+        genres_string = genres.join(", ")
 
         rawg_datum.update!(
-          name_original: name_original, 
-          background_image: background_image, 
-          website: website, 
-          developer: developer_string, 
+          name_original: name_original,
+          background_image: background_image,
+          website: website,
+          developer: developer_string,
           genres: genres_string
         )
       rescue StandardError => e

@@ -38,14 +38,14 @@ class Api::V1::CommentsController < ApplicationController
   # Returns : @comment data is converted to json using template in 'views/api/v1/comments/update.json.props'
   # OR an error message if object fails to save due to invalid parameters
   def update
-    if @comment.user == current_user || current_user.role != 'user'
+    if @comment.user == current_user || current_user.role != "user"
       if !@comment.update(comment_params)
         render json: @comment.errors, status: :unprocessable_content
       end
     else
       render json: {
-        message: 'Invalid update request', 
-        data: 'Cannot update comments that the current user did not author; exception : current user role is admin or moderator'
+        message: "Invalid update request",
+        data: "Cannot update comments that the current user did not author; exception : current user role is admin or moderator"
       }, status: :unprocessable_content
     end
   end
@@ -56,13 +56,13 @@ class Api::V1::CommentsController < ApplicationController
   # Uses before_action set_comment to specify a comment
   # Returns : json message: "Destroy successful" after destroy action is executed
   def destroy
-    if @comment.user == current_user || current_user.role != 'user'
+    if @comment.user == current_user || current_user.role != "user"
       @comment.destroy!
-      render json: {message: 'Destroy successful'}, status: :accepted
+      render json: { message: "Destroy successful" }, status: :accepted
     else
       render json: {
-        message: 'Invalid delete request', 
-        data: 'Cannot delete comments that the current user did not author; exception : current user role is admin or moderator'
+        message: "Invalid delete request",
+        data: "Cannot delete comments that the current user did not author; exception : current user role is admin or moderator"
       }, status: :unprocessable_content
     end
   end
@@ -77,6 +77,6 @@ class Api::V1::CommentsController < ApplicationController
   # Only allow a list of trusted parameters through
   # @param body [String] the comment's body
   def comment_params
-    params.expect(comment: [:body])
+    params.expect(comment: [ :body ])
   end
 end

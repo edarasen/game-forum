@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Channel, type: :model do
-  let (:test_channelgroup) {create(:channelgroup)}
-  let (:test_channel) {create(:channel, channelgroup: test_channelgroup)}
-  let (:test_user) {create(:user)}
+  let (:test_channelgroup) { create(:channelgroup) }
+  let (:test_channel) { create(:channel, channelgroup: test_channelgroup) }
+  let (:test_user) { create(:user) }
 
   context "initial test" do
     it "creates channel" do
@@ -18,7 +18,7 @@ RSpec.describe Channel, type: :model do
       expect(channel).not_to be_valid
     end
     it "has a description that cannot be blank" do
-      channel = Channel.new(title: "asdf", description:"")
+      channel = Channel.new(title: "asdf", description: "")
       expect(channel).not_to be_valid
     end
   end

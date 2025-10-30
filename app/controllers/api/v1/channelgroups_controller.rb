@@ -52,7 +52,7 @@ class Api::V1::ChannelgroupsController < ApplicationController
 
   # Authenticates user and checks role of user
   # Returns : json message: current_user is not an administrator or moderator
-  # OR proceeds to next action 
+  # OR proceeds to next action
   def ensure_admin_moderator
     authenticate_user!
     if !current_user.admin? && !current_user.moderator?

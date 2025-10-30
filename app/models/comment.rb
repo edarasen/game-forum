@@ -1,9 +1,9 @@
 class Comment < ApplicationRecord
   validates :body, presence: true
-  
+
   belongs_to :post
   belongs_to :user
-  
+
   after_destroy :destroy_report
 
   private
