@@ -60,16 +60,14 @@ export default function PostCreate() {
 
     const hasProfanity = Filter.check(cleanTitle) || Filter.check(cleanBody);
 
-      if (hasProfanity) {
-        setError("Excuse your French.");
-        setLoading(false);
-        return;
-      }
+    if (hasProfanity) {
+      setError("Excuse your French.");
+      setLoading(false);
+      return;
+    }
 
     const filteredTitle = Filter.clean(form.title);
     const filteredBody = Filter.clean(form.body);
-
-  
 
     console.log(userHeaders);
     try {
