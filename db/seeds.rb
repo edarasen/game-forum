@@ -105,16 +105,16 @@ def test_data
 
   # Posts
   puts "Seeding Posts..."
-  delete_post_test = Post.create(title: "Delete Post Test", body: "Delete This Please", channel: delete_this_c, user: user_two)
+  delete_post_test = Post.create(title: "Delete Post Test", body: "Delete This Please", channel: delete_this_c, user: user_two, user_id: user_two.id)
 
-  game_post_test = Post.create(title: "The puzzles are hard!", body: "Is it just me? Am I just stupid? haha", channel: game_discussion_c, user: user_one)
-  game_post_test_two = Post.create(title: "The puzzles are soooo easy", body: "When is it going to get harder!! I crave the challenge.", channel: game_discussion_c, user: user_three)
-  game_post_test_three = Post.create(title: "The characters are really hot", body: "When do we get to romance them? Devs, I'm begging on my knees. Let me kiss Sebastien.", channel: game_discussion_c, user: user_two)
+  game_post_test = Post.create(title: "The puzzles are hard!", body: "Is it just me? Am I just stupid? haha", channel: game_discussion_c, user: user_one, user_id: user_one.id)
+  game_post_test_two = Post.create(title: "The puzzles are soooo easy", body: "When is it going to get harder!! I crave the challenge.", channel: game_discussion_c, user: user_three, user_id: user_three.id)
+  game_post_test_three = Post.create(title: "The characters are really hot", body: "When do we get to romance them? Devs, I'm begging on my knees. Let me kiss Sebastien.", channel: game_discussion_c, user: user_two, user_id: user_two.id)
 
-  guide_post_test = Post.create(title: "Here's how I solve the brewing puzzles every time", body: "Just count the number of lines coming from each node and make sure they're in the same position as the one on the chalkboard", channel: guides_c, user: user_two)
+  guide_post_test = Post.create(title: "Here's how I solve the brewing puzzles every time", body: "Just count the number of lines coming from each node and make sure they're in the same position as the one on the chalkboard", channel: guides_c, user: user_two, user_id: user_two.id)
 
-  support_post_test = Post.create(title: "Please add an inventory view outside of selling or foraging", body: "Would be nice to see everything I'm missing before I travel to a sanctum", channel: game_suggestions_c, user: user_one)
-  support_post_test_test = Post.create(title: "The game crashes for me huhu", body: "I played the demo on itch and after a while, the brewing puzzle just bugs out.", channel: game_suggestions_c, user: user_three)
+  support_post_test = Post.create(title: "Please add an inventory view outside of selling or foraging", body: "Would be nice to see everything I'm missing before I travel to a sanctum", channel: game_suggestions_c, user: user_one, user_id: user_one.id)
+  support_post_test_test = Post.create(title: "The game crashes for me huhu", body: "I played the demo on itch and after a while, the brewing puzzle just bugs out.", channel: game_suggestions_c, user: user_three, user_id: user_three.id)
   puts "Posts seeded!"
 
   # Comments
