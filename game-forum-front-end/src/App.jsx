@@ -13,7 +13,7 @@ import LatestPosts from "./pages/LatestPosts/LatestPosts";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import PostCreate from "./pages/PostCreate/PostCreate";
-import PostView from "./pages/PostView/Postview";
+import PostView from "./pages/PostView/PostView";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import AdminMain from "./pages/AdminMain/AdminMain";
 import EditChannelGroup from "./pages/EditChannelGroup/EditChannelGroup";
