@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function KebabMenu({ options, onSelect }) {
+function KebabMenu({ options, onSelect, variant = "post" }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -20,6 +20,9 @@ function KebabMenu({ options, onSelect }) {
     };
   }, [isOpen]);
 
+  const hoverBorderClass = variant === "post" ? "border border-[#6B796A] hover:border-[#F7D480]" : "border border-[#FAE5CA] hover:border-[#6B796A]";
+  const kebabColorClass = variant === "post" ? "w-5 h-5 text-[#F7D480]" : "w-5 h-5 text-[#6B796A]";
+
   return (
     <div className="relative" ref={menuRef}>
       <button
@@ -27,7 +30,7 @@ function KebabMenu({ options, onSelect }) {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+        className={`p-1 ${hoverBorderClass} rounded-full transition-colors cursor-pointer`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +38,7 @@ function KebabMenu({ options, onSelect }) {
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="w-5 h-5 text-[#5B6153]"
+          className={`${kebabColorClass}`}
         >
           <path
             strokeLinecap="round"
