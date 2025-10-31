@@ -54,7 +54,7 @@ function ForumNavBar(){
             {window.location.pathname === "/" ? "About P&B" : "P&B Forums"}
           </h1>
         </div>
-        <div className="hidden flex-row lg:flex text-(--pnb-gold) gap-18 text-md">
+        <div className="hidden flex-row xl:flex text-(--pnb-gold) gap-18 text-md">
           <Link to="/" className={navButton}>
             Main Site
           </Link>
@@ -71,10 +71,10 @@ function ForumNavBar(){
           )}
           <Link to="/forums" className={navButton}>Forums</Link>
           {
-            (window.location.pathname === "/forums" || window.location.pathname === "/admin-tools")  && userDetails['role'] === 'admin' ? 
+            (userDetails['role'] === 'admin' || userDetails['role'] === 'moderator') && 
             <Link to="/admin-tools" className={navButton}>
              Admin Tools 
-            </Link> : <></>
+            </Link>
           }
           {/* shows only when userHeaders exist */}
           {userHeaders ? (
@@ -103,7 +103,7 @@ function ForumNavBar(){
           )}
         </div>
         <div
-          className={`hamburger flex ${menuOpen ? "open" : ""} lg:hidden`}
+          className={`hamburger flex ${menuOpen ? "open" : ""} xl:hidden`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
@@ -159,6 +159,13 @@ function ForumNavBar(){
         <Link to="/forums" className={navButton}>
           Forums
         </Link>
+        {
+          (userDetails['role'] === 'admin' || userDetails['role'] === 'moderator')
+          &&
+          <Link to="/admin-tools" className={navButton}>
+            Admin Tools 
+          </Link>
+        }
         {/* shows only when userHeaders exist */}
         {userHeaders ? (
           <>

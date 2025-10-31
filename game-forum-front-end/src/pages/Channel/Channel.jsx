@@ -48,6 +48,7 @@ function Channel({onLogout}){
             <div className="flex flex-col">
               <h1 className="text-sm">{channelData['channelgroup_details']['title']}</h1>
               <h3 className="font-semibold text-2xl">{channelData['channel_details']['title']}</h3>
+              <h1 className="text-sm">{channelData['channel_details']['description']}</h1>
             </div>        
           </div>
 

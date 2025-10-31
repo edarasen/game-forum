@@ -4,6 +4,8 @@ import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import { useData } from "../../context/DataProvider";
 import Loader from "../../components/Loader/Loader";
 import axios from "axios";
+import Modal from "../../components/Modals/Modal";
+import Login from "../Login/Login";
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -29,6 +31,18 @@ const Signup = ({ onLogout }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+      if (showLoginModal) {
+        return (
+          <Modal
+            isOpen={showLoginModal}
+            onClose={() => setShowLoginModal(false)}
+          >
+            <Login setShowLoginModal={setShowLoginModal} />
+          </Modal>
+        );
+      }
 
     function onBlur() {
       setError(EMAIL_RE.test(email) ? null : "Invalid e-mail");
@@ -156,7 +170,7 @@ const Signup = ({ onLogout }) => {
             <p className="text-center mt-4" style={{ color: "#f7d486" }}>
               Already have an account?{" "}
               <span
-                onClick={() => navigate("/login")}
+                onClick={() => setShowLoginModal(true)}
                 className="underline cursor-pointer"
               >
                 Login
@@ -165,6 +179,9 @@ const Signup = ({ onLogout }) => {
           </div>
         )}
       </div>
+      <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
+        <Login onLogin={() => setShowLoginModal(false)} onLogout={onLogout} />
+      </Modal>
     </>
   );
 };

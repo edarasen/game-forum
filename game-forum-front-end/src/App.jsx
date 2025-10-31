@@ -16,6 +16,10 @@ import PostCreate from "./pages/PostCreate/PostCreate";
 import PostView from "./pages/PostView/Postview";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import AdminMain from "./pages/AdminMain/AdminMain";
+import EditChannelGroup from "./pages/EditChannelGroup/EditChannelGroup";
+import NewChannelGroup from "./pages/NewChannelGroup/NewChannelGroup";
+import NewChannel from "./pages/NewChannel/NewChannel";
+import EditChannel from "./pages/EditChannel/EditChannel";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,7 +28,7 @@ function App() {
     <DataProvider setAppAuth={setIsAuthenticated} setAdminAuth={setIsAdmin}>
       <BrowserRouter>
         <Routes>
-          <Route
+          {/* <Route
             path="/login"
             element={
               isAuthenticated ? (
@@ -33,7 +37,7 @@ function App() {
                 <Login />
               )
             }
-          />
+          /> */}
           <Route path="/">
             <Route
               index
@@ -60,10 +64,10 @@ function App() {
               }
             />
             {/* <Route path="permissions-test" element={<Test />} /> */}
-            <Route
+            {/* <Route
               path="login"
               element={<Login />}
-            />
+            /> */}
             <Route
               path="my-posts"
               element={
@@ -98,11 +102,31 @@ function App() {
                 <SearchResults />
               }
             />
-              <Route path="admin-tools" element={
-                <ProtectedRoute isAuthenticated={isAdmin}>
-                  <AdminMain/>
-                </ProtectedRoute>
-              }/>
+            <Route path="admin-tools" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <AdminMain/>
+              </ProtectedRoute>
+            }/>
+            <Route path="edit/channelgroup/:id" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <EditChannelGroup/>
+              </ProtectedRoute>
+            }/>
+            <Route path="new/channelgroup" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <NewChannelGroup/>
+              </ProtectedRoute>
+            }/>
+            <Route path="new/channel" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <NewChannel/>
+              </ProtectedRoute>
+            }/>
+            <Route path="edit/channel/:id" element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <EditChannel/>
+              </ProtectedRoute>
+            }/>
           </Route>
         </Routes>
       </BrowserRouter>
