@@ -1,128 +1,147 @@
-import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
-import { useData } from "../../context/DataProvider"
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useData } from "../../context/DataProvider";
 import axios from "axios";
 import KebabMenu from "../../components/KebabMenu/KebabMenu";
 import Report from "../../components/Report/Report";
+import Filter from "leo-profanity";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Helper function to format date
 function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
 async function getPost(postId) {
-  return await axios.get(`${API_URL}/posts/${postId}`, {
-    headers: { Accept: "application/json" }
-  }).then(
-    (response) => response.data,
-    (error) => {
-      console.error("API Error:", error);
-      return null;
-    }
-  )
+  return await axios
+    .get(`${API_URL}/posts/${postId}`, {
+      headers: { Accept: "application/json" },
+    })
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("API Error:", error);
+        return null;
+      }
+    );
 }
 
 async function updatePost(userHeaders, postId, title, body) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
-  return await axios.patch(
-    `${API_URL}/posts/${postId}`,
-    { post: { title, body } },
-    requestHeaders
-  ).then(
-    (response) => response.data,
-    (error) => {
-      console.error("Post update error:", error);
-      return null;
-    }
-  )
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .patch(
+      `${API_URL}/posts/${postId}`,
+      { post: { title, body } },
+      requestHeaders
+    )
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("Post update error:", error);
+        return null;
+      }
+    );
 }
 
 async function deletePost(userHeaders, postId) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
   return await axios.delete(`${API_URL}/posts/${postId}`, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("Post deletion error:", error);
       return null;
     }
-  )
+  );
 }
 
 async function createReport(userHeaders, contentType, contentId, reportReason) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
-  return await axios.post(
-    `${API_URL}/reports`,
-    { report: { content_type: contentType, content_id: contentId, report_reason: reportReason } },
-    requestHeaders
-  ).then(
-    (response) => response.data,
-    (error) => {
-      console.error("Report creation error:", error);
-      return null;
-    }
-  )
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .post(
+      `${API_URL}/reports`,
+      {
+        report: {
+          content_type: contentType,
+          content_id: contentId,
+          report_reason: reportReason,
+        },
+      },
+      requestHeaders
+    )
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("Report creation error:", error);
+        return null;
+      }
+    );
 }
 
 async function createComment(userHeaders, postId, commentBody) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
-  return await axios.post(
-    `${API_URL}/posts/${postId}/comments`, 
-    { comment: { body: commentBody } },
-    requestHeaders
-  ).then(
-    (response) => response.data,
-    (error) => {
-      console.error("Comment creation error:", error);
-      return null;
-    }
-  )
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .post(
+      `${API_URL}/posts/${postId}/comments`,
+      { comment: { body: commentBody } },
+      requestHeaders
+    )
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("Comment creation error:", error);
+        return null;
+      }
+    );
 }
 
 async function updateComment(userHeaders, commentId, body) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
-  return await axios.patch(
-    `${API_URL}/comments/${commentId}`,
-    { comment: { body } },
-    requestHeaders
-  ).then(
-    (response) => response.data,
-    (error) => {
-      console.error("Comment update error:", error);
-      return null;
-    }
-  )
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .patch(
+      `${API_URL}/comments/${commentId}`,
+      { comment: { body } },
+      requestHeaders
+    )
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("Comment update error:", error);
+        return null;
+      }
+    );
 }
 
 async function deleteComment(userHeaders, commentId) {
   const requestHeaders = {
-    headers: { ...userHeaders, Accept: "application/json" }
-  }
-  return await axios.delete(`${API_URL}/comments/${commentId}`, requestHeaders).then(
-    (response) => response.data,
-    (error) => {
-      console.error("Comment deletion error:", error);
-      return null;
-    }
-  )
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .delete(`${API_URL}/comments/${commentId}`, requestHeaders)
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("Comment deletion error:", error);
+        return null;
+      }
+    );
 }
 
 function PostView() {
@@ -131,26 +150,29 @@ function PostView() {
   const [loading, setLoading] = useState(true);
   const [commentBody, setCommentBody] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
-  
+
   // Post edit state
   const [isEditingPost, setIsEditingPost] = useState(false);
   const [editPostTitle, setEditPostTitle] = useState("");
   const [editPostBody, setEditPostBody] = useState("");
-  
+
   // Comment edit state
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentBody, setEditCommentBody] = useState("");
-  
+
   // Report modal state
   const [report, setReport] = useState({ isOpen: false, type: null, id: null });
-  
+
   const { userHeaders, userDetails } = useData();
   const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
+
 
   // Fetch post data on mount or when id changes
   useEffect(() => {
     let mounted = true;
-    
+
     if (id) {
       setLoading(true);
       getPost(id).then((data) => {
@@ -162,7 +184,7 @@ function PostView() {
         setLoading(false);
       });
     }
-    
+
     return () => (mounted = false);
   }, [id]);
 
@@ -173,7 +195,11 @@ function PostView() {
         setIsEditingPost(true);
         break;
       case "delete":
-        if (window.confirm("Are you sure you want to delete this post? This will also delete all comments.")) {
+        if (
+          window.confirm(
+            "Are you sure you want to delete this post? This will also delete all comments."
+          )
+        ) {
           const result = await deletePost(userHeaders, id);
           if (result) {
             alert("Post deleted successfully");
@@ -192,14 +218,19 @@ function PostView() {
   // Handlers for post editing
   const handlePostUpdate = async (e) => {
     e.preventDefault();
-    
+
     if (!editPostTitle.trim() || !editPostBody.trim()) {
       alert("Title and body cannot be empty");
       return;
     }
 
-    const result = await updatePost(userHeaders, id, editPostTitle, editPostBody);
-    
+    const result = await updatePost(
+      userHeaders,
+      id,
+      editPostTitle,
+      editPostBody
+    );
+
     if (result) {
       const updatedData = await getPost(id);
       if (updatedData) {
@@ -253,7 +284,7 @@ function PostView() {
     }
 
     const result = await updateComment(userHeaders, commentId, editCommentBody);
-    
+
     if (result) {
       const updatedData = await getPost(id);
       if (updatedData) {
@@ -276,6 +307,26 @@ function PostView() {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     
+    const normalizeText = (text) =>
+      text
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+    
+    const cleanBody = normalizeText(commentBody);
+    const hasProfanity = Filter.check(cleanBody);
+
+        if (hasProfanity) {
+          setError("Excuse your French.");
+          setLoading(false);
+
+            setTimeout(() => {
+              setError(null);
+            }, 5000);
+          return;
+        }
+      
+
     if (!commentBody.trim()) {
       alert("Comment cannot be empty");
       return;
@@ -288,7 +339,7 @@ function PostView() {
 
     setSubmittingComment(true);
     const result = await createComment(userHeaders, id, commentBody);
-    
+
     if (result) {
       const updatedData = await getPost(id);
       if (updatedData) {
@@ -298,21 +349,23 @@ function PostView() {
     } else {
       alert("Failed to post comment");
     }
-    
+
     setSubmittingComment(false);
   };
 
   // Handler for reporting content
   const handleReport = async (reportReason) => {
     const result = await createReport(
-      userHeaders, 
-      report.type, 
+      userHeaders,
+      report.type,
       report.id,
       reportReason
     );
-    
+
     if (result) {
-      alert("Report submitted successfully. Thank you for helping keep our community safe.");
+      alert(
+        "Report submitted successfully. Thank you for helping keep our community safe."
+      );
       setReport({ isOpen: false, type: null, id: null });
     } else {
       alert("Failed to submit report");
@@ -320,17 +373,18 @@ function PostView() {
   };
 
   // Permission checks
-  const canEditPost = userDetails && (
-    postData?.owner_details?.id === userDetails.id ||
-    userDetails.role === 'admin' ||
-    userDetails.role === 'moderator'
-  );
+  const canEditPost =
+    userDetails &&
+    (postData?.owner_details?.id === userDetails.id ||
+      userDetails.role === "admin" ||
+      userDetails.role === "moderator");
 
   const canEditComment = (comment) => {
-    return userDetails && (
-      comment.owner?.id === userDetails.id ||
-      userDetails.role === 'admin' ||
-      userDetails.role === 'moderator'
+    return (
+      userDetails &&
+      (comment.owner?.id === userDetails.id ||
+        userDetails.role === "admin" ||
+        userDetails.role === "moderator")
     );
   };
 
@@ -385,7 +439,7 @@ function PostView() {
           onClick={() => navigate(-1)}
           className="w-1/9 mb-4 px-4 py-2 cursor-pointer text-left text-[#5B6153] hover:text-[#6B796A] transition-colors"
         >
-          ← <span className="underline">Back</span> 
+          ← <span className="underline">Back</span>
         </button>
 
         {/* Post Card */}
@@ -440,7 +494,11 @@ function PostView() {
                     <span>•</span>
                     <span>Channel: {postData.channel_details?.title}</span>
                     <span>•</span>
-                    <span>{postData.created_at ? formatDate(postData.created_at) : "—"}</span>
+                    <span>
+                      {postData.created_at
+                        ? formatDate(postData.created_at)
+                        : "—"}
+                    </span>
                     <span>•</span>
                     <span>{postData.comment_count ?? 0} comments</span>
                   </div>
@@ -461,6 +519,14 @@ function PostView() {
             </>
           )}
         </div>
+        {error && (
+          <p
+            className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md transition-opacity duration-500"
+            style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
+          >
+            {error}
+          </p>
+        )}
 
         {/* Comments Section */}
         <div className="rounded border border-[#6B796A] bg-stone-50 shadow-sm">
@@ -479,7 +545,9 @@ function PostView() {
             ) : (
               <ul className="divide-y divide-slate-300/60">
                 {[...postData.comments]
-                  .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+                  .sort(
+                    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+                  )
                   .map((comment) => (
                     <li key={comment.id} className="px-6 py-4">
                       {editingCommentId === comment.id ? (
@@ -515,18 +583,22 @@ function PostView() {
                                 {comment.owner?.username}
                               </span>
                               <span className="text-sm text-slate-500">
-                                {comment.created_at ? formatDate(comment.created_at) : "—"}
+                                {comment.created_at
+                                  ? formatDate(comment.created_at)
+                                  : "—"}
                               </span>
                             </div>
                             <div className="text-slate-700 whitespace-pre-wrap">
                               {comment.body}
                             </div>
                           </div>
-                          
+
                           {getCommentMenuOptions(comment).length > 0 && (
                             <KebabMenu
                               options={getCommentMenuOptions(comment)}
-                              onSelect={(action) => handleCommentMenuSelect(action, comment)}
+                              onSelect={(action) =>
+                                handleCommentMenuSelect(action, comment)
+                              }
                             />
                           )}
                         </div>
@@ -576,7 +648,7 @@ function PostView() {
         type={report.type}
       />
     </div>
-  )
+  );
 }
 
-export default PostView
+export default PostView;
