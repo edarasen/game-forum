@@ -22,7 +22,7 @@ function ForumMainActions(){
 
   const searchOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) py-12 gap-12"
   return (
-    <div className="flex flex-row justify-around">
+    <div className="flex flex-row justify-around mt-4">
       <div className={`${searchOverlay} ${menuOpen ? "flex" : "hidden"}`}>
         <div className="flex flex-col items-center w-[90%] gap-4">
           <div className="flex flex-col sm:flex-row gap-4 items-center w-full">
