@@ -4,9 +4,15 @@ import channels_icon from "../../assets/channels_icon.svg"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function AdminActions({handleReports, handleAllUsers, handleChannels}){
+function AdminActions({handleReports, handleAllUsers, handleChannels, handleReportsSubAction}){
   const navigate = useNavigate();
   const [subActions, setSubActions] = useState('reports');
+  const handleShowActiveReports = () => {
+    handleReportsSubAction('active')
+  }
+  const handleShowArchiveReports = () => {
+    handleReportsSubAction('archive')
+  }
   const handleReportsSub =() => {
     setSubActions('reports')
     handleReports()
@@ -42,7 +48,8 @@ function AdminActions({handleReports, handleAllUsers, handleChannels}){
       </div>
       { 
         subActions === 'reports' && <div className="flex flex-row justify-around pt-4">
-          <p>Report sub actions : delete, edit, update</p>
+          <button className={subActionButton} onClick={handleShowActiveReports}>Active Reports</button>
+          <button className={subActionButton} onClick={handleShowArchiveReports}>Archive</button>
         </div>
       }
       { 
