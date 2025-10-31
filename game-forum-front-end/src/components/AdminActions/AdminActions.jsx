@@ -4,9 +4,15 @@ import channels_icon from "../../assets/channels_icon.svg"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function AdminActions({handleReports, handleAllUsers, handleChannels}){
+function AdminActions({handleReports, handleAllUsers, handleChannels, handleReportsSubAction}){
   const navigate = useNavigate();
   const [subActions, setSubActions] = useState('reports');
+  const handleShowActiveReports = () => {
+    handleReportsSubAction('active')
+  }
+  const handleShowArchiveReports = () => {
+    handleReportsSubAction('archive')
+  }
   const handleReportsSub =() => {
     setSubActions('reports')
     handleReports()
@@ -22,7 +28,7 @@ function AdminActions({handleReports, handleAllUsers, handleChannels}){
   //handleallusers : users, search (admin only: admin, moderator)
   //handlechannels : new channel group, new channel
   //mods have no access to mod or admin list and cannot modify them. but all actions remain as is.
-  const actionButton = "flex flex-row gap-2 rounded-full text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-2 items-center"
+  const actionButton = "flex lg:flex-row flex-col gap-2 lg:rounded-full rounded-xl text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-4 items-center"
   const subActionButton = "flex flex-row gap-2 rounded-full border-2 border-(--pnb-green) text-(--pnb-text-green) cursor-pointer px-4 py-2 items-center"
   return (
     <>
@@ -42,7 +48,8 @@ function AdminActions({handleReports, handleAllUsers, handleChannels}){
       </div>
       { 
         subActions === 'reports' && <div className="flex flex-row justify-around pt-4">
-          <p>Report sub actions : delete, edit, update</p>
+          <button className={subActionButton} onClick={handleShowActiveReports}>Active Reports</button>
+          <button className={subActionButton} onClick={handleShowArchiveReports}>Archive</button>
         </div>
       }
       { 
