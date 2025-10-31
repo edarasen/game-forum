@@ -1,12 +1,12 @@
 class Api::V1::ReportsController < ApplicationController
-  before_action :set_report, only: %i[ show destroy ]
-  before_action :ensure_admin_moderator, only: %i[index show destroy]
+  before_action :set_report, only: %i[ show destroy archive ]
+  before_action :ensure_admin_moderator, only: %i[index show destroy archive show_archive]
 
   # GET api/v1/reports
   # Returns : @post_reports, @comment_reports data is converted to json using template in 'views/api/v1/reports/index.json.props'
   def index
-    @post_reports = Report.posts
-    @comment_reports = Report.comments
+    @post_reports = Report.posts.where(archive: false)
+    @comment_reports = Report.comments.where(archive: false)
   end
 
   # GET api/v1/reports/:id
@@ -41,6 +41,23 @@ class Api::V1::ReportsController < ApplicationController
     if !@report.save && !valid_content
       render json: @report.errors, status: :unprocessable_content
     end
+  end
+
+  # GET api/v1/reports/archive
+  # Uses before_action ensure_admin_moderator before the action proceeds
+  # Returns : data is converted to json using template in 'views/api/v1/reports/show_archive.json.props'
+  def show_archive
+    @post_reports = Report.posts.where(archive: true).order(:created_at)
+    @comment_reports = Report.comments.where(archive: true).order(:created_at)
+  end
+  
+  # PATCH api/v1/reports/archive/:id
+  # Uses before_action ensure_admin_moderator before the action proceeds
+  # Uses before_action set_report to specify a report
+  # Returns : json message: "Archive successful" after Archive action is executed
+  def archive
+    @report.update(archive: true)
+    render json: {message: 'Archive successful'}, status: :accepted
   end
 
   # DELETE api/v1/reports/:id

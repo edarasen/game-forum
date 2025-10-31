@@ -9,7 +9,7 @@ import down_icon from "../../../assets/arrow_down_icon.svg"
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function ReportsIndex(){
+function ReportsArchive(){
   const {userHeaders} = useData()
   const [reportsData, setReportsData] = useState('');
   const [collapseComments, setCollapseComments] = useState(false);
@@ -24,7 +24,7 @@ function ReportsIndex(){
       const requestHeaders = {
         headers: { ...userHeaders, Accept: "application/json" }
       }
-      const response = await axios.get(`${API_URL}/reports`, requestHeaders)
+      const response = await axios.get(`${API_URL}/reports/archive`, requestHeaders)
       const {data} = response;
       if(data.data){
         setReportsData(data.data);
@@ -45,7 +45,7 @@ function ReportsIndex(){
     <div className="flex flex-col gap-4 py-6 px-4 text-(--pnb-text-green)">
       <div className="border-2 border-(--pnb-green) mx-4 my-2">
         <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center justify-between gap-3">
-          <h1 className="font-semibold text-2xl">Active Reported Posts</h1>
+          <h1 className="font-semibold text-2xl">Archived Reported Posts</h1>
           <img src={collapsePosts ? left_icon : down_icon} alt={collapsePosts ? "Expand Posts" : "Collapse Posts"} className="w-8 h-8" onClick={()=>{setCollapsePosts(!collapsePosts)}}/>
         </div>
         <div className={collapsePosts ? "hidden" : ""}>
@@ -58,7 +58,7 @@ function ReportsIndex(){
       </div>
       <div className="border-2 border-(--pnb-green) mx-4 my-2">
         <div className="bg-(--pnb-green) px-4 py-4 text-(--pnb-gold) flex flex-row items-center justify-between gap-3">
-          <h1 className="font-semibold text-2xl">Active Reported Comments</h1>
+          <h1 className="font-semibold text-2xl">Ardchived Reported Comments</h1>
           <img src={collapseComments ? left_icon : down_icon} alt={collapseComments ? "Expand Comments" : "Collapse Comments"} className="w-8 h-8" onClick={()=>{setCollapseComments(!collapseComments)}}/>
         </div>
         <div className={collapseComments ? "hidden" : ""}>
@@ -73,4 +73,4 @@ function ReportsIndex(){
   )
 }
 
-export default ReportsIndex;
+export default ReportsArchive;

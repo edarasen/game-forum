@@ -1,6 +1,6 @@
 json.status do
   json.code 200
-  json.message "Fetched reports successfully"
+  json.message "Fetched archived reports successfully"
 end
 
 json.data do
