@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       get "/search" => "search#search"
       get "/all_posts" => "users#posts"
       get "/channels/all" => "channels#all"
+      get "/reports/archive" => "reports#show_archive"
       resources :users
 
       resources :channelgroups, shallow: true do
@@ -36,7 +37,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :reports, only: [ :index, :show, :create, :destroy ]
+      resources :reports, only: [:index, :show, :create, :destroy]
+      patch "/reports/archive/:id" => "reports#archive"
 
       namespace :admins do
         get "/show_reports" => "users#show_reports"

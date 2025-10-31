@@ -63,6 +63,10 @@ export default function PostCreate() {
     if (hasProfanity) {
       setError("Excuse your French.");
       setLoading(false);
+
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
       return;
     }
 
@@ -117,14 +121,14 @@ export default function PostCreate() {
     <>
       <ForumNavBar onLogout={onLogout} />
       <h2
-        className="text-2xl font-bold text-center mb-6"
+        className="text-2xl font-bold text-center"
         style={{ color: "#677365" }}
       >
         Want to Participate? Create your post below!
       </h2>
       <div
-        style={{ padding: "1rem", backgroundColor: "#FCE5CD" }}
-        className="min-h-screen flex items-center justify-center"
+        style={{ padding: "0.5rem", backgroundColor: "#FCE5CD" }}
+        className="min-h-screen flex items-center justify-center pt-2"
       >
         <form
           onSubmit={handleSubmit}
@@ -132,7 +136,7 @@ export default function PostCreate() {
         >
           {error && (
             <p
-              className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md"
+              className="w-full p-3 mt-3 text-center text-red-300 font-semibold rounded-md transition-opacity duration-500"
               style={{ backgroundColor: "#f05252ff", color: "#ffffffff" }}
             >
               {error}
@@ -148,9 +152,18 @@ export default function PostCreate() {
               </label>
             </div>
             {allChannelData ? (
-              <div className="space-y-2">
+              <div className="space-y-2 flex flex-col">
                 {[...allChannelData["channels"]].map((channel) => (
-                  <div className="border border-transparent p-2">
+                  <div className="flex items-center gap-3 p-2" key={channel.id}>
+                    <input
+                      type="radio"
+                      id={channel["title"]}
+                      name="channel_id"
+                      value={channel["id"]}
+                      onChange={handleChannelChange}
+                      required
+                      className="w-4 h-4"
+                    />
                     <label
                       htmlFor={channel["title"]}
                       className="cursor-pointer transition-colors duration-200 hover:bg-[#f7d486] px-2 py-1 rounded"
@@ -160,14 +173,6 @@ export default function PostCreate() {
                     >
                       {channel["title"]}
                     </label>
-                    <input
-                      type="radio"
-                      id={channel["title"]}
-                      name="channel_id"
-                      value={channel["id"]}
-                      onChange={handleChannelChange}
-                      required
-                    />
                   </div>
                 ))}
               </div>

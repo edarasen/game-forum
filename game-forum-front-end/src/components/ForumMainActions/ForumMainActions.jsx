@@ -22,14 +22,13 @@ function ForumMainActions(){
 
   const searchOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg z-1500 h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) py-12 gap-12"
   return (
-    <div className="flex flex-row justify-around pt-6">
+    <div className="flex flex-row justify-around mt-4">
       <div className={`${searchOverlay} ${menuOpen ? "flex" : "hidden"}`}>
-        <div className="flex flex-col items-center w-[80%] gap-4">
-          <div className="flex flex-row gap-4">
+        <div className="flex flex-col items-center w-[90%] gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 items-center w-full">
             <img src={search_icon} alt="Search Icon" className="w-8 h-8" />
             <p className="font-semibold text-2xl">Search</p>
-          </div>
-          <form className="w-full" onSubmit={submitSearch}>
+            <form className="w-full" onSubmit={submitSearch}>
             <input
               type="text"
               className="rounded-md p-2 text-lg border border-(--pnb-green) h-20 w-full"
@@ -39,18 +38,21 @@ function ForumMainActions(){
               placeholder="Type here"
             ></input>
           </form>
+          </div>
         </div>
-        <button className={mainActionLink} onClick={submitSearch}>
-          Submit
-        </button>
-        <button
-          className={secondaryActionLink}
-          onClick={() => {
-            setMenuOpen(!menuOpen);
-          }}
-        >
-          Back
-        </button>
+        <div className="flex flex-row gap-4">
+          <button className={mainActionLink} onClick={submitSearch}>
+            Submit
+          </button>
+          <button
+            className={secondaryActionLink}
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+            }}
+          >
+            Back
+          </button>
+        </div>
       </div>
       {userHeaders ? (
         <Link to="/channels/posts/new" className={mainActionLink}>
