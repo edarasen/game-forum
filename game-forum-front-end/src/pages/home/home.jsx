@@ -69,6 +69,18 @@ const LandingPage = ({ onLogout }) => {
       <div className="PnB">
         {/* <img src="landing-page.webp" alt="PnB Logo" /> */}
       </div>
+      <div className="demo w-full py-16 p-0 m-0">
+        <p className="text-4xl font-bold text-center mb-12">
+          Play the Demo in itch.io!
+        </p>
+        <a
+          href="https://nalshiragames.itch.io"
+          target="_blank"
+          className="text-6xl text-center underline break-words max-w-full"
+        >
+          https://nalshiragames.itch.io
+        </a>
+      </div>
       <div className="abt" id="about">
         <p className="font-Montserrat, text-4xl">
           <strong>About the Game</strong>
@@ -248,43 +260,8 @@ const LandingPage = ({ onLogout }) => {
           </div>
         </div>
       </div>
-
-      <div className="demo w-full py-16 p-0 m-0">
-        <p className="text-4xl font-bold text-center mb-12">
-          Play the Demo in itch.io!
-        </p>
-        <br />
-        <a
-          href="https://nalshiragames.itch.io"
-          target="_blank"
-          className="text-6xl text-center underline"
-        >
-          https://nalshiragames.itch.io
-        </a>
-        <br />
-        <br />
-        <div className="record">
-          <div>
-            <p className="font-bold text-5xl text-center">
-              {gameData ? gameData["views_count"] : ""}
-            </p>
-            <p className="text-4xl text-center">Views</p>
-          </div>
-          <div>
-            <p className="font-bold text-5xl">
-              {gameData ? gameData["downloads_count"] : ""}
-            </p>
-            <p className="text-4xl text-center">Downloads</p>
-          </div>
-        </div>
-        <br />
-        <div className="altar p-0 m-0">
-          <img
-            src={symbol}
-            className="w-full block object-cover object-bottom"
-            style={{ margin: 0, padding: 0 }}
-          />
-        </div>
+      <div>
+        <GamesGallery />
       </div>
       <div className="discussion py-16">
         <p className="text-4xl font-bold text-center mb-12">
@@ -310,8 +287,42 @@ const LandingPage = ({ onLogout }) => {
           <button className="cta-btn outline">Join Discord</button>
         </div>
       </div>
-      <div>
-        <GamesGallery />
+      <div className="demo w-full py-0 p-0 m-0">
+        <p className="text-4xl font-bold text-center mb-12 pt-10">
+          Play the Demo in itch.io!
+        </p>
+        <br />
+        <a
+          href="https://nalshiragames.itch.io"
+          target="_blank"
+          className="text-6xl text-center underline break-words max-w-full"
+        >
+          https://nalshiragames.itch.io
+        </a>
+        <br />
+        <br />
+        <div className="record">
+          <div>
+            <p className="font-bold text-5xl text-center">
+              {gameData ? gameData["views_count"] : ""}
+            </p>
+            <p className="text-4xl text-center">Views</p>
+          </div>
+          <div>
+            <p className="font-bold text-5xl">
+              {gameData ? gameData["downloads_count"] : ""}
+            </p>
+            <p className="text-4xl text-center">Downloads</p>
+          </div>
+        </div>
+        <br />
+        <div className="altar p-0 m-0">
+          <img
+            src={symbol}
+            className="w-full block object-cover object-bottom pb-0"
+            style={{ margin: 0, padding: 0 }}
+          />
+        </div>
       </div>
       <div id="contact">
         <ContactSection />
