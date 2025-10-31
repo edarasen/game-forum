@@ -37,7 +37,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :reports, only: [:index, :show, :create, :destroy]
+      resources :reports, only: [ :index, :show, :create, :destroy ]
       patch "/reports/archive/:id" => "reports#archive"
 
       namespace :admins do
