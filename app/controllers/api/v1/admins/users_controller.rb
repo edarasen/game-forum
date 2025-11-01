@@ -22,10 +22,6 @@ class Api::V1::Admins::UsersController < ApplicationController
     # render :show_all, status: :ok
   end
 
-  def show_reports
-    @reports = Report.all
-  end
-
   def update
     if @user.update(edit_user_params)
       # render json: { message: "Credentials updated!" }, status: :ok
