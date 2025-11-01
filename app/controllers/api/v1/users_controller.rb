@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     @user.update(deactivated: true)
-    render json: {message: 'Deactivation successful'}, status: :accepted
+    render json: { message: "Deactivation successful" }, status: :accepted
   end
 
   def posts
