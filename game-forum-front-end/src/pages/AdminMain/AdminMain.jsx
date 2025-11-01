@@ -5,10 +5,8 @@ import ReportsIndex from "../../components/AdminActions/ReportsIndex/ReportsInde
 import UsersIndex from "../../components/AdminActions/UsersIndex/UsersIndex";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import { useState } from "react";
-import { useData } from "../../context/DataProvider";
 
 function AdminMain({onLogout}){
-  const {userDetails} = useData()
   const [show, setShow] = useState('reports')
   const [showReports, setShowReports] = useState('active')
   const [showUsers, setShowUsers] = useState('applications')
