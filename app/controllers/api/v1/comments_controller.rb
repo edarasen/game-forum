@@ -68,6 +68,11 @@ class Api::V1::CommentsController < ApplicationController
   end
 
   private
+  def deactivate_check
+    if current_user.deactivate === true
+      render json: { message: "Deactivated #{current_user.username} cannot proceed with this action" }, status: :forbidden and return
+    end
+  end
   # Assigns a @comment object before proceeding to next action
   # @param id [Integer] the comment id specified in params
   def set_comment

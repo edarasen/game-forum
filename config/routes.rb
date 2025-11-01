@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       get "/all_posts" => "users#posts"
       get "/channels/all" => "channels#all"
       get "/reports/archive" => "reports#show_archive"
-      resources :users
+      resources :users, only: [ :show, :update, :destroy ]
 
       resources :channelgroups, shallow: true do
         resources :channels, shallow:true do

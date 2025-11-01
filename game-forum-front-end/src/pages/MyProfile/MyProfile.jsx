@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useData } from "../../context/DataProvider"
 import axios from "axios";
+import Loader from "../../components/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,6 +20,28 @@ async function getUserProfile(userHeaders, userId) {
   )
 }
 
+async function editUserProfile(userHeaders, userId, username, email, profile_picture, password){
+  if (password === ""){
+    password = null
+  }
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  return await axios
+    .patch(
+      `${API_URL}/users/${userId}`,
+      { user: { username, email, profile_picture, password } },
+      requestHeaders
+    )
+    .then(
+      (response) => response.data,
+      (error) => {
+        console.error("User update error:", error);
+        return null;
+      }
+    );
+}
+
 async function applyModerator(userHeaders) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
@@ -32,8 +56,14 @@ async function applyModerator(userHeaders) {
 }
 
 function MyProfile() {
+  const navigate = useNavigate()
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editUserForm, setEditUserForm] = useState(false)
+  const [editUsername, setEditUsername] = useState('')
+  const [editEmail, setEditEmail] = useState('')
+  const [editProfilePicture, setEditProfilePicture] = useState('')
+  const [editPassword, setEditPassword] = useState('')
   const { userHeaders, userDetails } = useData();
   
   useEffect(() => {
@@ -44,6 +74,10 @@ function MyProfile() {
       getUserProfile(userHeaders, userDetails.id).then((data) => {
         if (mounted && data) {
           setProfileData(data.data);
+          setEditEmail(data.data['email']);
+          setEditPassword(data.data['password'] || "");
+          setEditProfilePicture(data.data['profile_picture']);
+          setEditUsername(data.data['username']);
           setLoading(false);
         } else {
           setLoading(false);
@@ -66,8 +100,47 @@ function MyProfile() {
 
   if (!profileData) {
     return (
-      <></>
+      <Loader/>
     );
+  }
+
+  const handleResetEditForm = () => {
+    setEditEmail(profileData['email']);
+    setEditPassword(profileData['password'] || "");
+    setEditProfilePicture(profileData['profile_picture']);
+    setEditUsername(profileData['username']);
+    setEditUserForm(!editUserForm)
+  }
+
+  const handleDeactivateAccount = async (e) => {
+    e.preventDefault();
+    if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+      alert("Delete functionality - To be implemented");
+    }
+  }
+  const handleEditAccount = async (e) => {
+    e.preventDefault();
+    if (!editEmail.trim() || !editUsername.trim()) {
+      alert("Email and username cannot be empty");
+      return;
+    }
+    
+    const result = await editUserProfile(userHeaders, userDetails.id, editUsername, editEmail, editProfilePicture, editPassword);
+    
+    if (result) {
+      const updatedData = await getUserProfile(userHeaders, userDetails.id);
+      if (updatedData) {
+        setProfileData(updatedData.data);
+        setEditEmail(updatedData.data['email']);
+        setEditPassword(updatedData.data['password'] || "");
+        setEditProfilePicture(updatedData.data['profile_picture']);
+        setEditUsername(updatedData.data['username']);
+        setEditUserForm(false);
+      }
+      alert("User updated successfully");
+    } else {
+      alert("Failed to update User");
+    }
   }
 
   return (
@@ -90,40 +163,43 @@ function MyProfile() {
         {/* Action Buttons */}
         <div className="flex justify-center gap-4 mb-8">
           <button
-            onClick={() => alert("Edit functionality - To be implemented")}
-            className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
+            onClick={handleResetEditForm}
+            className={ editUserForm ? "px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors font-semibold" : "px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"}
           >
-            Edit Profile
+            {editUserForm ? "Cancel Editing" : "Edit Profile"}
           </button>
-          <button
-            onClick={() => {
-              if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-                alert("Delete functionality - To be implemented");
-              }
-            }}
-            className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
-          >
-            Delete Account
-          </button>
-          {profileData?.role === "user" && (
+          {
+            editUserForm && 
+            <button className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold" onClick={handleEditAccount}> Save Changes </button>
+          }
+          { !editUserForm && 
+          <>
             <button
-              onClick={async () => {
-                if (window.confirm("Do you want to apply to become a moderator?")) {
-                  const result = await applyModerator(userHeaders);
-                  if (result) {
-                    alert(result.message || "Application submitted successfully!");
-                    const data = await getUserProfile(userHeaders, userDetails.id);
-                    if (data) {
-                      setProfileData(data.data);
-                    }
-                  }
-                }
-              }}
+              onClick={handleDeactivateAccount}
               className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
             >
-              Apply as Moderator
+              Deactivate Account
             </button>
-          )}
+            {(profileData?.role === "user" && profileData['moderator_status'] === 'not_applied') && (
+              <button
+                onClick={async () => {
+                  if (window.confirm("Do you want to apply to become a moderator?")) {
+                    const result = await applyModerator(userHeaders);
+                    if (result) {
+                      alert(result.message || "Application submitted successfully!");
+                      const data = await getUserProfile(userHeaders, userDetails.id);
+                      if (data) {
+                        setProfileData(data.data);
+                      }
+                    }
+                  }
+                }}
+                className="px-6 py-2 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
+              >
+                Apply as Moderator
+              </button>
+            )}
+          </>}
         </div>
 
         {/* Profile Information Card */}
@@ -135,32 +211,66 @@ function MyProfile() {
           <div className="bg-[#FAE5CA]">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-300/60">
               <div className="font-semibold text-[#5B6153] text-lg">Username</div>
-              <div className="text-slate-700">{profileData?.username ?? "—"}</div>
+              {
+                editUserForm ? 
+                <input
+                  type="text"
+                  value={editUsername}
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  className="w-120 text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+                  placeholder="Username"
+                /> : <div className="text-slate-700">{profileData?.username ?? "—"}</div>
+              }
             </div>
 
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-300/60">
               <div className="font-semibold text-[#5B6153] text-lg">Profile Picture</div>
               <div className="text-slate-700">
-                {profileData?.profile_picture ? (
-                  <img 
-                    src={profileData.profile_picture} 
-                    alt="Profile" 
-                    className="h-12 w-12 rounded-full object-cover"
-                  />
-                ) : (
-                  <span className="text-slate-500 italic">No profile picture</span>
-                )}
+                { editUserForm ?
+                  <input
+                    type="text"
+                    value={editProfilePicture}
+                    onChange={(e) => setEditProfilePicture(e.target.value)}
+                    className="w-120 text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+                    placeholder="Profile Picture URL"
+                  /> 
+                  : profileData?.profile_picture ? (
+                    <img 
+                      src={profileData.profile_picture} 
+                      alt="Profile" 
+                      className="h-12 w-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-slate-500 italic">No profile picture</span>
+                  )
+                }
               </div>
             </div>
 
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-300/60">
               <div className="font-semibold text-[#5B6153] text-lg">Email</div>
-              <div className="text-slate-700">{profileData?.email ?? "—"}</div>
+              { editUserForm ?
+                <input
+                  type="text"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  className="w-120 text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+                  placeholder="Email"
+                />  
+              : <div className="text-slate-700">{profileData?.email ?? "—"}</div> }
             </div>
 
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-300/60">
               <div className="font-semibold text-[#5B6153] text-lg">Password</div>
-              <div className="text-slate-700">••••••••</div>
+              { editUserForm ?
+                <input
+                  type="password"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  className="w-120 text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+                  placeholder="New Password"
+                />
+                : <div className="text-slate-700">••••••••</div>}
             </div>
 
             <div className="flex items-center justify-between px-6 py-4">
