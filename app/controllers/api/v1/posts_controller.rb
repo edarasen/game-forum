@@ -1,6 +1,6 @@
 class Api::V1::PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
-  before_action :deactivate_check, only: %i[ create update destroy ]
+  before_action :deactivated_check, only: %i[ create update destroy ]
   before_action :authenticate_user!, only: %i[ create update destroy ]
 
   # GET api/v1/channels/:channel_id/posts
@@ -95,8 +95,8 @@ class Api::V1::PostsController < ApplicationController
   end
 
   private
-    def deactivate_check
-      if current_user.deactivate === true
+    def deactivated_check
+      if current_user.deactivated === true
         render json: { message: "Deactivated #{current_user.username} cannot proceed with this action" }, status: :forbidden and return
       end
     end
