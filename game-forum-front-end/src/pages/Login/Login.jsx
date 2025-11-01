@@ -47,16 +47,19 @@ function Login({ setShowLoginModal }) {
         handleDetails(data.data);
         const isAdmin = data.data["role"] === "admin";
         onLogin(true);
+        if (data.data["deactivated"] === true) {
+          resetHeadersDetails();
+          onLogout();
+          setErrorMessage("You user is deactivated. You can send your appeals through here: edaresen@dragons.com");
+          return;
+        };
         setShowLoginModal(false);
-        if (data.data[deactivated] === true) {
-          
-        }
-          navigate("/"); // Changed from "/forums" to "/" to route to home
+        navigate("/"); // Changed from "/forums" to "/" to route to home
       }
     } catch (error) {
       if (error) {
         console.log(error);
-        setErrorMessage( 
+        setErrorMessage(
           "Invalid Email or password, please check the spelling of your email or password or you can Sign up for a new account"
         );
       }
