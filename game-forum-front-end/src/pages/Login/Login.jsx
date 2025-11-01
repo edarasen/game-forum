@@ -48,7 +48,10 @@ function Login({ setShowLoginModal }) {
         const isAdmin = data.data["role"] === "admin";
         onLogin(true);
         setShowLoginModal(false);
-        navigate("/"); // Changed from "/forums" to "/" to route to home
+        if (data.data[deactivated] === true) {
+          
+        }
+          navigate("/"); // Changed from "/forums" to "/" to route to home
       }
     } catch (error) {
       if (error) {
