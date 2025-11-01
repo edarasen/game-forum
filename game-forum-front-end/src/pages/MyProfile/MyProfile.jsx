@@ -42,6 +42,20 @@ async function editUserProfile(userHeaders, userId, username, email, profile_pic
     );
 }
 
+async function deactivateUser(userHeaders, userId) {
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" }
+  }
+  return await axios.delete(`${API_URL}/users/${userId}`, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("API Error:", error);
+      console.error("Error response:", error.response);
+      return null;
+    }
+  )
+}
+
 async function applyModerator(userHeaders) {
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" }
@@ -64,7 +78,7 @@ function MyProfile() {
   const [editEmail, setEditEmail] = useState('')
   const [editProfilePicture, setEditProfilePicture] = useState('')
   const [editPassword, setEditPassword] = useState('')
-  const { userHeaders, userDetails } = useData();
+  const { userHeaders, userDetails, resetHeadersDetails, onLogout } = useData();
   
   useEffect(() => {
     let mounted = true;
@@ -115,7 +129,15 @@ function MyProfile() {
   const handleDeactivateAccount = async (e) => {
     e.preventDefault();
     if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-      alert("Delete functionality - To be implemented");
+      const result = await deactivateUser(userHeaders, userDetails.id);
+      if (result) {
+        alert("User deactivated successfully. We're sorry to see you go.");
+        resetHeadersDetails()
+        onLogout()
+        navigate('/');
+      } else {
+        alert("Failed to deactivate user.");
+      }
     }
   }
   const handleEditAccount = async (e) => {
