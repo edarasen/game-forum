@@ -7,10 +7,6 @@ class Api::V1::Moderators::UsersController < ApplicationController
     render json: @user
   end
 
-  def show_reports
-    @reports = Reports.all
-  end
-
   def update
     if @user.admin? || @user.moderator?
       render json: { message: "Unable to modify #{@user.role}" }, status: :unprocessable_entity
