@@ -10,9 +10,9 @@ Avion School Project : A game forum for Pluck & Brew, a game in development
 - [Environment Variables](#environment-variables)
 - [Running the App Locally](#running-the-app-locally)
 - [API Reference](#api-reference)
-  - [WIP - Users](#users)
-  - [WIP - Admins](#admins)
-  - [WIP - Moderators](#moderators)
+  - [Users](#users)
+  - [Admins](#admins)
+  - [Moderators](#moderators)
   - [Channel Groups](#channel-groups)
   - [Channels](#channels)
   - [Posts](#posts)
@@ -64,9 +64,353 @@ To run this project, you will need to add the following environment variables to
 - Start the front end and back end servers using open terminals
 - Use the app using the front end app port
 ## API Reference
-### Users - WIP
-### Admins - WIP
-### Moderators - WIP
+### Users
+#### Get user
+
+```http
+  GET /api/v1/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "You are now viewing user01"
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "deactivated": false,
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-10-31T11:23:47.088Z"
+    }
+}
+```
+
+#### Update user
+User can only update their own account
+```http
+  PATCH /api/v1/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of user to fetch |
+| `username`   | `string` | Username of user |
+| `email` | `string` | Email of user |
+| `password` | `string` | Password of user |
+| `profile_picture` | `string` | URL of user's profile picture |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Update successful!"
+    },
+    "data": {
+        "id": 1,
+        "username": "user_01",
+        "email": "user01_test@test.com",
+        "password": null,
+        "profile_picture": "https://cataas.com/cat",
+        "role": "user",
+        "deactivated": false,
+        "moderator_status": "not_applied",
+        "created_at": "2025-10-31T11:23:46.547Z",
+        "updated_at": "2025-10-31T11:23:46.547Z"
+    }
+}
+```
+#### Deactivate user
+User can only update their own account
+```http
+  DELETE /api/v1/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "message": "Deactivation successful"
+}
+```
+
+#### Get all of current user's posts
+```http
+  DELETE /api/v1/all_posts
+```
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Posts fetching successful!"
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-10-31T11:23:47.088Z",
+        "posts": [
+            {
+                "id": 6,
+                "title": "Please add an inventory view outside of selling or foraging",
+...
+```
+
+#### Apply for moderator as current user
+```http
+  PATCH /api/v1/apply_mod
+```
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Moderator application now pending for approval."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "deactivated": false,
+        "moderator_status": "pending",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T05:12:41.739Z"
+    }
+}
+```
+### Admins
+#### Create user
+
+```http
+  POST/api/v1/admins/users
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `email`   | `string` | **Required**. Email of new user |
+| `password`   | `string` | **Required**. Password of new user |
+| `username`   | `string` | **Required**. Username of new user |
+| `role`   | `string (enum)` | **Required**. Role of new user. User, Moderator, or Admin |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 201,
+        "message": "created by admin(user) has been created!"
+    },
+    "data": {
+        "id": 10,
+        "username": "created by admin",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T06:52:35.591Z"
+    }
+}
+```
+
+#### Get user
+```http
+  GET /api/v1/admins/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "You are now viewing created by admin"
+    },
+    "data": {
+        "id": 10,
+        "username": "created by admin",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "deactivated": false,
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T06:52:35.591Z"
+    }
+}
+```
+
+#### Show all users
+```http
+  GET /api/v1/admins/show_all
+```
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Successfully fetched users"
+    },
+    "data": {
+        "moderators": [
+            {
+                "id": 2,
+                "username": "moderater_one",
+                "email": "moderator_test@test.com",
+                "role": "moderator",
+                "created_at": "2025-10-31T11:23:46.818Z",
+                "updated_at": "2025-11-01T03:53:15.083Z"
+            }
+        ],
+...
+```
+
+#### Update user
+```http
+  PATCH /api/v1/admins/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "confusing name's credentials has been updated!"
+    },
+    "data": {
+        "id": 10,
+        "username": "confusing name",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T07:13:16.441Z"
+    }
+}
+```
+
+#### Approve moderator
+```http
+  PATCH /api/v1/admins/approve_mod/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "user01 is now a moderator."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "approved",
+        "mod_approval_date": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
+#### Ban user
+```http
+  PATCH /api/v1/admins/ban/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "message": "user has been banned."
+}
+```
+### Moderators
+
+#### Get user
+```http
+  GET /api/v1/moderators/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "You are now viewing created by admin"
+    },
+    "data": {
+        "id": 10,
+        "username": "created by admin",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "deactivated": false,
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T06:52:35.591Z"
+    }
+}
+```
+
+#### Update user
+```http
+  PATCH /api/v1/moderators/users/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "confusing name's credentials has been updated!"
+    },
+    "data": {
+        "id": 10,
+        "username": "confusing name",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T07:13:16.441Z"
+    }
+}
+```
+
+#### Ban user
+```http
+  PATCH /api/v1/moderators/ban/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "message": "user has been banned."
+}
+```
 ### Channel Groups
 #### Get all channel groups
 ```http
@@ -811,3 +1155,9 @@ Requires an API Key from itch.io
     }
 ]
 ```
+
+## Collaborators
+
+- [@edarasen](https://www.github.com/edarasen)
+- [@AvelDanielPadilla](https://github.com/AvelDanielPadilla)
+- [@daleespi93](https://github.com/daleespi93)

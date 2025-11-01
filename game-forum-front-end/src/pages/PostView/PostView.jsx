@@ -610,7 +610,7 @@ function PostView() {
           </div>
 
           {/* Comment Form */}
-          {userHeaders ? (
+          {userHeaders && !userDetails['deactivated'] ? (
             <div className="bg-[#FAE5CA] px-6 py-4 border-t border-[#6B796A]">
               <form onSubmit={handleCommentSubmit}>
                 <textarea
@@ -634,7 +634,7 @@ function PostView() {
             </div>
           ) : (
             <div className="bg-[#FAE5CA] px-6 py-4 border-t border-[#6B796A] text-center text-slate-600">
-              Please log in to comment
+              {userDetails['deactivated'] ? "Current account is deactivated" : "Please log in to comment"}
             </div>
           )}
         </div>
