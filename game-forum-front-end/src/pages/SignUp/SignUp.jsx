@@ -16,7 +16,7 @@ const Signup = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const {
-    userHeaders,
+    onLogin,
     resetHeadersDetails,
     userDetails,
     handleHeaders,
@@ -71,6 +71,7 @@ const Signup = ({ onLogout }) => {
         handleHeaders(headers);
         handleDetails(data.data);
         setIsLoading(false);
+        onLogin(true)
         navigate("/forums");
       }
     } catch (error) {
