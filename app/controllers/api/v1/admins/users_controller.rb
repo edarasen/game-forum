@@ -44,7 +44,7 @@ class Api::V1::Admins::UsersController < ApplicationController
   end
 
   def ban
-    if (@user.user? || @user.admin?) && !@user.deactivated?
+    if (@user.user? || @user.moderator?) && !@user.deactivated?
       @user.update(deactivated: true, deactivated_at: Time.current)
       render json: { message: "#{@user.role} has been banned." }, status: :ok
     else
