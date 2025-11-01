@@ -50,7 +50,7 @@ function Login({ setShowLoginModal }) {
         if (data.data["deactivated"] === true) {
           resetHeadersDetails();
           onLogout();
-          setErrorMessage("You user is deactivated. You can send your appeals through here: edaresen@dragons.com");
+          setErrorMessage("Your account was deactivated. You can send your appeals through here: edaresen@dragons.com");
           return;
         };
         setShowLoginModal(false);
