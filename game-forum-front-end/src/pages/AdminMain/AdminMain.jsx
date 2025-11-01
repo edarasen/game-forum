@@ -9,16 +9,24 @@ import { useState } from "react";
 function AdminMain({onLogout}){
   const [show, setShow] = useState('reports')
   const [showReports, setShowReports] = useState('active')
+  const [showUsers, setShowUsers] = useState('applications')
 
   const handleReportsSubAction = (value) => {
     setShowReports(value)
   }
+  
+  const handleUsersSubAction = (value) => {
+    setShowUsers(value)
+  }
+  
   const handleReports = () => {
     setShow('reports')
   }
+  
   const handleAllUsers = () => {
-    setShow('all-users')
+    setShow('users')
   }
+  
   const handleChannels = () => {
     setShow('channels')
   }
@@ -26,23 +34,29 @@ function AdminMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
-      <AdminActions handleReports={handleReports} handleAllUsers={handleAllUsers} handleChannels={handleChannels} 
-      handleReportsSubAction={handleReportsSubAction}/>
+      <AdminActions 
+        handleReports={handleReports} 
+        handleAllUsers={handleAllUsers} 
+        handleChannels={handleChannels} 
+        handleReportsSubAction={handleReportsSubAction}
+        handleUsersSubAction={handleUsersSubAction}
+        show={show}
+      />
       {
-        show === 'reports' && showReports == 'active' &&
+        show === 'reports' && showReports === 'active' &&
         <ReportsIndex/>
       }
       {
-        show === 'reports' && showReports == 'archive' &&
+        show === 'reports' && showReports === 'archive' &&
         <ReportsArchive/>
       }
       {
-        show === 'all-users' ?
-        <UsersIndex/> : <></>
+        show === 'channels' &&
+        <ChannelsIndex/>
       }
       {
-        show === 'channels' ?
-        <ChannelsIndex/> : <></>
+        show === 'users' &&
+        <UsersIndex activeTab={showUsers} />
       }
     </>
   )

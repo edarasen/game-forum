@@ -4,16 +4,17 @@ import channels_icon from "../../assets/channels_icon.svg"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function AdminActions({handleReports, handleAllUsers, handleChannels, handleReportsSubAction}){
+function AdminActions({handleReports, handleAllUsers, handleChannels, handleReportsSubAction, handleUsersSubAction}){
   const navigate = useNavigate();
   const [subActions, setSubActions] = useState('reports');
+  
   const handleShowActiveReports = () => {
     handleReportsSubAction('active')
   }
   const handleShowArchiveReports = () => {
     handleReportsSubAction('archive')
   }
-  const handleReportsSub =() => {
+  const handleReportsSub = () => {
     setSubActions('reports')
     handleReports()
   }
@@ -24,12 +25,25 @@ function AdminActions({handleReports, handleAllUsers, handleChannels, handleRepo
   const handleChannelsSub = () => {
     setSubActions('channels')
     handleChannels()
-  } 
-  //handleallusers : users, search (admin only: admin, moderator)
-  //handlechannels : new channel group, new channel
-  //mods have no access to mod or admin list and cannot modify them. but all actions remain as is.
+  }
+  
+  // User sub-action handlers
+  const handleModeratorApplications = () => {
+    handleUsersSubAction('applications')
+  }
+  const handleActiveUsers = () => {
+    handleUsersSubAction('active')
+  }
+  const handleBannedUsers = () => {
+    handleUsersSubAction('banned')
+  }
+  const handleCreateUser = () => {
+    handleUsersSubAction('create')
+  }
+
   const actionButton = "flex lg:flex-row flex-col gap-2 lg:rounded-full rounded-xl text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-4 items-center"
   const subActionButton = "flex flex-row gap-2 rounded-full border-2 border-(--pnb-green) text-(--pnb-text-green) cursor-pointer px-4 py-2 items-center"
+  
   return (
     <>
       <div className="flex flex-row justify-around pt-4">
@@ -46,17 +60,23 @@ function AdminActions({handleReports, handleAllUsers, handleChannels, handleRepo
           <p>Channels</p>
         </button>
       </div>
+      
       { 
         subActions === 'reports' && <div className="flex flex-row justify-around pt-4">
           <button className={subActionButton} onClick={handleShowActiveReports}>Active Reports</button>
           <button className={subActionButton} onClick={handleShowArchiveReports}>Archive</button>
         </div>
       }
+      
       { 
-        subActions === 'all-users' && <div className="flex flex-row justify-around pt-4">
-          <p>User sub actions : all users with collapsible headers, users crud</p>
+        subActions === 'all-users' && <div className="flex flex-row justify-around pt-4 flex-wrap gap-2">
+          <button className={subActionButton} onClick={handleModeratorApplications}>Moderator Applications</button>
+          <button className={subActionButton} onClick={handleActiveUsers}>Active Users</button>
+          <button className={subActionButton} onClick={handleBannedUsers}>Banned Users</button>
+          <button className={subActionButton} onClick={handleCreateUser}>Create User</button>
         </div>
       }
+      
       { 
         subActions === 'channels' && <div className="flex flex-row justify-around pt-4">
           <button className={subActionButton} onClick={() => navigate('/new/channel')}>New Channel</button>
