@@ -7,7 +7,7 @@ import search_icon from "../../assets/search_icon.svg"
 
 function ForumMainActions(){
   const navigate = useNavigate()
-  const {userHeaders} = useData()
+  const {userHeaders, userDetails} = useData()
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -54,7 +54,7 @@ function ForumMainActions(){
           </button>
         </div>
       </div>
-      {userHeaders ? (
+      {userHeaders && !userDetails['deactivated'] ? (
         <Link to="/channels/posts/new" className={mainActionLink}>
           <img src={add_icon} alt="Add Icon" className="w-8 h-8" />
           New Post

@@ -6,9 +6,8 @@ import Modal from "../Modals/Modal";
 import Login from "../../pages/Login/Login";
 
 function ForumNavBar(){
-  const {onLogin, onLogout} = useData();
   const navigate = useNavigate()
-  const {userHeaders, resetHeadersDetails, userDetails} = useData();
+  const {onLogout, userHeaders, resetHeadersDetails, userDetails} = useData();
   const [menuOpen, setMenuOpen] = useState(false);
   const navOverlay = "absolute w-[100%] bg-(--pnb-parchment-nav) backdrop-blur-lg h-[100vh] m-0 items-center flex-col backdrop-blur-3xl list-none text-(--pnb-text-green) text-2xl py-12 gap-16"
   const navButton = "hover:font-semibold"

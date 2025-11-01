@@ -5,8 +5,10 @@ import ReportsIndex from "../../components/AdminActions/ReportsIndex/ReportsInde
 import UsersIndex from "../../components/AdminActions/UsersIndex/UsersIndex";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import { useState } from "react";
+import { useData } from "../../context/DataProvider";
 
 function AdminMain({onLogout}){
+  const {userDetails} = useData()
   const [show, setShow] = useState('reports')
   const [showReports, setShowReports] = useState('active')
 
@@ -26,23 +28,28 @@ function AdminMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
-      <AdminActions handleReports={handleReports} handleAllUsers={handleAllUsers} handleChannels={handleChannels} 
-      handleReportsSubAction={handleReportsSubAction}/>
-      {
-        show === 'reports' && showReports == 'active' &&
-        <ReportsIndex/>
-      }
-      {
-        show === 'reports' && showReports == 'archive' &&
-        <ReportsArchive/>
-      }
-      {
-        show === 'all-users' ?
-        <UsersIndex/> : <></>
-      }
-      {
-        show === 'channels' ?
-        <ChannelsIndex/> : <></>
+      {  userDetails['deactivated'] ?
+        <p>Current user is deactivated. Access Denied.</p> :
+        <>
+          <AdminActions handleReports={handleReports} handleAllUsers={handleAllUsers} handleChannels={handleChannels} 
+          handleReportsSubAction={handleReportsSubAction}/>
+          {
+            show === 'reports' && showReports == 'active' &&
+            <ReportsIndex/>
+          }
+          {
+            show === 'reports' && showReports == 'archive' &&
+            <ReportsArchive/>
+          }
+          {
+            show === 'all-users' ?
+            <UsersIndex/> : <></>
+          }
+          {
+            show === 'channels' ?
+            <ChannelsIndex/> : <></>
+          }
+        </>
       }
     </>
   )

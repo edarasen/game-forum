@@ -127,7 +127,7 @@ function EditChannel(){
               type="text"
               value={editChannelTitle}
               onChange={(e) => setEditChannelTitle(e.target.value)}
-              className="w-full text-3xl font-bold text-[#5B6153] bg-white px-4 py-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+              className="w-full text-3xl font-bold text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
               placeholder="Channel title..."
             />
             <p className="text-xl text-(--pnb-text-green)">Description</p>
@@ -135,7 +135,7 @@ function EditChannel(){
               type="text"
               value={editChannelDescription}
               onChange={(e) => setEditChannelDescription(e.target.value)}
-              className="w-full text-3xl font-bold text-[#5B6153] bg-white px-4 py-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
+              className="w-full text-3xl font-bold text-[#5B6153] bg-white px-4 py-2 rounded border border-(--pnb-green) focus:outline-none focus:ring-2 focus:ring-[#F7D480]"
               placeholder="Channel description..."
             />
           </form>
