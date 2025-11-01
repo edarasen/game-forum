@@ -55,8 +55,8 @@ class Api::V1::ChannelgroupsController < ApplicationController
   # OR proceeds to next action
   def ensure_admin_moderator
     authenticate_user!
-    if !current_user.admin? && !current_user.moderator?
-      render json: { message: "#{current_user.username} is not an administrator or moderator" }, status: :forbidden and return
+    if (!current_user.admin? && !current_user.moderator?) || current_user.deactivated === true
+      render json: { message: "#{current_user.username} is not an active administrator or moderator" }, status: :forbidden and return
     end
   end
 

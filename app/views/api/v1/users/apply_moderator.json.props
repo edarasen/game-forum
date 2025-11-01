@@ -4,7 +4,7 @@ json.status do
 end
 
 json.data do
-  json.extract! current_user, :id, :username, :email, :role
+  json.extract! current_user, :id, :username, :email, :role, :deactivated, :moderator_status
 
   json.created_at current_user.created_at
   json.updated_at current_user.updated_at
