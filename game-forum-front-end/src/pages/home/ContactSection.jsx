@@ -15,7 +15,7 @@ export default function ContactSection() {
             <div className="flex items-center gap-4">
               <FaEnvelope size={28} className="flex-shrink-0" />
               <div>
-                <p className="text-lg font-semibold leading-none">Email</p>
+                <p className="text-lg font-semibold text-left leading-none">Email</p>
                 <p className="text-[#f7d486] opacity-90 leading-tight">
                   nalshiradraws@gmail.com
                 </p>
@@ -26,7 +26,7 @@ export default function ContactSection() {
             <div className="flex items-center gap-4">
               <FaXTwitter size={28} className="flex-shrink-0" />
               <div>
-                <p className="text-lg font-semibold leading-none">Twitter/X</p>
+                <p className="text-lg text-left font-semibold leading-none">Twitter/X</p>
                 <a
                   href="https://x.com/nalshiradraws"
                   target="_blank"
@@ -42,7 +42,7 @@ export default function ContactSection() {
             <div className="flex items-center gap-4">
               <FaInstagram size={28} className="flex-shrink-0" />
               <div>
-                <p className="text-lg font-semibold leading-none">Instagram</p>
+                <p className="text-lg text-left font-semibold leading-none">Instagram</p>
                 <a
                   href="https://www.instagram.com/nalshira_draws/"
                   target="_blank"
@@ -58,7 +58,7 @@ export default function ContactSection() {
             <div className="flex items-center gap-4">
               <FaMapMarkerAlt size={28} className="flex-shrink-0" />
               <div>
-                <p className="text-lg font-semibold leading-none">Office</p>
+                <p className="text-lg text-left font-semibold leading-none">Office</p>
                 <p className="text-[#f7d486] opacity-90 leading-tight">
                   UP AyalaLand Technobhub Bldg M
                 </p>
