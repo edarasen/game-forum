@@ -77,7 +77,7 @@ class Api::V1::Admins::UsersController < ApplicationController
   end
 
   def new_user_params
-    params.require(:user).permit(:email, :password, :username)
+    params.require(:user).permit(:email, :password, :username, :role)
   end
 
   def edit_user_params
