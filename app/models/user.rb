@@ -11,6 +11,6 @@ class User < ApplicationRecord
   enum :role, { admin: "admin", moderator: "moderator", user: "user" }
   enum :moderator_status, { not_applied: "no application", pending: "pending", approved: "approved" }
 
-  has_many :posts
-  has_many :comments
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
 end
