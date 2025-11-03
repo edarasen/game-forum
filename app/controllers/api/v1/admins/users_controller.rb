@@ -1,7 +1,7 @@
 class Api::V1::Admins::UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_admin
-  before_action :set_user, only: %i[ show update ban approve_moderator nuke_user]
+  before_action :set_user, only: %i[ show update ban approve_moderator reject_moderator reactivate_user nuke_user]
 
 
   def create
@@ -41,6 +41,14 @@ class Api::V1::Admins::UsersController < ApplicationController
     end
   end
 
+  def reject_moderator
+    if @user.pending?
+      @user.update(moderator_status: "not_applied")
+    else
+      render json: { message: "#{@user.username} does not have a pending application." }, status: :unprocessable_entity
+    end
+  end
+
   def ban
     if (@user.user? || @user.moderator?) && !@user.deactivated?
       @user.update(deactivated: true, deactivated_at: Time.current)
@@ -61,6 +69,15 @@ class Api::V1::Admins::UsersController < ApplicationController
 
     else
       render json: { message: "Unable to nuke this user" }, status: :unprocessable_entity
+    end
+  end
+
+  def reactivate_user
+    if (@user.user? || @user.moderator?) && @user.deactivated?
+      @user.update(deactivated: false, deactivated_at: nil)
+      # Will render reactivate_user.json.props
+    else
+      render json: { message: "#{@user.username} is not banned" }, status: :unprocessable_entity
     end
   end
 

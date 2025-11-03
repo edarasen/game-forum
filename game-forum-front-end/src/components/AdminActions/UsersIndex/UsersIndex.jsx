@@ -59,8 +59,8 @@ async function rejectModeratorApplication(userHeaders, userId) {
   };
   return await axios
     .patch(
-      `${API_URL}/admins/users/${userId}`,
-      { user: { moderator_status: "not_applied" } },
+      `${API_URL}/admins/reject_mod/${userId}`,
+      {},
       requestHeaders
     )
     .then(
@@ -121,6 +121,24 @@ async function nukeUser(userHeaders, userId, userRole) {
     (response) => response.data,
     (error) => {
       console.error("Nuke user error:", error);
+      return null;
+    }
+  );
+}
+
+async function reactivateUser(userHeaders, userId, userRole) {
+  const endpoint = userRole === "admin" 
+    ? `${API_URL}/admins/reactivate/${userId}`
+    : `${API_URL}/moderators/reactivate/${userId}`;
+    
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  
+  return await axios.patch(endpoint, {}, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Reactivate user error:", error);
       return null;
     }
   );
@@ -284,6 +302,22 @@ function UsersIndex({ activeTab }) {
     }
   };
 
+  const handleReactivateUser = async (user) => {
+    if (
+      window.confirm(
+        `Are you sure you want to REACTIVATE ${user.username}?\n\nThis will:\n- Reactivate the account\n- Restore access to the forum`
+      )
+    ) {
+      const result = await reactivateUser(userHeaders, user.id, userDetails?.role);
+      if (result) {
+        alert(`${user.username} has been reactivated successfully!`);
+        await refreshUsers();
+      } else {
+        alert("Failed to reactivate user");
+      }
+    }
+  };
+
   // Permission check function
   const canEditUser = (user) => {
     if (userDetails?.role === "admin") {
@@ -304,6 +338,18 @@ function UsersIndex({ activeTab }) {
     }
     if (userDetails?.role === "moderator") {
       // Moderators can only ban regular users (not admins or other moderators)
+      return user.role === "user";
+    }
+    return false;
+  };
+
+  const canReactivateUser = (user) => {
+    if (userDetails?.role === "admin") {
+      // Admins can reactivate everyone except themselves
+      return user.id !== userDetails.id;
+    }
+    if (userDetails?.role === "moderator") {
+      // Moderators can only reactivate regular users
       return user.role === "user";
     }
     return false;
@@ -477,19 +523,27 @@ function UsersIndex({ activeTab }) {
                       className="bg-[#FAE5CA] rounded-lg border border-[#6B796A] px-4 py-3"
                     >
                       <div className="flex justify-between items-center">
-                        <div>
+                        <div className="flex-1">
                           <h3 className="text-lg font-semibold text-[#5B6153]">
                             {user.username}
                           </h3>
                           <p className="text-sm text-slate-500">
                             {user.email} • Role: {user.role}
                           </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-red-600 font-semibold">
+                          <p className="text-sm text-red-600 font-semibold mt-1">
                             Banned: {formatDate(user.deactivated_at)}
                           </p>
                         </div>
+                        
+                        {/* Reactivate Button */}
+                        {canReactivateUser(user) && (
+                          <button
+                            onClick={() => handleReactivateUser(user)}
+                            className="px-4 py-2 bg-(--pnb-green) text-(--pnb-gold) rounded"
+                          >
+                            Reactivate
+                          </button>
+                        )}
                       </div>
                     </li>
                   ))}

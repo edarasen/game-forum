@@ -1,0 +1,8 @@
+json.status do
+  json.code 200
+  json.message "Moderator application rejected successfully"
+end
+
+json.data do
+  json.extract! @user, :id, :username, :email, :role, :moderator_status, :created_at, :updated_at
+end
