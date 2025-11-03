@@ -111,7 +111,7 @@ function ForumNavBar(){
         </div>
       </div>
       {window.location.pathname === "/" ? (
-        <div className="flex flex-row justify-around py-2 md:px-20 lg:px-40 bg-(--pnb-parchment)">
+        <div className="flex flex-row justify-around py-2 text-xs sm:text-base md:px-20 lg:px-40 bg-(--pnb-parchment)">
           <a className={`${navButton} underline`} href="#about">
             {" "}
             About{" "}
