@@ -67,13 +67,15 @@ function MyPosts() {
   return (
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="w-1/9 mb-4 px-4 py-2 cursor-pointer text-left text-[#5B6153] hover:text-[#6B796A] transition-colors"
-        >
-          ← <span className="underline">Back</span> 
-        </button>
+        <div className="flex flex-row">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="w-1/9 mb-4 px-4 py-2 cursor-pointer text-left text-[#5B6153] hover:text-[#6B796A] transition-colors"
+          >
+            ← <span className="underline">Back</span> 
+          </button>
+        </div>
         {/* Profile header */}
         <div className="flex justify-center items-center gap-4 mb-8">
           <div className="h-16 w-16 rounded-md bg-yellow-200 ring-4 ring-yellow-300/80 shadow-sm flex items-center justify-center text-xl font-semibold text-slate-700">
@@ -94,7 +96,7 @@ function MyPosts() {
             <h2 className="text-2xl font-semibold text-[#F7D480]">My Posts</h2>
           </div>
 
-          <div className="bg-[#FAE5CA] px-6 py-4">
+          <div className="bg-[#FAE5CA] py-4 px-4">
             {!postsData?.posts || postsData.posts.length === 0 ? (
               <p className="py-8 text-[#5B6153]">You haven&apos;t created any posts yet.</p>
             ) : (
@@ -103,16 +105,16 @@ function MyPosts() {
                   <li 
                     key={post.id} 
                     onClick={() => navigate(`/posts/${post.id}`)}
-                    className="flex items-center justify-between py-8 cursor-pointer hover:bg-[#F5E0C0] transition-colors"
+                    className="flex items-center justify-between py-8 px-4 cursor-pointer hover:bg-[#F5E0C0] transition-colors"
                   >
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-2xl font-semibold text-[#5B6153]">{post.title}</h3>
                       <p className="mt-1 text-slate-500">
                         Created: {post.created_at ? formatDate(post.created_at) : "—"}
                       </p>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-center">
                       <div className="text-3xl font-semibold leading-none text-[#5B6153]">
                         {getCommentsCount(post)}
                       </div>
