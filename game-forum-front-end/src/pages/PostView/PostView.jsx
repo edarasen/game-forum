@@ -489,7 +489,7 @@ function PostView() {
                   <h1 className="text-3xl font-bold text-[#F7D480]">
                     {postData.title}
                   </h1>
-                  <div className="mt-2 flex items-center gap-4 text-sm text-[#FAE5CA]">
+                  <div className="mt-2 flex justify-center items-center gap-4 text-sm text-[#FAE5CA]">
                     <span>By: {postData.owner_details?.username}</span>
                     <span>•</span>
                     <span>Channel: {postData.channel_details?.title}</span>
@@ -507,6 +507,7 @@ function PostView() {
                   <KebabMenu
                     options={getPostMenuOptions()}
                     onSelect={handlePostMenuSelect}
+                    variant="post"
                   />
                 )}
               </div>
@@ -549,7 +550,7 @@ function PostView() {
                     (a, b) => new Date(a.created_at) - new Date(b.created_at)
                   )
                   .map((comment) => (
-                    <li key={comment.id} className="px-6 py-4">
+                    <li key={comment.id} className="px-6 py-4 border-[#6B796A]">
                       {editingCommentId === comment.id ? (
                         /* Comment Edit Form */
                         <div>
@@ -596,9 +597,8 @@ function PostView() {
                           {getCommentMenuOptions(comment).length > 0 && (
                             <KebabMenu
                               options={getCommentMenuOptions(comment)}
-                              onSelect={(action) =>
-                                handleCommentMenuSelect(action, comment)
-                              }
+                              onSelect={(action) => handleCommentMenuSelect(action, comment)}
+                              variant="comment"
                             />
                           )}
                         </div>
@@ -617,7 +617,7 @@ function PostView() {
                   value={commentBody}
                   onChange={(e) => setCommentBody(e.target.value)}
                   placeholder="Write a comment..."
-                  className="w-full px-4 py-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A] resize-none"
+                  className="w-full px-4 py-3 border border-[#6B796A] rounded focus:outline-none focus:ring-1 focus:ring-[#6B796A] resize-none"
                   rows="3"
                   disabled={submittingComment}
                 />

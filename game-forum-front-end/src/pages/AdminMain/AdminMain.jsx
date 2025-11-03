@@ -5,22 +5,28 @@ import ReportsIndex from "../../components/AdminActions/ReportsIndex/ReportsInde
 import UsersIndex from "../../components/AdminActions/UsersIndex/UsersIndex";
 import ForumNavBar from "../../components/ForumNavBar/ForumNavBar";
 import { useState } from "react";
-import { useData } from "../../context/DataProvider";
 
 function AdminMain({onLogout}){
-  const {userDetails} = useData()
   const [show, setShow] = useState('reports')
   const [showReports, setShowReports] = useState('active')
+  const [showUsers, setShowUsers] = useState('applications')
 
   const handleReportsSubAction = (value) => {
     setShowReports(value)
   }
+  
+  const handleUsersSubAction = (value) => {
+    setShowUsers(value)
+  }
+  
   const handleReports = () => {
     setShow('reports')
   }
+  
   const handleAllUsers = () => {
-    setShow('all-users')
+    setShow('users')
   }
+  
   const handleChannels = () => {
     setShow('channels')
   }
@@ -28,28 +34,29 @@ function AdminMain({onLogout}){
   return (
     <>
       <ForumNavBar onLogout={onLogout}/>
-      {  userDetails['deactivated'] ?
-        <p>Current user is deactivated. Access Denied.</p> :
-        <>
-          <AdminActions handleReports={handleReports} handleAllUsers={handleAllUsers} handleChannels={handleChannels} 
-          handleReportsSubAction={handleReportsSubAction}/>
-          {
-            show === 'reports' && showReports == 'active' &&
-            <ReportsIndex/>
-          }
-          {
-            show === 'reports' && showReports == 'archive' &&
-            <ReportsArchive/>
-          }
-          {
-            show === 'all-users' ?
-            <UsersIndex/> : <></>
-          }
-          {
-            show === 'channels' ?
-            <ChannelsIndex/> : <></>
-          }
-        </>
+      <AdminActions 
+        handleReports={handleReports} 
+        handleAllUsers={handleAllUsers} 
+        handleChannels={handleChannels} 
+        handleReportsSubAction={handleReportsSubAction}
+        handleUsersSubAction={handleUsersSubAction}
+        show={show}
+      />
+      {
+        show === 'reports' && showReports === 'active' &&
+        <ReportsIndex/>
+      }
+      {
+        show === 'reports' && showReports === 'archive' &&
+        <ReportsArchive/>
+      }
+      {
+        show === 'channels' &&
+        <ChannelsIndex/>
+      }
+      {
+        show === 'users' &&
+        <UsersIndex activeTab={showUsers} />
       }
     </>
   )

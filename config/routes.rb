@@ -43,12 +43,15 @@ Rails.application.routes.draw do
       namespace :admins do
         get "/show_all" => "users#show_all"
         patch "/ban/:id" => "users#ban"
+        delete "/nuke/:id" => "users#nuke_user"
         patch "/approve_mod/:id" => "users#approve_moderator"
         resources :users, only: [ :show, :update, :create ]
       end
       namespace :moderators do
+        get "/show_all" => "users#show_all"
         patch "/ban/:id" => "users#ban"
-        resources :users, only: [ :show, :update ]
+        delete "/nuke/:id" => "users#nuke_user"
+        resources :users, only: [ :show, :update, :create ]
       end
     end
   end
