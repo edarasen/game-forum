@@ -1,7 +1,7 @@
 class Api::V1::Moderators::UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_moderator
-  before_action :set_user, only: %i[ show update ban nuke_user ]
+  before_action :set_user, only: %i[ show update ban nuke_user reactivate_user ]
 
   def create
     @user = User.new(new_user_params)
@@ -60,6 +60,17 @@ class Api::V1::Moderators::UsersController < ApplicationController
       render json: { message: "Unable to nuke #{@user.role}" }, status: :unprocessable_entity
     else
       render json: { message: "#{@user.username} is already banned" }, status: :unprocessable_entity
+    end
+  end
+
+  def reactivate_user
+    if @user.user? && @user.deactivated?
+      @user.update(deactivated: false, deactivated_at: nil)
+      # Will render reactivate_user.json.props
+    elsif @user.admin? || @user.moderator?
+      render json: { message: "Unable to reactivate #{@user.role}" }, status: :unprocessable_entity
+    else
+      render json: { message: "#{@user.username} is not banned" }, status: :unprocessable_entity
     end
   end
 
