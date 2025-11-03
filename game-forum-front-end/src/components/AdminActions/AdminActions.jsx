@@ -42,7 +42,7 @@ function AdminActions({handleReports, handleAllUsers, handleChannels, handleRepo
   }
 
   const actionButton = "flex lg:flex-row flex-col gap-2 lg:rounded-full rounded-xl text-(--pnb-gold) bg-(--pnb-green) cursor-pointer px-4 py-4 items-center"
-  const subActionButton = "flex flex-row gap-2 rounded-full border-2 border-(--pnb-green) text-(--pnb-text-green) cursor-pointer px-4 py-2 items-center"
+  const subActionButton = "flex flex-row gap-2 rounded-full border border-(--pnb-green) bg-(--pnb-gold) text-(--pnb-text-green) cursor-pointer px-4 py-2 items-center"
   
   return (
     <>
@@ -62,14 +62,14 @@ function AdminActions({handleReports, handleAllUsers, handleChannels, handleRepo
       </div>
       
       { 
-        subActions === 'reports' && <div className="flex flex-row justify-around pt-4">
+        subActions === 'reports' && <div className="flex flex-row justify-center gap-2 pt-4">
           <button className={subActionButton} onClick={handleShowActiveReports}>Active Reports</button>
           <button className={subActionButton} onClick={handleShowArchiveReports}>Archive</button>
         </div>
       }
       
       { 
-        subActions === 'all-users' && <div className="flex flex-row justify-around pt-4 flex-wrap gap-2">
+        subActions === 'all-users' && <div className="flex flex-row justify-center pt-4 flex-wrap gap-2 ">
           <button className={subActionButton} onClick={handleModeratorApplications}>Moderator Applications</button>
           <button className={subActionButton} onClick={handleActiveUsers}>Active Users</button>
           <button className={subActionButton} onClick={handleBannedUsers}>Banned Users</button>
@@ -78,7 +78,7 @@ function AdminActions({handleReports, handleAllUsers, handleChannels, handleRepo
       }
       
       { 
-        subActions === 'channels' && <div className="flex flex-row justify-around pt-4">
+        subActions === 'channels' && <div className="flex flex-row justify-center gap-2 pt-4">
           <button className={subActionButton} onClick={() => navigate('/new/channel')}>New Channel</button>
           <button className={subActionButton} onClick={() => navigate('/new/channelgroup')}>New Channel Group</button>
         </div>

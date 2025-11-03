@@ -1,7 +1,8 @@
 class Api::V1::Admins::UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_admin
-  before_action :set_user, only: %i[ show update ban approve_moderator]
+  before_action :set_user, only: %i[ show update ban approve_moderator nuke_user]
+
 
   def create
     @user = User.new(new_user_params)
@@ -19,6 +20,7 @@ class Api::V1::Admins::UsersController < ApplicationController
   def show_all
     @moderators = User.moderator
     @users = User.user
+    @admins = User.admin
     # render :show_all, status: :ok
   end
 
@@ -48,6 +50,20 @@ class Api::V1::Admins::UsersController < ApplicationController
     end
   end
 
+  def nuke_user
+    if (@user.user? || @user.moderator?) && !@user.deactivated?
+      # Delete all posts and comments
+      @user.posts.destroy_all
+      @user.comments.destroy_all
+
+      # Deactivate user
+      @user.update(deactivated: true, deactivated_at: Time.current)
+
+    else
+      render json: { message: "Unable to nuke this user" }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def ensure_admin
@@ -61,7 +77,7 @@ class Api::V1::Admins::UsersController < ApplicationController
   end
 
   def new_user_params
-    params.require(:user).permit(:email, :password, :username, :role)
+    params.require(:user).permit(:email, :password, :username)
   end
 
   def edit_user_params

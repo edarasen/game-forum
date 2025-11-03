@@ -1,0 +1,8 @@
+json.status do
+  json.code 200
+  json.message "User nuked successfully"
+end
+
+json.data do
+  json.extract! @user, :id, :username, :email, :role, :moderator_status, :deactivated, :deactivated_at, :created_at, :updated_at
+end

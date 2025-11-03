@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useData } from "../../../context/DataProvider";
 import axios from "axios";
 
+import EditUser from "./EditUser";
+import CollapsibleCard from "./CollapsibleCard";
+import CreateUser from "./CreateUser";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Helper function to format date
@@ -15,11 +19,17 @@ function formatDate(dateString) {
   });
 }
 
-async function getAllUsers(userHeaders) {
+// FIXED: Use correct endpoint based on user role
+async function getAllUsers(userHeaders, userRole) {
+  const endpoint = userRole === "admin" 
+    ? `${API_URL}/admins/show_all`
+    : `${API_URL}/moderators/show_all`;
+    
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" },
   };
-  return await axios.get(`${API_URL}/admins/show_all`, requestHeaders).then(
+  
+  return await axios.get(endpoint, requestHeaders).then(
     (response) => response.data,
     (error) => {
       console.error("API Error:", error);
@@ -62,12 +72,71 @@ async function rejectModeratorApplication(userHeaders, userId) {
     );
 }
 
-async function createUser(userHeaders, userData) {
+async function updateUser(userHeaders, userId, userData, userRole) {
+  const endpoint = userRole === "admin"
+    ? `${API_URL}/admins/users/${userId}`
+    : `${API_URL}/moderators/users/${userId}`;
+    
   const requestHeaders = {
     headers: { ...userHeaders, Accept: "application/json" },
   };
+  
+  return await axios.patch(endpoint, { user: userData }, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Update user error:", error);
+      return null;
+    }
+  );
+}
+
+async function banUser(userHeaders, userId, userRole) {
+  const endpoint = userRole === "admin" 
+    ? `${API_URL}/admins/ban/${userId}`
+    : `${API_URL}/moderators/ban/${userId}`;
+    
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  
+  return await axios.patch(endpoint, {}, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Ban user error:", error);
+      return null;
+    }
+  );
+}
+
+async function nukeUser(userHeaders, userId, userRole) {
+  const endpoint = userRole === "admin" 
+    ? `${API_URL}/admins/nuke/${userId}`
+    : `${API_URL}/moderators/nuke/${userId}`;
+    
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  
+  return await axios.delete(endpoint, requestHeaders).then(
+    (response) => response.data,
+    (error) => {
+      console.error("Nuke user error:", error);
+      return null;
+    }
+  );
+}
+
+async function createUser(userHeaders, userData, userRole) {
+  const endpoint = userRole === "admin"
+    ? `${API_URL}/admins/users`
+    : `${API_URL}/moderators/users`;
+    
+  const requestHeaders = {
+    headers: { ...userHeaders, Accept: "application/json" },
+  };
+  
   return await axios
-    .post(`${API_URL}/admins/users`, { user: userData }, requestHeaders)
+    .post(endpoint, { user: userData }, requestHeaders)
     .then(
       (response) => response.data,
       (error) => {
@@ -78,27 +147,26 @@ async function createUser(userHeaders, userData) {
 }
 
 function UsersIndex({ activeTab }) {
-  const [usersData, setUsersData] = useState({ moderators: [], users: [] });
+  const [usersData, setUsersData] = useState({ admins: [], moderators: [], users: [] });
   const [loading, setLoading] = useState(true);
   const { userHeaders, userDetails } = useData();
 
-  // Create user form state
-  const [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-    role: "user",
+  // Edit modal state
+  const [editModal, setEditModal] = useState({
+    isOpen: false,
+    user: null,
   });
 
   // Fetch all users data
   useEffect(() => {
     let mounted = true;
 
-    if (userHeaders) {
+    if (userHeaders && userDetails) {
       setLoading(true);
-      getAllUsers(userHeaders).then((data) => {
+      getAllUsers(userHeaders, userDetails.role).then((data) => {
         if (mounted && data) {
           setUsersData({
+            admins: data.data?.admins || [],
             moderators: data.data?.moderators || [],
             users: data.data?.users || [],
           });
@@ -108,21 +176,25 @@ function UsersIndex({ activeTab }) {
     }
 
     return () => (mounted = false);
-  }, [userHeaders]);
+  }, [userHeaders, userDetails]);
+
+  const refreshUsers = async () => {
+    const updatedData = await getAllUsers(userHeaders, userDetails?.role);
+    if (updatedData) {
+      setUsersData({
+        admins: updatedData.data?.admins || [],
+        moderators: updatedData.data?.moderators || [],
+        users: updatedData.data?.users || [],
+      });
+    }
+  };
 
   const handleApproveModerator = async (userId) => {
     if (window.confirm("Are you sure you want to approve this moderator application?")) {
       const result = await approveModerator(userHeaders, userId);
       if (result) {
         alert("Moderator approved successfully!");
-        // Refresh data
-        const updatedData = await getAllUsers(userHeaders);
-        if (updatedData) {
-          setUsersData({
-            moderators: updatedData.data?.moderators || [],
-            users: updatedData.data?.users || [],
-          });
-        }
+        await refreshUsers();
       } else {
         alert("Failed to approve moderator");
       }
@@ -134,53 +206,129 @@ function UsersIndex({ activeTab }) {
       const result = await rejectModeratorApplication(userHeaders, userId);
       if (result) {
         alert("Application rejected successfully!");
-        // Refresh data
-        const updatedData = await getAllUsers(userHeaders);
-        if (updatedData) {
-          setUsersData({
-            moderators: updatedData.data?.moderators || [],
-            users: updatedData.data?.users || [],
-          });
-        }
+        await refreshUsers();
       } else {
         alert("Failed to reject application");
       }
     }
   };
 
-  const handleCreateUser = async (e) => {
-    e.preventDefault();
+  const handleEditUser = (user) => {
+    setEditModal({ isOpen: true, user });
+  };
 
-    if (!newUser.username || !newUser.email || !newUser.password) {
-      alert("All fields are required");
-      return;
+  const handleSaveEdit = async (formData) => {
+    const result = await updateUser(userHeaders, editModal.user.id, formData, userDetails?.role);
+    if (result) {
+      alert("User updated successfully!");
+      setEditModal({ isOpen: false, user: null });
+      await refreshUsers();
+    } else {
+      alert("Failed to update user");
     }
+  };
 
-    const result = await createUser(userHeaders, newUser);
+  const handleBanUser = async (user) => {
+    if (
+      window.confirm(
+        `Are you sure you want to BAN ${user.username}?\n\nThis will:\n- Deactivate the account\n- Keep all posts and comments`
+      )
+    ) {
+      const result = await banUser(userHeaders, user.id, userDetails?.role);
+      if (result) {
+        alert(`${user.username} has been banned successfully!`);
+        await refreshUsers();
+      } else {
+        alert("Failed to ban user");
+      }
+    }
+  };
+
+  const handleNukeUser = async (user) => {
+    if (
+      window.confirm(
+        `⚠️ ARE YOU SURE YOU WANT TO NUKE ${user.username}? ⚠️\n\nThis will:\n- Deactivate the account\n- DELETE all posts\n- DELETE all comments\n\nThis action CANNOT be undone!`
+      )
+    ) {
+      const doubleCheck = window.confirm(
+        `FINAL WARNING: Confirm NUKE for ${user.username}?`
+      );
+      
+      if (doubleCheck) {
+        const confirmation = window.prompt(
+          `Type "${user.username}" to confirm NUKE:`
+        );
+        
+        if (confirmation === user.username) {
+          const result = await nukeUser(userHeaders, user.id, userDetails?.role);
+          if (result) {
+            alert(`${user.username} has been nuked successfully!`);
+            await refreshUsers();
+          } else {
+            alert("Failed to nuke user");
+          }
+        } else {
+          alert("Confirmation failed. Nuke cancelled.");
+        }
+      }
+    }
+  };
+
+  const handleCreateUser = async (userData) => {
+    const result = await createUser(userHeaders, userData, userDetails?.role);
     if (result) {
       alert("User created successfully!");
-      setNewUser({ username: "", email: "", password: "", role: "user" });
-      // Refresh data
-      const updatedData = await getAllUsers(userHeaders);
-      if (updatedData) {
-        setUsersData({
-          moderators: updatedData.data?.moderators || [],
-          users: updatedData.data?.users || [],
-        });
-      }
+      await refreshUsers();
     } else {
       alert("Failed to create user");
     }
   };
 
-  // Combine all users
-  const allUsers = [...usersData.moderators, ...usersData.users];
+  // Permission check function
+  const canEditUser = (user) => {
+    if (userDetails?.role === "admin") {
+      return true; // Admins can edit everyone
+    }
+    if (userDetails?.role === "moderator") {
+      // Moderators can only edit regular users
+      return user.role === "user";
+    }
+    return false;
+  };
 
-  // Filter users based on moderator_status and deactivated fields
+  // Permission check for ban/nuke
+  const canBanUser = (user) => {
+    if (userDetails?.role === "admin") {
+      // Admins can ban everyone except themselves
+      return user.id !== userDetails.id;
+    }
+    if (userDetails?.role === "moderator") {
+      // Moderators can only ban regular users (not admins or other moderators)
+      return user.role === "user";
+    }
+    return false;
+  };
+
+  // Check if user can approve/reject moderator applications
+  const canManageApplications = () => {
+    return userDetails?.role === "admin";
+  };
+
+  // Combine all users
+  const allUsers = [...usersData.admins, ...usersData.moderators, ...usersData.users];
+
+  // Filter users based on role and status
   const pendingApplications = allUsers.filter(
     (user) => user.moderator_status === "pending"
   );
-  const activeUsers = allUsers.filter((user) => !user.deactivated);
+  
+  // Active users by role
+  const admins = usersData.admins.filter((user) => !user.deactivated);
+  
+  const moderators = usersData.moderators.filter((user) => !user.deactivated);
+  
+  const activeUsers = usersData.users.filter((user) => !user.deactivated);
+  
   const bannedUsers = allUsers.filter((user) => user.deactivated);
 
   if (loading) {
@@ -193,6 +341,15 @@ function UsersIndex({ activeTab }) {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-6">
+      {/* Edit Modal */}
+      <EditUser
+        user={editModal.user}
+        isOpen={editModal.isOpen}
+        onClose={() => setEditModal({ isOpen: false, user: null })}
+        onSave={handleSaveEdit}
+        currentUserRole={userDetails?.role}
+      />
+
       {/* Content Area */}
       <div className="rounded border border-[#6B796A] bg-stone-50 shadow-sm">
         {/* Moderator Applications Tab */}
@@ -213,7 +370,7 @@ function UsersIndex({ activeTab }) {
                   {pendingApplications.map((user) => (
                     <li
                       key={user.id}
-                      className="bg-white rounded-lg border border-[#6B796A] p-4"
+                      className="bg-[#FAE5CAC0] rounded-lg border border-[#6B796A] p-4"
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -225,20 +382,31 @@ function UsersIndex({ activeTab }) {
                             Applied: {formatDate(user.created_at)}
                           </p>
                         </div>
-                        <div className="flex gap-3">
-                          <button
-                            onClick={() => handleRejectApplication(user.id)}
-                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold"
-                          >
-                            Reject
-                          </button>
-                          <button
-                            onClick={() => handleApproveModerator(user.id)}
-                            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-semibold"
-                          >
-                            Accept
-                          </button>
-                        </div>
+                        
+                        {/* Only show approve/reject buttons for admins */}
+                        {canManageApplications() && (
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => handleRejectApplication(user.id)}
+                              className="px-4 py-2 bg-[#B8402D] text-(--pnb-gold) rounded hover:bg-red-700 transition-colors font-semibold"
+                            >
+                              Reject
+                            </button>
+                            <button
+                              onClick={() => handleApproveModerator(user.id)}
+                              className="px-4 py-2 bg-(--pnb-green) text-(--pnb-gold) rounded hover:bg-green-700 transition-colors font-semibold"
+                            >
+                              Accept
+                            </button>
+                          </div>
+                        )}
+                        
+                        {/* Show read-only message for moderators */}
+                        {!canManageApplications() && (
+                          <div className="text-sm text-slate-500 italic">
+                            Only admins can approve/reject
+                          </div>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -248,7 +416,7 @@ function UsersIndex({ activeTab }) {
           </>
         )}
 
-        {/* Active Users Tab */}
+        {/* Active Users Tab - 3 Collapsible Cards */}
         {activeTab === "active" && (
           <>
             <div className="rounded-t bg-[#6B796A] px-6 py-4">
@@ -256,35 +424,36 @@ function UsersIndex({ activeTab }) {
                 Active Users
               </h2>
             </div>
-            <div className="bg-[#FAE5CA] px-6 py-6">
-              {activeUsers.length === 0 ? (
-                <p className="text-center text-slate-600 py-8">No active users</p>
-              ) : (
-                <ul className="space-y-3">
-                  {activeUsers.map((user) => (
-                    <li
-                      key={user.id}
-                      className="bg-white rounded-lg border border-[#6B796A] px-4 py-3"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="text-lg font-semibold text-[#5B6153]">
-                            {user.username}
-                          </h3>
-                          <p className="text-sm text-slate-500">
-                            {user.email} • Role: {user.role}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-slate-500">
-                            Joined: {formatDate(user.created_at)}
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div className="bg-[#FAE5CA] px-6 py-6 space-y-4">
+              <CollapsibleCard
+                title="Admins"
+                users={admins}
+                onEdit={handleEditUser}
+                onBan={handleBanUser}
+                onNuke={handleNukeUser}
+                canEdit={canEditUser}
+                canBan={canBanUser}
+                showProhibitedMessage={userDetails?.role === "moderator"}
+              />
+              <CollapsibleCard
+                title="Moderators"
+                users={moderators}
+                onEdit={handleEditUser}
+                onBan={handleBanUser}
+                onNuke={handleNukeUser}
+                canEdit={canEditUser}
+                canBan={canBanUser}
+                showProhibitedMessage={userDetails?.role === "moderator"}
+              />
+              <CollapsibleCard
+                title="Users"
+                users={activeUsers}
+                onEdit={handleEditUser}
+                onBan={handleBanUser}
+                onNuke={handleNukeUser}
+                canEdit={canEditUser}
+                canBan={canBanUser}
+              />
             </div>
           </>
         )}
@@ -305,7 +474,7 @@ function UsersIndex({ activeTab }) {
                   {bannedUsers.map((user) => (
                     <li
                       key={user.id}
-                      className="bg-white rounded-lg border border-red-400 px-4 py-3"
+                      className="bg-[#FAE5CA] rounded-lg border border-[#6B796A] px-4 py-3"
                     >
                       <div className="flex justify-between items-center">
                         <div>
@@ -330,89 +499,12 @@ function UsersIndex({ activeTab }) {
           </>
         )}
 
-        {/* Create User Tab */}
-        {activeTab === "create" && userDetails?.role === "admin" && (
-          <>
-            <div className="rounded-t bg-[#6B796A] px-6 py-4">
-              <h2 className="text-2xl font-semibold text-[#F7D480]">
-                Create New User
-              </h2>
-            </div>
-            <div className="bg-[#FAE5CA] px-6 py-6">
-              <form onSubmit={handleCreateUser} className="max-w-md">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5B6153] mb-2">
-                      Username
-                    </label>
-                    <input
-                      type="text"
-                      value={newUser.username}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, username: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-[#6B796A] rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A]"
-                      placeholder="Enter username"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5B6153] mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={newUser.email}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, email: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-[#6B796A] rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A]"
-                      placeholder="Enter email"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5B6153] mb-2">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      value={newUser.password}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, password: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-[#6B796A] rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A]"
-                      placeholder="Enter password"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5B6153] mb-2">
-                      Role
-                    </label>
-                    <select
-                      value={newUser.role}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, role: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-[#6B796A] rounded focus:outline-none focus:ring-2 focus:ring-[#6B796A]"
-                    >
-                      <option value="user">User</option>
-                      <option value="moderator">Moderator</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full px-6 py-3 bg-[#6B796A] text-[#F7D480] rounded hover:bg-[#5B6153] transition-colors font-semibold"
-                  >
-                    Create User
-                  </button>
-                </div>
-              </form>
-            </div>
-          </>
+        {/* Create User Tab - Use separate component */}
+        {activeTab === "create" && (
+          <CreateUser
+            onCreateUser={handleCreateUser}
+            currentUserRole={userDetails?.role}
+          />
         )}
       </div>
     </div>
