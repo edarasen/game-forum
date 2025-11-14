@@ -284,7 +284,7 @@ GEM
       tsort
     redis (5.4.1)
       redis-client (>= 0.22.0)
-    redis-client (0.25.3)
+    redis-client (0.26.1)
       connection_pool
     regexp_parser (2.11.3)
     reline (0.6.2)
@@ -432,7 +432,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.0.3)
   redis (~> 5.4, >= 5.4.1)
-  redis-client (~> 0.25.3)
+  redis-client (~> 0.26.1)
   rspec-rails
   rubocop-rails-omakase
   sidekiq
