@@ -1,4 +1,4 @@
-
+<img width="2308" height="1108" alt="Screenshot 2025-11-14 093452" src="https://github.com/user-attachments/assets/2816d877-b1c8-4f3a-9b03-ead93f4c099b" />
 # Game Forum Project (03Nov2025)
 
 Avion School Project : A game forum for Pluck & Brew, a game in development
@@ -21,6 +21,8 @@ Avion School Project : A game forum for Pluck & Brew, a game in development
   - [Search](#search)
   - [Rawg Data](#rawg-data)
   - [Itch Data](#itch-data)
+- [Deployment](#deployment)
+
 ### React External Dependencies
 - Tailwind CSS
 - Axios
@@ -328,6 +330,34 @@ User can only update their own account
 }
 ```
 
+#### Reject moderator
+```http
+  PATCH /api/v1/admins/reject_mod/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Moderator application rejected successfully."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "rejected",
+        "mod_approval_date": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
 #### Ban user
 ```http
   PATCH /api/v1/admins/ban/${id}
@@ -342,7 +372,93 @@ User can only update their own account
     "message": "user has been banned."
 }
 ```
+
+#### Nuke user
+```http
+  PATCH /api/v1/admins/nuke/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "User nuked successfully."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "rejected",
+        "mod_approval_date": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
+#### Reactivate user
+```http
+  PATCH /api/v1/admins/reactivate/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "User reactivated successfully."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "rejected",
+        "deactivated": false,
+        "deactivated_at": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
 ### Moderators
+#### Create user
+
+```http
+  POST/api/v1/moderators/users
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `email`   | `string` | **Required**. Email of new user |
+| `password`   | `string` | **Required**. Password of new user |
+| `username`   | `string` | **Required**. Username of new user |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 201,
+        "message": "User created successfully"
+    },
+    "data": {
+        "id": 10,
+        "username": "created by admin",
+        "email": "admin_create@test.com",
+        "role": "user",
+        "created_at": "2025-11-01T06:52:35.591Z",
+        "updated_at": "2025-11-01T06:52:35.591Z"
+    }
+}
+```
 
 #### Get user
 ```http
@@ -369,6 +485,31 @@ User can only update their own account
         "updated_at": "2025-11-01T06:52:35.591Z"
     }
 }
+```
+
+#### Show all users
+```http
+  GET /api/v1/moderators/show_all
+```
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "Successfully fetched users"
+    },
+    "data": {
+        "moderators": [
+            {
+                "id": 2,
+                "username": "moderater_one",
+                "email": "moderator_test@test.com",
+                "role": "moderator",
+                "created_at": "2025-10-31T11:23:46.818Z",
+                "updated_at": "2025-11-01T03:53:15.083Z"
+            }
+        ],
+...
 ```
 
 #### Update user
@@ -411,6 +552,64 @@ User can only update their own account
     "message": "user has been banned."
 }
 ```
+
+#### Nuke user
+```http
+  PATCH /api/v1/moderators/nuke/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "User nuked successfully."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "rejected",
+        "mod_approval_date": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
+#### Reactivate user
+```http
+  PATCH /api/v1/moderators/reactivate/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`   | `integer` | **Required**. Id of user to fetch |
+
+#### Sample Response
+```
+{
+    "status": {
+        "code": 200,
+        "message": "User reactivated successfully."
+    },
+    "data": {
+        "id": 3,
+        "username": "user01",
+        "email": "user01_test@test.com",
+        "role": "user",
+        "moderator_status": "rejected",
+        "deactivated": false,
+        "deactivated_at": "2025-11-01T07:14:51.973Z",
+        "created_at": "2025-10-31T11:23:47.088Z",
+        "updated_at": "2025-11-01T07:14:51.974Z"
+    }
+}
+```
+
 ### Channel Groups
 #### Get all channel groups
 ```http
@@ -1155,6 +1354,14 @@ Requires an API Key from itch.io
     }
 ]
 ```
+## Deployment
+This project was deployed with the free tier of Render which may no longer be available for viewing.
+#### Deployment Screenshots
+<img width="2304" height="1172" alt="Screenshot 2025-11-14 093407" src="https://github.com/user-attachments/assets/5a81e419-9a20-4ced-bc90-5ace19b32460" />
+<img width="2302" height="1166" alt="image" src="https://github.com/user-attachments/assets/394b1e11-85af-4d3f-9cd2-2edaf44896d6" />
+<img width="2302" height="1110" alt="Screenshot 2025-11-14 093610" src="https://github.com/user-attachments/assets/02e8416c-a32b-45b9-9c59-0ec037c5dfb7" />
+<img width="2308" height="1108" alt="Screenshot 2025-11-14 093452" src="https://github.com/user-attachments/assets/70e06e54-0dba-447c-b72b-0bc884e336d9" />
+<img width="2309" height="1106" alt="image" src="https://github.com/user-attachments/assets/ef80798b-6070-4aac-82f2-3e1c4ce861aa" />
 
 ## Collaborators
 
