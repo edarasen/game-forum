@@ -1,4 +1,3 @@
-<img width="2308" height="1108" alt="Screenshot 2025-11-14 093452" src="https://github.com/user-attachments/assets/2816d877-b1c8-4f3a-9b03-ead93f4c099b" />
 # Game Forum Project (03Nov2025)
 
 Avion School Project : A game forum for Pluck & Brew, a game in development
